@@ -1,0 +1,55 @@
+# Environment variables
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+*.pytest_cache/
+.coverage
+htmlcov/
+
+# Frontend build & dependencies
+node_modules/
+dist/
+build/
+.next/
+
+# Model checkpoints & serialized binaries
+*.pkl
+*.joblib
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.h5
+
+# Raw & interim tabular dataset files
+*.csv
+*.parquet
+*.feather
+*.h5
+*.sqlite3
+
+# Ignore dataset folders content across components
+**/data/raw/*
+**/data/interim/*
+**/data/processed/*
+**/data/features/*
+**/data/splits/*
+!**/data/**/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

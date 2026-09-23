@@ -1,0 +1,12 @@
+raw_smart_attributes:
+  - smart_5_raw
+  - smart_9_raw
+  - smart_187_raw
+  - smart_188_raw
+  - smart_197_raw
+  - smart_198_raw
+
+engineered_features:
+  - smart_5_rolling_mean_7d
+  - smart_187_rolling_max_7d
+  - smart_197_diff_1d

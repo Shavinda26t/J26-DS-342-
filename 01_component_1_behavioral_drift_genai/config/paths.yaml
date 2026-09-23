@@ -1,0 +1,5 @@
+raw_data_dir: "data/raw"
+interim_data_dir: "data/interim"
+processed_data_dir: "data/processed"
+model_dir: "models/trained"
+results_dir: "results"

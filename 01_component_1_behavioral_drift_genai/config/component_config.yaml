@@ -1,0 +1,4 @@
+component_name: "Behavioral Drift & GenAI Intelligence"
+version: "1.0.0"
+drift_threshold: 0.05
+genai_model: "fleet-llm-v1"

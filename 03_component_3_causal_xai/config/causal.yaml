@@ -1,0 +1,6 @@
+causal_discovery:
+  algorithm: "PCMCI"
+  alpha_level: 0.05
+  max_lag: 7
+causal_inference:
+  estimator: "backdoor.linear_regression"
