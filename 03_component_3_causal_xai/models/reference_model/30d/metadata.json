@@ -1,0 +1,12 @@
+{
+    "horizon_days": 30,
+    "target": "failure_within_30d",
+    "number_of_features": 176,
+    "training_rows": 1137431,
+    "training_positive_rows": 1899,
+    "training_negative_rows": 1135532,
+    "scale_pos_weight": 597.9631384939441,
+    "selected_threshold": 0.13576215505599976,
+    "training_seconds": 424.54998779296875,
+    "random_state": 42
+}
