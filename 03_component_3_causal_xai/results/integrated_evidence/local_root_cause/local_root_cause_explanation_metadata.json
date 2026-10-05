@@ -1,0 +1,13 @@
+{
+    "method": "Local SHAP plus fleet-level causal evidence enrichment",
+    "local_predictive_evidence": "Local SHAP values are aggregated to canonical HDD factors using sum of absolute SHAP for importance. Direction is determined from positive/negative absolute SHAP mass.",
+    "fleet_temporal_evidence": "PCMCI stability evidence is inherited from the integrated fleet-level evidence matrix.",
+    "fleet_failure_risk_evidence": "Matched incident ATT evidence is inherited from the integrated fleet-level evidence matrix.",
+    "important_limitation": "Fleet-level causal evidence is not converted into an individual counterfactual causal claim. Local SHAP remains predictive attribution.",
+    "representative_cases": [
+        "TP",
+        "FP",
+        "FN",
+        "TN"
+    ]
+}
