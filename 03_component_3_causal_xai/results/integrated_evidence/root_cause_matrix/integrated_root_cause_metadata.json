@@ -1,0 +1,13 @@
+{
+    "framework_name": "Integrated Causal-XAI Root-Cause Evidence Framework",
+    "evidence_streams": [
+        "Global SHAP predictive evidence",
+        "PCMCI temporal-dependency evidence",
+        "Matched incident ATT failure-risk evidence"
+    ],
+    "integration_method": "Rule-based qualitative integration. Evidence-stream values are preserved separately and are not added into a numerical causal score.",
+    "root_cause_language": "Root-cause candidate / supporting factor language is used because observational data cannot prove physical causation.",
+    "shap_interpretation": "Predictive attribution; not causal evidence.",
+    "pcmci_interpretation": "Stable lagged conditional dependencies under PCMCI assumptions; not direct physical causal proof.",
+    "matched_att_interpretation": "Observational matched 30-day failure-risk contrast under measured-confounding and matching assumptions."
+}

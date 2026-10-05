@@ -1,4 +1,4 @@
 """Service module: component2_service.py"""
 
-def dummy_service_func(*args, **kwargs):
-    return {"status": "service_active"}
+def process_digital_twin(request=None):
+    return {"status": "component2_active", "twin_state": "normal"}

@@ -1,0 +1,10 @@
+{
+    "primary_estimand": "matched ATT risk difference",
+    "unit": "percentage points of 30-day failure risk",
+    "preferred_interval": "control-HDD clustered bootstrap 95% CI",
+    "paired_test": "exact McNemar test",
+    "matching_balance_threshold": "maximum absolute SMD < 0.10",
+    "retention_threshold": ">= 80% treated incident HDDs retained",
+    "evidence_classification": "Qualitative reporting categories based on analysis role, event count, matched balance, clustered CI and exact paired-test evidence. Not a numerical causal score.",
+    "causal_interpretation": "Observational matched failure-risk evidence under measured-confounding and matching assumptions; not proof of physical causation."
+}
