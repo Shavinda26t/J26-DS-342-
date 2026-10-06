@@ -1,0 +1,31 @@
+Component 2 Digital Twin
+Candidate Health-State Features
+================================
+
+These are screening candidates only.
+They are NOT yet the final model features.
+
+- smart_5_normalized
+- smart_198_normalized
+- smart_5_normalized_rolling_mean_7
+- smart_198_normalized_rolling_mean_7
+- smart_197_normalized
+- smart_197_normalized_rolling_mean_7
+- smart_1_normalized
+- smart_1_normalized_rolling_mean_7
+- smart_1_normalized_delta
+- smart_1_normalized_rolling_std_7
+- smart_5_normalized_rolling_std_7
+- smart_5_normalized_delta
+- smart_198_normalized_rolling_std_7
+- smart_198_normalized_delta
+- smart_197_normalized_rolling_std_7
+- smart_197_normalized_delta
+- smart_1_normalized_change_7d
+- smart_5_normalized_change_7d
+- smart_198_normalized_change_7d
+- smart_197_normalized_change_7d
+- smart_1_normalized_change_14d
+- smart_5_normalized_change_14d
+- smart_198_normalized_change_14d
+- smart_197_normalized_change_14d
