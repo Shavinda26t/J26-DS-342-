@@ -1,4 +1,4 @@
 """Service module: integration_service.py"""
 
-def dummy_service_func(*args, **kwargs):
-    return {"status": "service_active"}
+def run_integrated_analysis(drive_id: str = "UNKNOWN"):
+    return {"status": "integration_active", "drive_id": drive_id}
