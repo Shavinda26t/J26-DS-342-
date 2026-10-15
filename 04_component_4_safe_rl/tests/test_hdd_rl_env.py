@@ -244,5 +244,41 @@ class TestSafeHDDEnvironment(unittest.TestCase):
         self.assertEqual(rewards1, rewards2)
 
 
+    def test_14_repeated_isolation_is_idempotent(self):
+        """Already-isolated drives must not incur a second cost."""
+
+        configure_safe_migration(self.env)
+
+        self.env.migration_progress = 1.0
+        self.env.isolated = True
+
+        action = action_id(
+            self.env,
+            MitigationAction.ISOLATE_DRIVE
+        )
+
+        _, reward, _, _, info = self.env.step(action)
+
+        self.assertFalse(info["blocked_by_safety"])
+
+        self.assertEqual(
+            info["applied_action"],
+            "NO_OP"
+        )
+
+        self.assertTrue(self.env.isolated)
+
+        expected_reward = (
+            -info["failure_consequence_if_failed"]
+            if info["failed"]
+            else 0.0
+        )
+
+        self.assertAlmostEqual(
+            reward,
+            expected_reward
+        )
+    
+
 if __name__ == "__main__":
     unittest.main()

@@ -220,7 +220,10 @@ class SafeHDDEnv(gym.Env):
         # 5. Reward shaping and simulated action effects
         # ----------------------------------------------------
 
-        reward = 0.20
+        # No automatic reward for merely surviving a step.
+        # Rewards are determined by intervention costs,
+        # safety penalties and simulated failure consequences.
+        reward = 0.0
 
         if blocked:
             reward -= 2.0
@@ -251,10 +254,19 @@ class SafeHDDEnv(gym.Env):
                 0.40 + 0.001 * moved_gb
             )
 
+
         elif applied == MitigationAction.ISOLATE_DRIVE:
 
-            self.isolated = True
-            reward -= 0.40
+            if not self.isolated:
+                # Apply isolation once and charge its cost once.
+                self.isolated = True
+                reward -= 0.40
+
+            else:
+                # Already isolated: no new physical transition,
+                # and no repeated isolation cost.
+                applied = MitigationAction.NO_OP
+
 
         elif applied == MitigationAction.RECOMMEND_REPLACEMENT:
 

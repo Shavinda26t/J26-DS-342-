@@ -69,9 +69,9 @@ class TestRewardConsequences(unittest.TestCase):
                 )
 
                 expected_reward = (
-                    0.20 - expected
-                    if info["failed"]
-                    else 0.20
+                -expected
+                if info["failed"]
+                else 0.0
                 )
 
                 self.assertAlmostEqual(
@@ -93,9 +93,9 @@ class TestRewardConsequences(unittest.TestCase):
         )
 
         expected_reward = (
-            0.20 - 3.0
+             -3.0
             if info["failed"]
-            else 0.20
+            else 0.0
         )
 
         self.assertAlmostEqual(
@@ -126,6 +126,25 @@ class TestRewardConsequences(unittest.TestCase):
         self.assertGreater(
             before["failure_consequence_if_failed"],
             after["failure_consequence_if_failed"]
+        )
+
+
+    def test_04_no_op_has_no_passive_reward(self):
+        """Doing nothing must not earn a free survival bonus."""
+
+        reward, info = self.run_scenario(
+            progress=0.0,
+            isolated=False
+        )
+
+        expected = (
+            -40.0 if info["failed"] else 0.0
+        )
+
+        self.assertAlmostEqual(
+            reward,
+            expected,
+            places=5
         )
 
 
