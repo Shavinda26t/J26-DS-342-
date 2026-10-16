@@ -36,7 +36,14 @@ class SafeHDDEnvV2(gym.Env):
 
     ACTIONS = tuple(MitigationAction)
 
-    def __init__(self, episode_days=30):
+
+    def __init__(
+        self,
+        episode_days=30,
+        risk_drift_per_day=0.01,
+        risk_noise_std=0.003,
+    ):
+
 
         super().__init__()
 
@@ -46,8 +53,35 @@ class SafeHDDEnvV2(gym.Env):
         ):
             raise ValueError("episode_days must be positive")
 
+
         self.episode_days = episode_days
+
+        # Configurable synthetic risk dynamics.
+        # Defaults preserve the original V2 behaviour.
+        for name, value in (
+            ("risk_drift_per_day", risk_drift_per_day),
+            ("risk_noise_std", risk_noise_std),
+        ):
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not np.isfinite(value)
+                or value < 0
+            ):
+                raise ValueError(
+                    f"{name} must be finite and nonnegative"
+                )
+
+        self.risk_drift_per_day = float(
+            risk_drift_per_day
+        )
+
+        self.risk_noise_std = float(
+            risk_noise_std
+        )
+
         self.validator = SafetyValidator()
+
 
         # Seven possible mitigation proposals.
         self.action_space = spaces.Discrete(
@@ -277,13 +311,18 @@ class SafeHDDEnvV2(gym.Env):
         # 6. Synthetic HDD degradation
         # ----------------------------------------------------
 
+
         noise = float(
-            self.np_random.normal(0.0, 0.003)
+            self.np_random.normal(
+                0.0,
+                self.risk_noise_std
+            )
         )
+
 
         self.risk = float(
             np.clip(
-                self.risk + 0.01 + noise,
+                self.risk + self.risk_drift_per_day + noise,
                 0.0,
                 1.0
             )

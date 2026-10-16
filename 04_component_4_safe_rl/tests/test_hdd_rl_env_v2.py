@@ -289,5 +289,108 @@ class TestSafeHDDEnvV2(unittest.TestCase):
             env.close()
 
 
+    # --------------------------------------------------------
+    # E134 - Configurable synthetic risk dynamics
+    # --------------------------------------------------------
+
+    def test_08_stable_risk_without_drift_or_noise(self):
+        """Risk must remain stable when both settings are zero."""
+
+        for initial_risk in [0.02, 0.20, 0.50]:
+
+            with self.subTest(initial_risk=initial_risk):
+
+                env = SafeHDDEnvV2(
+                    episode_days=30,
+                    risk_drift_per_day=0.0,
+                    risk_noise_std=0.0,
+                )
+
+                try:
+                    env.reset(seed=2026)
+                    env.risk = initial_risk
+
+                    action = env.ACTIONS.index(
+                        MitigationAction.NO_OP
+                    )
+
+                    _, _, _, _, info = env.step(action)
+
+                    self.assertAlmostEqual(
+                        env.risk,
+                        initial_risk,
+                        places=10,
+                    )
+
+                    expected_hazard = (
+                        1.0
+                        - (1.0 - initial_risk) ** (1.0 / 7.0)
+                    )
+
+                    self.assertAlmostEqual(
+                        info["daily_failure_hazard"],
+                        expected_hazard,
+                        places=10,
+                    )
+
+                finally:
+                    env.close()
+
+    def test_09_configurable_drift_changes_risk(self):
+        """Risk increases by the configured drift without noise."""
+
+        env = SafeHDDEnvV2(
+            episode_days=30,
+            risk_drift_per_day=0.05,
+            risk_noise_std=0.0,
+        )
+
+        try:
+            env.reset(seed=2026)
+            env.risk = 0.20
+
+            action = env.ACTIONS.index(
+                MitigationAction.NO_OP
+            )
+
+            env.step(action)
+
+            self.assertAlmostEqual(
+                env.risk,
+                0.25,
+                places=10,
+            )
+
+        finally:
+            env.close()
+
+    def test_10_invalid_risk_settings_rejected(self):
+        """Invalid drift and noise parameters must be rejected."""
+
+        invalid_values = [
+            -0.01,
+            float("nan"),
+            float("inf"),
+            True,
+        ]
+
+        for value in invalid_values:
+
+            with self.subTest(drift=value):
+
+                with self.assertRaises(ValueError):
+                    SafeHDDEnvV2(
+                        risk_drift_per_day=value
+                    )
+
+            with self.subTest(noise=value):
+
+                with self.assertRaises(ValueError):
+                    SafeHDDEnvV2(
+                        risk_noise_std=value
+                    )
+
+
+
 if __name__ == "__main__":
     unittest.main()
