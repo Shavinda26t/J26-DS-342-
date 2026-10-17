@@ -42,6 +42,7 @@ class SafeHDDEnvV2(gym.Env):
         episode_days=30,
         risk_drift_per_day=0.01,
         risk_noise_std=0.003,
+        initial_risk_mode="legacy",
     ):
 
 
@@ -79,6 +80,22 @@ class SafeHDDEnvV2(gym.Env):
         self.risk_noise_std = float(
             risk_noise_std
         )
+
+
+        # Initial-risk sampling is a synthetic
+        # experimental design choice, not a
+        # calibrated fleet-risk distribution.
+
+        if initial_risk_mode not in (
+            "legacy",
+            "stratified",
+        ):
+            raise ValueError(
+                "initial_risk_mode must be "
+                "'legacy' or 'stratified'"
+            )
+
+        self.initial_risk_mode = initial_risk_mode
 
         self.validator = SafetyValidator()
 
@@ -171,9 +188,36 @@ class SafeHDDEnvV2(gym.Env):
         self.day = 0
         self._done = False
 
-        self.risk = float(
-            rng.uniform(0.05, 0.85)
-        )
+
+        # V2 training experiment: stratified initial risks.
+        # Each band has equal sampling probability.
+        # This distribution is NOT representative
+        # of real HDD failure prevalence.
+
+        if self.initial_risk_mode == "stratified":
+
+            risk_bands = (
+                (0.002, 0.012),  # Very low risk
+                (0.012, 0.15),   # Low/moderate risk
+                (0.15, 0.85),    # High risk
+            )
+
+            band_index = int(
+                rng.integers(0, len(risk_bands))
+            )
+
+            low, high = risk_bands[band_index]
+
+            self.risk = float(
+                rng.uniform(low, high)
+            )
+
+        else:
+            # Preserve original V2 behaviour.
+            self.risk = float(
+                rng.uniform(0.05, 0.85)
+            )
+
 
         self.rul_days = float(
             rng.uniform(5.0, 80.0)

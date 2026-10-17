@@ -391,6 +391,106 @@ class TestSafeHDDEnvV2(unittest.TestCase):
                     )
 
 
+    # --------------------------------------------------------
+    # E144 - Stratified risk sampling validation
+    # --------------------------------------------------------
+
+    def test_11_stratified_sampling_reproducible(self):
+        """Same seed must generate the same initial risk."""
+
+        env = SafeHDDEnvV2(
+            initial_risk_mode="stratified"
+        )
+
+        try:
+            env.reset(seed=12345)
+            first_risk = env.risk
+
+            env.reset(seed=12345)
+            second_risk = env.risk
+
+            self.assertEqual(first_risk, second_risk)
+
+        finally:
+            env.close()
+
+    def test_12_stratified_sampling_covers_all_bands(self):
+        """Sampling should cover all three configured bands."""
+
+        env = SafeHDDEnvV2(
+            initial_risk_mode="stratified"
+        )
+
+        counts = {
+            "VERY_LOW": 0,
+            "MODERATE": 0,
+            "HIGH": 0,
+        }
+
+        try:
+            for seed in range(1000, 1300):
+
+                env.reset(seed=seed)
+                risk = env.risk
+
+                self.assertGreaterEqual(risk, 0.002)
+                self.assertLess(risk, 0.85)
+
+                if risk < 0.012:
+                    counts["VERY_LOW"] += 1
+
+                elif risk < 0.15:
+                    counts["MODERATE"] += 1
+
+                else:
+                    counts["HIGH"] += 1
+
+            self.assertEqual(sum(counts.values()), 300)
+
+            for band, count in counts.items():
+                self.assertGreater(
+                    count,
+                    0,
+                    f"No samples from {band}"
+                )
+
+        finally:
+            env.close()
+
+    def test_13_default_mode_matches_legacy(self):
+        """Default mode must preserve original initialization."""
+
+        default_env = SafeHDDEnvV2()
+
+        legacy_env = SafeHDDEnvV2(
+            initial_risk_mode="legacy"
+        )
+
+        try:
+            default_obs, _ = default_env.reset(seed=42)
+            legacy_obs, _ = legacy_env.reset(seed=42)
+
+            np.testing.assert_array_equal(
+                default_obs,
+                legacy_obs
+            )
+
+        finally:
+            default_env.close()
+            legacy_env.close()
+
+    def test_14_invalid_risk_mode_rejected(self):
+        """Unsupported initial-risk modes must be rejected."""
+
+        for mode in ["random", "balanced", "", None]:
+
+            with self.subTest(mode=mode):
+
+                with self.assertRaises(ValueError):
+                    SafeHDDEnvV2(
+                        initial_risk_mode=mode
+                    )
+
 
 if __name__ == "__main__":
     unittest.main()
