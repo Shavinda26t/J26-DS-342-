@@ -1,0 +1,100 @@
+{
+    "experiment": "C4_DQN_V2_ACTIONABLE_153",
+    "status": "EXPLORATORY_PILOT",
+    "simulation_only": true,
+    "algorithm": "DQN",
+    "training_seed": 42,
+    "training_steps": 10000,
+    "evaluation_seed_start": 30000,
+    "evaluation_episodes": 100,
+    "environment": "SafeHDDEnvV2",
+    "environment_configuration": {
+        "episode_days": 30,
+        "initial_risk_mode": "stratified",
+        "risk_drift_per_day": 0.0,
+        "risk_noise_std": 0.0
+    },
+    "training_start_distribution": "ACTIONABLE_ONLY",
+    "training_wrapper": "ActionableStartWrapper",
+    "training_wrapper_max_attempts": 100,
+    "evaluation_start_distribution": "ORIGINAL_UNFILTERED_STRATIFIED",
+    "hyperparameters": {
+        "learning_rate": 0.0003,
+        "buffer_size": 10000,
+        "learning_starts": 500,
+        "batch_size": 64,
+        "gamma": 0.99,
+        "train_freq": 4,
+        "gradient_steps": 1,
+        "target_update_interval": 500,
+        "exploration_fraction": 0.3,
+        "exploration_final_eps": 0.1
+    },
+    "versions": {
+        "gymnasium": "1.1.1",
+        "stable_baselines3": "2.7.0",
+        "torch": "2.7.1+cpu"
+    },
+    "results": [
+        {
+            "policy": "DQN_V2",
+            "evaluation_episodes": 100,
+            "mean_episode_reward": -42.31719,
+            "failure_episodes": 41,
+            "safety_blocks": 1539,
+            "completed_migrations": 8,
+            "proposed_actions": {
+                "MIGRATE_DATA": 1620,
+                "RECOMMEND_REPLACEMENT": 191,
+                "NO_OP": 283,
+                "RECHECK_SOON": 68
+            },
+            "applied_actions": {
+                "MIGRATE_DATA": 81,
+                "RECOMMEND_REPLACEMENT": 191,
+                "RECHECK_SOON": 1607,
+                "NO_OP": 283
+            }
+        },
+        {
+            "policy": "NO_OP",
+            "evaluation_episodes": 100,
+            "mean_episode_reward": -14.27776,
+            "failure_episodes": 41,
+            "safety_blocks": 0,
+            "completed_migrations": 0,
+            "proposed_actions": {
+                "NO_OP": 2162
+            },
+            "applied_actions": {
+                "NO_OP": 2162
+            }
+        },
+        {
+            "policy": "SAFE_MIGRATION_FIRST",
+            "evaluation_episodes": 100,
+            "mean_episode_reward": -10.04356,
+            "failure_episodes": 41,
+            "safety_blocks": 0,
+            "completed_migrations": 28,
+            "proposed_actions": {
+                "MIGRATE_DATA": 117,
+                "NO_OP": 2045
+            },
+            "applied_actions": {
+                "MIGRATE_DATA": 117,
+                "NO_OP": 2045
+            }
+        }
+    ],
+    "limitations": [
+        "Synthetic, uncalibrated HDD failure dynamics",
+        "Equal risk-band sampling is not fleet prevalence",
+        "Only one RL training seed",
+        "Short pilot training duration",
+        "Evaluation uses 100 matched initial seeds",
+        "Mitigation reduces consequences, not physical failures",
+        "No evidence of production safety or effectiveness"
+    ],
+    "created_utc": "2026-10-17T04:58:29.801910+00:00"
+}
