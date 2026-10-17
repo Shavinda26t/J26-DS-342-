@@ -473,6 +473,18 @@ class AdaptiveDigitalTwin:
             )
         )
 
+                # Input variation warning
+        if len(sequence) < SEQUENCE_LENGTH:
+            input_variation_status = "INSUFFICIENT_HISTORY"
+        else:
+            processed = self.preprocess(
+                sequence.sort_values("date").tail(SEQUENCE_LENGTH)
+            )
+            if np.all(np.std(processed, axis=0) < 1e-6):
+                input_variation_status = "NO_INPUT_VARIATION"
+            else:
+                input_variation_status = "INPUT_VARIATION_PRESENT"
+
         # ----------------------------------------------------
         # Health feature availability
         # ----------------------------------------------------
@@ -519,6 +531,9 @@ class AdaptiveDigitalTwin:
                 degradation[
                     "adaptive_state"
                 ],
+
+                        "input_variation_status":
+                input_variation_status,
 
             "predicted_rul_days":
                 rul
