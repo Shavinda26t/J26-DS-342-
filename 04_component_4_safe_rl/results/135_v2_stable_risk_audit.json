@@ -1,0 +1,102 @@
+{
+    "experiment": "C4_V2_STABLE_RISK_AUDIT",
+    "simulation_only": true,
+    "episodes_per_policy_per_scenario": 200,
+    "seed_start": 1000,
+    "episode_days": 30,
+    "matched_seeds": true,
+    "controlled_storage_conditions": true,
+    "results": [
+        {
+            "scenario": "ULTRA_LOW_STABLE_RISK",
+            "initial_seven_day_risk": 0.002,
+            "policies": {
+                "NO_OP": {
+                    "mean_episode_reward": -0.3416,
+                    "failure_episodes": 3,
+                    "safety_blocks": 0,
+                    "applied_migrations": 0,
+                    "episodes_with_complete_migration": 0
+                },
+                "MIGRATE_THEN_NO_OP": {
+                    "mean_episode_reward": -1.8496,
+                    "failure_episodes": 3,
+                    "safety_blocks": 0,
+                    "applied_migrations": 800,
+                    "episodes_with_complete_migration": 200
+                }
+            },
+            "reward_difference_migration_minus_no_op": -1.508
+        },
+        {
+            "scenario": "LOW_STABLE_RISK",
+            "initial_seven_day_risk": 0.02,
+            "policies": {
+                "NO_OP": {
+                    "mean_episode_reward": -3.3684,
+                    "failure_episodes": 15,
+                    "safety_blocks": 0,
+                    "applied_migrations": 0,
+                    "episodes_with_complete_migration": 0
+                },
+                "MIGRATE_THEN_NO_OP": {
+                    "mean_episode_reward": -2.2878,
+                    "failure_episodes": 15,
+                    "safety_blocks": 0,
+                    "applied_migrations": 798,
+                    "episodes_with_complete_migration": 199
+                }
+            },
+            "reward_difference_migration_minus_no_op": 1.0806
+        },
+        {
+            "scenario": "MODERATE_STABLE_RISK",
+            "initial_seven_day_risk": 0.2,
+            "policies": {
+                "NO_OP": {
+                    "mean_episode_reward": -25.3949,
+                    "failure_episodes": 123,
+                    "safety_blocks": 0,
+                    "applied_migrations": 0,
+                    "episodes_with_complete_migration": 0
+                },
+                "MIGRATE_THEN_NO_OP": {
+                    "mean_episode_reward": -5.9034,
+                    "failure_episodes": 123,
+                    "safety_blocks": 0,
+                    "applied_migrations": 759,
+                    "episodes_with_complete_migration": 180
+                }
+            },
+            "reward_difference_migration_minus_no_op": 19.4915
+        },
+        {
+            "scenario": "HIGH_STABLE_RISK",
+            "initial_seven_day_risk": 0.5,
+            "policies": {
+                "NO_OP": {
+                    "mean_episode_reward": -37.7482,
+                    "failure_episodes": 191,
+                    "safety_blocks": 0,
+                    "applied_migrations": 0,
+                    "episodes_with_complete_migration": 0
+                },
+                "MIGRATE_THEN_NO_OP": {
+                    "mean_episode_reward": -10.0896,
+                    "failure_episodes": 191,
+                    "safety_blocks": 0,
+                    "applied_migrations": 691,
+                    "episodes_with_complete_migration": 150
+                }
+            },
+            "reward_difference_migration_minus_no_op": 27.6586
+        }
+    ],
+    "limitations": [
+        "Synthetic risks and rewards are not calibrated.",
+        "Migration eligibility is intentionally controlled.",
+        "Simulated administrator approval is not real authorization.",
+        "Migration changes consequences, not physical failure hazard.",
+        "This experiment is not representative of fleet prevalence."
+    ]
+}
