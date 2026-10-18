@@ -1,3 +1,4 @@
+from project_paths import RAW_DATA_DIR
 import os
 import glob
 import pandas as pd
@@ -9,7 +10,7 @@ from digital_twin_rul_predictor import DigitalTwinRULPredictor
 # Configuration
 # ============================================================
 
-DATA_DIR = r"D:\db module 4th yera 1sem\data_Q1_2023\data_Q1_2023"
+DATA_DIR = str(RAW_DATA_DIR)
 
 # A failed HDD known to have enough pre-failure observations.
 SERIAL_NUMBER = "1050A098F97G"

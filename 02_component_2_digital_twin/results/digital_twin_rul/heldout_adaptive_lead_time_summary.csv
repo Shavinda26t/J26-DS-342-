@@ -1,2 +1,2 @@
-test_hdds_in_results,hdds_with_recorded_failure,detected_within_60_days,not_detected_within_60_days,detection_rate_percent,persistence_observations,max_lead_time_window_days,mean_lead_time_days,median_lead_time_days,minimum_lead_time_days,maximum_lead_time_days
-117,117,24,93,20.51282051282051,7,60,14.166666666666666,7.5,1.0,54.0
+test_hdds_in_results,hdds_with_recorded_failure,detected_within_60_days,not_detected_within_60_days,detection_rate_percent,persistence_observations,max_lead_time_window_days,mean_lead_time_days,median_lead_time_days,minimum_lead_time_days,maximum_lead_time_days,median_persistence_span_days,maximum_persistence_span_days
+117,117,41,76,35.04273504273504,7,60,20.463414634146343,15.0,1.0,57.0,6.0,8.0

@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
+import argparse
 
+import degradation_detector as detector
 
 # ============================================================
 # CONFIGURATION
@@ -77,6 +79,54 @@ class RULBiLSTM(nn.Module):
 
 class AdaptiveDigitalTwin:
 
+    # ========================================================
+    # Degradation detector configuration
+    # ========================================================
+    #
+    # The values themselves live in scripts/degradation_detector.py,
+    # the single source of truth shared with the streaming state
+    # manager (digital_twin_state_manager.py) and the validators.
+    # Summary:
+    #
+    #   MIN_SEVERITY = 1   mild-or-higher counts as degradation
+    #   PERSISTENCE  = 7   consecutive qualifying observations
+    #
+    # Selected by scripts/tune_detection_thresholds.py over 40
+    # configurations on the TRAIN + VALIDATION HDD split (657 failed
+    # HDDs + 400 never-failed controls), then evaluated once on the
+    # untouched held-out test set:
+    #
+    #   results/digital_twin_rul/threshold_sweep_results.csv (tuning)
+    #   results/digital_twin_rul/threshold_sweep_final_test.csv (test)
+    #
+    # Requiring Moderate-or-higher severity was too strict: counting
+    # Mild-or-higher signals that persist for 7 consecutive
+    # observations roughly doubles detection and doubles the warning
+    # lead time, at a modest false-alarm cost.
+    #
+    # NOTE: "7 consecutive observations" is an observation count, not
+    # a calendar-week guarantee - the change features are
+    # observation diffs and sampling gaps are common (see
+    # results/hdd_observation_gap_analysis.csv).
+    # ========================================================
+
+    # None keeps the production thresholds; a factor < 1 would
+    # make them less strict (bounds are negative).
+    RELAX_THRESHOLDS = None
+
+    MIN_SEVERITY = detector.MIN_SEVERITY
+
+    PERSISTENCE = detector.PERSISTENCE
+
+    # Per-attribute change thresholds, from strict to mild.
+    # Each entry maps a lower bound (change <= bound) to a
+    # severity level. When RELAX_THRESHOLDS is set, the bounds are
+    # scaled by that factor (bounds are negative, so a factor < 1
+    # makes them less strict).
+    SMART1_THRESHOLDS = detector.SMART1_THRESHOLDS
+
+    SMART187_THRESHOLDS = detector.SMART187_THRESHOLDS
+
     def __init__(self):
 
         self.device = torch.device(
@@ -84,6 +134,19 @@ class AdaptiveDigitalTwin:
         )
 
         print("Device:", self.device)
+
+        # Scale the severity thresholds once at construction time.
+        factor = self.RELAX_THRESHOLDS
+
+        self.smart1_thresholds = detector.scaled_thresholds(
+            self.SMART1_THRESHOLDS,
+            factor,
+        )
+
+        self.smart187_thresholds = detector.scaled_thresholds(
+            self.SMART187_THRESHOLDS,
+            factor,
+        )
 
         # ----------------------------------------------------
         # Load preprocessing parameters
@@ -298,6 +361,26 @@ class AdaptiveDigitalTwin:
         )
 
     # ========================================================
+    # SEVERITY
+    # ========================================================
+
+    @staticmethod
+    def severity_from_thresholds(value, thresholds):
+        """
+        Return the severity level (0-4) for a change value given
+        an ordered list of (bound, level) pairs. Missing values
+        return 0 (no evidence, which never qualifies).
+
+        Delegates to the shared rules in degradation_detector.py.
+        """
+
+        return detector.severity_from_thresholds(
+            value,
+            thresholds,
+            missing=0,
+        )
+
+    # ========================================================
     # ADAPTIVE DEGRADATION
     # ========================================================
 
@@ -313,11 +396,11 @@ class AdaptiveDigitalTwin:
         )
 
         # ----------------------------------------------------
-        # Determine whether each observation has
-        # Moderate+ degradation
+        # Determine whether each observation qualifies as
+        # degradation (severity >= MIN_SEVERITY)
         # ----------------------------------------------------
 
-        moderate_flags = []
+        qualifying_flags = []
 
         for _, row in sequence.iterrows():
 
@@ -329,56 +412,33 @@ class AdaptiveDigitalTwin:
                 "smart_187_normalized_change_7d"
             ]
 
-            smart1_severity = 0
-            smart187_severity = 0
+            smart1_severity = self.severity_from_thresholds(
+                smart1,
+                self.smart1_thresholds,
+            )
 
-            # SMART1 thresholds
-            if pd.notna(smart1):
-
-                if smart1 <= -15:
-                    smart1_severity = 4
-
-                elif smart1 <= -8:
-                    smart1_severity = 3
-
-                elif smart1 <= -3:
-                    smart1_severity = 2
-
-                elif smart1 <= -1:
-                    smart1_severity = 1
-
-            # SMART187 thresholds
-            if pd.notna(smart187):
-
-                if smart187 <= -23:
-                    smart187_severity = 4
-
-                elif smart187 <= -9:
-                    smart187_severity = 3
-
-                elif smart187 <= -3:
-                    smart187_severity = 2
-
-                elif smart187 <= -1:
-                    smart187_severity = 1
+            smart187_severity = self.severity_from_thresholds(
+                smart187,
+                self.smart187_thresholds,
+            )
 
             combined_severity = max(
                 smart1_severity,
                 smart187_severity
             )
 
-            moderate_flags.append(
-                combined_severity >= 2
+            qualifying_flags.append(
+                combined_severity >= self.MIN_SEVERITY
             )
 
         # ----------------------------------------------------
-        # Longest consecutive Moderate+ run
+        # Longest consecutive qualifying run
         # ----------------------------------------------------
 
         longest_run = 0
         current_run = 0
 
-        for flag in moderate_flags:
+        for flag in qualifying_flags:
 
             if flag:
 
@@ -400,7 +460,7 @@ class AdaptiveDigitalTwin:
         current_run = 0
 
         for flag in reversed(
-            moderate_flags
+            qualifying_flags
         ):
 
             if flag:
@@ -413,31 +473,21 @@ class AdaptiveDigitalTwin:
 
         # ----------------------------------------------------
         # Adaptive state
+        #
+        # Persistence is measured in consecutive qualifying
+        # observations (severity >= MIN_SEVERITY, mild or
+        # worse). The confirmation threshold is PERSISTENCE;
+        # longer runs escalate the warning level. The ladder
+        # itself lives in degradation_detector.py so every
+        # detector escalates identically.
         # ----------------------------------------------------
 
-        if current_run >= 7:
-
-            adaptive_state = (
-                "Strong Persistent Degradation"
+        adaptive_state = detector.adaptive_state_name(
+            detector.escalation_level(
+                current_run,
+                self.PERSISTENCE,
             )
-
-        elif current_run >= 5:
-
-            adaptive_state = (
-                "Elevated Degradation"
-            )
-
-        elif current_run >= 3:
-
-            adaptive_state = (
-                "Early Warning"
-            )
-
-        else:
-
-            adaptive_state = (
-                "Normal / Monitor"
-            )
+        )
 
         return {
             "current_persistence": current_run,

@@ -1,13 +1,14 @@
+from project_paths import COMPONENT_ROOT
 from pathlib import Path
 import pandas as pd
 
 INPUT_FILE = Path(
-    r"D:\Project\J26-DS-342-\02_component_2_digital_twin"
+    str(COMPONENT_ROOT) + 
     r"\data\interim\temporal_features.csv"
 )
 
 OUTPUT_FILE = Path(
-    r"D:\Project\J26-DS-342-\02_component_2_digital_twin"
+    str(COMPONENT_ROOT) + 
     r"\results\digital_twin_temporal_state.csv"
 )
 

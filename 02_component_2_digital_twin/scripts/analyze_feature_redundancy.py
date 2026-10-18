@@ -1,3 +1,4 @@
+from project_paths import COMPONENT_ROOT
 import pandas as pd
 import numpy as np
 from pathlib import Path
@@ -7,7 +8,7 @@ from pathlib import Path
 # ============================================================
 
 BASE_DIR = Path(
-    r"D:\Project\J26-DS-342-\02_component_2_digital_twin"
+    COMPONENT_ROOT
 )
 
 INPUT_FILE = (

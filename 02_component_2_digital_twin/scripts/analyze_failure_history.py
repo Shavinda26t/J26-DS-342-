@@ -1,3 +1,4 @@
+from project_paths import RAW_DATA_DIR
 from pathlib import Path
 import pandas as pd
 
@@ -7,7 +8,7 @@ import pandas as pd
 # --------------------------------------------------
 
 DATA_DIR = Path(
-    r"D:\db module 4th yera 1sem\data_Q1_2023\data_Q1_2023"
+    RAW_DATA_DIR
 )
 
 

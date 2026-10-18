@@ -1,3 +1,4 @@
+from project_paths import COMPONENT_ROOT, RAW_DATA_DIR
 from pathlib import Path
 import pandas as pd
 
@@ -7,11 +8,11 @@ import pandas as pd
 # ============================================================
 
 DATA_DIR = Path(
-    r"D:\db module 4th yera 1sem\data_Q1_2023\data_Q1_2023"
+    RAW_DATA_DIR
 )
 
 OUTPUT_FILE = Path(
-    r"D:\Project\J26-DS-342-\02_component_2_digital_twin"
+    str(COMPONENT_ROOT) + 
    r"\results\smart5_individual_trajectory.csv"
 )
 

@@ -1,9 +1,10 @@
+from project_paths import require_raw_data_dir
 from pathlib import Path
 import pandas as pd
 
-DATA_DIR = Path(
-    r"D:\db module 4th yera 1sem\data_Q1_2023\data_Q1_2023"
-)
+# Fails fast when the raw SMART extract is missing instead of
+# silently processing zero files.
+DATA_DIR = require_raw_data_dir()
 
 OUTPUT_DIR = Path("data/interim")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

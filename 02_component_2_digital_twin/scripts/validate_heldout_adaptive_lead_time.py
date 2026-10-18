@@ -10,13 +10,18 @@ Method:
 4. Evaluate observations before the failure date.
 5. Apply the same SMART1 / SMART187 severity thresholds used by
    adaptive_digital_twin.py.
-6. Define detection when Moderate-or-higher degradation persists
-   for 7 consecutive observations.
+6. Define detection when Mild-or-higher degradation (severity
+   >= MIN_SEVERITY) persists for 7 consecutive observations.
 7. Count detections confirmed within 0-60 calendar days before failure.
 8. Save per-HDD results, summary metrics, and lead-time distribution.
+9. Report persistence_span_days - the calendar span the confirmed
+   run actually covered - so the observation count is never read
+   as calendar days.
 
 Important:
 - Persistence counts consecutive observations, not necessarily calendar days.
+  persistence_span_days (per-HDD CSV) and median_persistence_span_days
+  (summary CSV) show the real calendar span of the confirming runs.
 - Lead time is measured in calendar days.
 - This evaluates degradation detection, not RUL prediction accuracy.
 """
@@ -25,6 +30,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+import degradation_detector as detector
 
 
 # ============================================================
@@ -48,11 +55,37 @@ DISTRIBUTION_PATH = (
 )
 
 CHUNK_SIZE = 250_000
-PERSISTENCE_OBSERVATIONS = 7
+
+# ============================================================
+# Tuned detector parameters
+#    Imported from scripts/degradation_detector.py - the single
+#    source of truth shared with adaptive_digital_twin.py and
+#    digital_twin_state_manager.py. See
+#    scripts/tune_detection_thresholds.py for the sweep that
+#    selected them (tuned on the train+validation HDD split,
+#    evaluated once on this held-out test set).
+# ============================================================
+
+PERSISTENCE_OBSERVATIONS = detector.PERSISTENCE
+
+RELAX_THRESHOLDS = None
+
+MIN_SEVERITY = detector.MIN_SEVERITY
+
+SMART1_THRESHOLDS = detector.scaled_thresholds(
+    detector.SMART1_THRESHOLDS,
+    RELAX_THRESHOLDS,
+)
+
+SMART187_THRESHOLDS = detector.scaled_thresholds(
+    detector.SMART187_THRESHOLDS,
+    RELAX_THRESHOLDS,
+)
+
 MAX_LEAD_TIME_DAYS = 60
 
-SMART1_COLUMN = "smart_1_normalized_change_7d"
-SMART187_COLUMN = "smart_187_normalized_change_7d"
+SMART1_COLUMN = detector.SMART1_7D
+SMART187_COLUMN = detector.SMART187_7D
 
 REQUIRED_STATE_COLUMNS = [
     "date",
@@ -65,43 +98,34 @@ REQUIRED_STATE_COLUMNS = [
 
 # ============================================================
 # 2. Severity thresholds
-#    These match adaptive_digital_twin.py
+#    Imported from degradation_detector.py
 # ============================================================
+
+def severity_from_thresholds(value, thresholds):
+    """
+    Return degradation severity (0-4) for a change value.
+
+    Missing values return 0 (no evidence), which never qualifies
+    for persistence - the same rule as the batch detector.
+    """
+
+    return detector.severity_from_thresholds(
+        value,
+        thresholds,
+        missing=0,
+    )
+
 
 def severity_smart1(value):
     """Return SMART 1 degradation severity from 0 to 4."""
 
-    if pd.isna(value):
-        return 0
-
-    if value <= -15:
-        return 4
-    elif value <= -8:
-        return 3
-    elif value <= -3:
-        return 2
-    elif value <= -1:
-        return 1
-
-    return 0
+    return severity_from_thresholds(value, SMART1_THRESHOLDS)
 
 
 def severity_smart187(value):
     """Return SMART 187 degradation severity from 0 to 4."""
 
-    if pd.isna(value):
-        return 0
-
-    if value <= -23:
-        return 4
-    elif value <= -9:
-        return 3
-    elif value <= -3:
-        return 2
-    elif value <= -1:
-        return 1
-
-    return 0
+    return severity_from_thresholds(value, SMART187_THRESHOLDS)
 
 
 # ============================================================
@@ -297,7 +321,8 @@ def load_heldout_state(test_hdd_ids, state_path):
 def add_adaptive_degradation_columns(pre_failure):
     """
     Apply the production severity thresholds and calculate
-    consecutive Moderate-or-higher observations.
+    consecutive qualifying observations (severity >= MIN_SEVERITY,
+    i.e. mild or worse).
 
     If both SMART change features are missing, the row does not
     count as degradation evidence and breaks the persistence run.
@@ -327,32 +352,48 @@ def add_adaptive_degradation_columns(pre_failure):
         smart187_severity,
     )
 
-    moderate_or_higher = (
-        evidence_available & (combined_severity >= 2)
+    qualifying = (
+        evidence_available
+        & (combined_severity >= MIN_SEVERITY)
     )
 
-    # Count consecutive qualifying observations.
+    # Count consecutive qualifying observations and remember the
+    # calendar date each run started on. The run length counts
+    # OBSERVATIONS; the start date lets callers report how many
+    # calendar days those observations actually spanned (sampling
+    # gaps mean 7 observations is not necessarily 7 days).
     persistence = np.zeros(
         len(result),
         dtype=int,
     )
 
-    current_run = 0
+    run_start_dates = []
 
-    for index, is_qualifying in enumerate(moderate_or_higher):
+    current_run = 0
+    current_start = pd.NaT
+
+    for index, (date, is_qualifying) in enumerate(
+        zip(result["date"], qualifying)
+    ):
         if is_qualifying:
             current_run += 1
+
+            if current_run == 1:
+                current_start = date
         else:
             current_run = 0
+            current_start = pd.NaT
 
         persistence[index] = current_run
+        run_start_dates.append(current_start)
 
     result["smart1_severity"] = smart1_severity
     result["smart187_severity"] = smart187_severity
     result["combined_severity"] = combined_severity
     result["degradation_evidence_available"] = evidence_available
-    result["moderate_or_higher"] = moderate_or_higher
+    result["qualifying"] = qualifying
     result["persistence_observations"] = persistence
+    result["persistence_start_date"] = run_start_dates
 
     return result
 
@@ -366,7 +407,8 @@ def evaluate_one_hdd(serial_number, hdd_rows):
     Evaluate one HDD.
 
     A detection is confirmed on the observation that completes
-    seven consecutive Moderate-or-higher observations.
+    seven consecutive qualifying observations (severity >=
+    MIN_SEVERITY).
 
     Only detections confirmed 0-60 calendar days before the
     recorded failure are counted as detections within the window.
@@ -386,6 +428,7 @@ def evaluate_one_hdd(serial_number, hdd_rows):
             "pre_failure_observations": 0,
             "first_detection_date": pd.NaT,
             "lead_time_days": np.nan,
+            "persistence_span_days": np.nan,
             "detected_within_60_days": False,
             "longest_persistence": 0,
             "status": "no_recorded_failure",
@@ -407,6 +450,7 @@ def evaluate_one_hdd(serial_number, hdd_rows):
             "pre_failure_observations": 0,
             "first_detection_date": pd.NaT,
             "lead_time_days": np.nan,
+            "persistence_span_days": np.nan,
             "detected_within_60_days": False,
             "longest_persistence": 0,
             "status": "insufficient_pre_failure_observations",
@@ -418,11 +462,9 @@ def evaluate_one_hdd(serial_number, hdd_rows):
         pre_failure["persistence_observations"].max()
     )
 
-    # Candidate confirmation points: the first observation at which
-    # persistence reaches the required seven observations.
-    
-    # Find the first confirmation of seven consecutive
-    # Moderate-or-higher observations, regardless of lead time.
+    # Find the first confirmation of seven consecutive qualifying
+    # observations (severity >= MIN_SEVERITY), regardless of lead
+    # time.
     confirmation_points = pre_failure[
         pre_failure["persistence_observations"]
         == PERSISTENCE_OBSERVATIONS
@@ -436,6 +478,7 @@ def evaluate_one_hdd(serial_number, hdd_rows):
             "pre_failure_observations": len(pre_failure),
             "first_detection_date": pd.NaT,
             "lead_time_days": np.nan,
+            "persistence_span_days": np.nan,
             "detected_within_60_days": False,
             "longest_persistence": longest_persistence,
             "status": "not_detected",
@@ -454,6 +497,19 @@ def evaluate_one_hdd(serial_number, hdd_rows):
         0 <= first_lead_time <= MAX_LEAD_TIME_DAYS
     )
 
+    # Calendar span actually covered by the persistence run that
+    # confirmed the detection. With a regular sampling interval of
+    # one observation per day this equals PERSISTENCE_OBSERVATIONS
+    # - 1 days; with sampling gaps it is longer. Reported so the
+    # observation count is never mistaken for calendar days.
+    run_start = first_detection["persistence_start_date"]
+
+    persistence_span_days = (
+        np.nan
+        if pd.isna(run_start)
+        else (first_detection["date"] - run_start).days
+    )
+
     return {
         "serial_number": serial_number,
         "failure_date": failure_date,
@@ -461,6 +517,7 @@ def evaluate_one_hdd(serial_number, hdd_rows):
         "pre_failure_observations": len(pre_failure),
         "first_detection_date": first_detection["date"],
         "lead_time_days": first_lead_time,
+        "persistence_span_days": persistence_span_days,
         "detected_within_60_days": detected_within_window,
         "longest_persistence": longest_persistence,
         "status": (
@@ -468,17 +525,6 @@ def evaluate_one_hdd(serial_number, hdd_rows):
             if detected_within_window
             else "detection_outside_60_day_window"
         ),
-    }
-    return {
-        "serial_number": serial_number,
-        "failure_date": failure_date,
-        "observations_total": len(hdd_rows),
-        "pre_failure_observations": len(pre_failure),
-        "first_detection_date": first_detection["date"],
-        "lead_time_days": int(first_detection["lead_time_days"]),
-        "detected_within_60_days": True,
-        "longest_persistence": longest_persistence,
-        "status": "detected_within_60_days",
     }
 
 
@@ -524,11 +570,15 @@ def save_outputs(results_df):
         median_lead = detected["lead_time_days"].median()
         minimum_lead = detected["lead_time_days"].min()
         maximum_lead = detected["lead_time_days"].max()
+        median_span = detected["persistence_span_days"].median()
+        maximum_span = detected["persistence_span_days"].max()
     else:
         mean_lead = np.nan
         median_lead = np.nan
         minimum_lead = np.nan
         maximum_lead = np.nan
+        median_span = np.nan
+        maximum_span = np.nan
 
     summary = pd.DataFrame(
         [
@@ -546,6 +596,11 @@ def save_outputs(results_df):
                 "median_lead_time_days": median_lead,
                 "minimum_lead_time_days": minimum_lead,
                 "maximum_lead_time_days": maximum_lead,
+                # Calendar days actually covered by the persistence
+                # run of the detections. Observation counts and
+                # calendar days differ whenever sampling has gaps.
+                "median_persistence_span_days": median_span,
+                "maximum_persistence_span_days": maximum_span,
             }
         ]
     )
