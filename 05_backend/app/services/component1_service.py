@@ -1,4 +1,4 @@
 """Service module: component1_service.py"""
 
-def dummy_service_func(*args, **kwargs):
-    return {"status": "service_active"}
+def analyze_fleet_drift(request=None):
+    return {"status": "component1_active", "drift_detected": False}

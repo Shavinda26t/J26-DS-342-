@@ -1,0 +1,14 @@
+{
+    "method": "PCMCI stability aggregation",
+    "input_exact_links": "D:\\Research\\research_project_v1\\03_component_3_causal_xai\\results\\causal_discovery\\pcmci_stability\\stable_exact_links.csv",
+    "input_pair_links": "D:\\Research\\research_project_v1\\03_component_3_causal_xai\\results\\causal_discovery\\pcmci_stability\\stable_pair_links.csv",
+    "evidence_meaning": "Stable lagged conditional-dependency evidence observed across repeated PCMCI subsamples.",
+    "causal_interpretation_warning": "PCMCI temporal links are treated as candidate causal/dependency relationships under method assumptions. They are not interpreted as proof of physical causation.",
+    "strength_measure": "median absolute MCI",
+    "direction_measure": "sign of median MCI",
+    "degradation_factors": [
+        "PENDING_SECTORS",
+        "REALLOCATED_SECTORS",
+        "REPORTED_UNCORRECTABLE"
+    ]
+}

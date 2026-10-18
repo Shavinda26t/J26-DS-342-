@@ -1,0 +1,93 @@
+{
+    "experiment": "C4_DQN_PILOT_91",
+    "status": "EXPLORATORY_PILOT",
+    "simulation_only": true,
+    "training_steps": 5000,
+    "training_seed": 42,
+    "evaluation_seeds": [
+        9000,
+        9001,
+        9002,
+        9003,
+        9004,
+        9005,
+        9006,
+        9007,
+        9008,
+        9009,
+        9010,
+        9011,
+        9012,
+        9013,
+        9014,
+        9015,
+        9016,
+        9017,
+        9018,
+        9019,
+        9020,
+        9021,
+        9022,
+        9023,
+        9024,
+        9025,
+        9026,
+        9027,
+        9028,
+        9029
+    ],
+    "episode_days": 30,
+    "algorithm": "DQN",
+    "network": "MlpPolicy",
+    "device": "cpu",
+    "hyperparameters": {
+        "learning_rate": 0.0003,
+        "buffer_size": 10000,
+        "learning_starts": 500,
+        "batch_size": 64,
+        "gamma": 0.99,
+        "train_freq": 4,
+        "gradient_steps": 1,
+        "target_update_interval": 500,
+        "exploration_fraction": 0.3,
+        "exploration_final_eps": 0.1
+    },
+    "versions": {
+        "gymnasium": "1.1.1",
+        "stable_baselines3": "2.7.0",
+        "torch": "2.7.1+cpu"
+    },
+    "results": [
+        {
+            "policy": "DQN_PILOT",
+            "evaluation_episodes": 30,
+            "mean_episode_reward": -30.80333,
+            "failure_episodes": 23,
+            "safety_blocks": 0,
+            "proposed_action_counts": {
+                "NO_OP": 444,
+                "RECOMMEND_REPLACEMENT": 41
+            }
+        },
+        {
+            "policy": "NO_OP",
+            "evaluation_episodes": 30,
+            "mean_episode_reward": -30.66667,
+            "failure_episodes": 23,
+            "safety_blocks": 0,
+            "proposed_action_counts": {
+                "NO_OP": 485
+            }
+        }
+    ],
+    "limitations": [
+        "Synthetic environment with provisional dynamics",
+        "Single training seed",
+        "Short training run",
+        "Only 30 evaluation episodes per policy",
+        "Pilot evaluation seeds are separate from training",
+        "No real-world operational validity established",
+        "No final model selection performed"
+    ],
+    "created_utc": "2026-10-15T08:10:46.168511+00:00"
+}

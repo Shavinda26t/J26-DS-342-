@@ -1,0 +1,12 @@
+{
+    "primary_estimand": "matched ATT risk difference",
+    "outcome": "failure_within_30d",
+    "outcome_window": "failure within 30 days",
+    "bootstrap_unit": "matched treatment-control set",
+    "bootstrap_iterations": 20000,
+    "confidence_interval": "95% percentile bootstrap",
+    "paired_test": "exact McNemar/binomial test",
+    "risk_ratio_role": "supplementary",
+    "primary_treatment": "treat_uncorrectable",
+    "interpretation_caution": "Observational matched effect estimate under measured-confounding and matching assumptions; not proof of physical causation."
+}

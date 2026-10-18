@@ -25,6 +25,7 @@ COMPONENT_ROUTERS = {
     "component2": ("/component2", "Component 2: Digital Twin"),
     "component3": ("/component3", "Component 3: Causal XAI"),
     "component4": ("/component4", "Component 4: Safe RL"),
+    "component4_decision": ("/component4", "Component 4: Safe Decisions"),
     "system": ("/system", "Integrated System"),
 }
 

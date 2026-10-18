@@ -1,0 +1,39 @@
+{
+    "request_example": {
+        "serial_number": "HDD_SERIAL",
+        "observation_date": "YYYY-MM-DD",
+        "prediction_horizon_days": 30
+    },
+    "response_example": {
+        "serial_number": "HDD_SERIAL",
+        "observation_date": "YYYY-MM-DD",
+        "prediction": {
+            "failure_probability": 0.0,
+            "threshold": 0.0,
+            "predicted_class": "LOW_RISK_OR_HIGH_RISK"
+        },
+        "local_predictive_explanation": {
+            "top_factors": [
+                {
+                    "factor_id": "FACTOR_ID",
+                    "factor_name": "Factor Name",
+                    "local_importance_share_pct": 0.0,
+                    "local_direction": "TOWARD_FAILURE_OUTPUT",
+                    "dominant_feature": "smart_x_raw_std_30d"
+                }
+            ]
+        },
+        "root_cause_context": {
+            "candidate_factors": [
+                {
+                    "factor_id": "REPORTED_UNCORRECTABLE",
+                    "classification": "HIGH_PRIORITY_ROOT_CAUSE_CANDIDATE",
+                    "local_alignment": "LOCAL_PREDICTIVE_SUPPORT_ALIGNS_WITH_FLEET_ROOT_CAUSE_EVIDENCE"
+                }
+            ],
+            "temporal_pathways": [],
+            "matched_failure_risk_evidence": []
+        },
+        "interpretation_warning": "Local SHAP explains the prediction. Fleet-level causal evidence provides context but does not establish an individual counterfactual causal effect."
+    }
+}

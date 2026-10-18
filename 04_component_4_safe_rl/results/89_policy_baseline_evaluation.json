@@ -1,0 +1,67 @@
+{
+    "experiment": "C4_BASELINE_POLICY_EVALUATION",
+    "environment": "SafeHDDEnv",
+    "simulation_only": true,
+    "episodes_per_policy": 200,
+    "episode_days": 30,
+    "seed_start": 1000,
+    "matched_seeds": true,
+    "rl_training_performed": false,
+    "results": [
+        {
+            "policy": "NO_OP",
+            "episodes": 200,
+            "mean_episode_reward": -29.0,
+            "std_episode_reward": 17.8606,
+            "mean_episode_length": 18.075,
+            "episodes_ending_in_failure": 145,
+            "failure_episode_rate_pct": 72.5,
+            "total_decision_steps": 3615,
+            "safety_blocks": 0,
+            "applied_actions": {
+                "NO_OP": 3615
+            }
+        },
+        {
+            "policy": "RULE_BASED",
+            "episodes": 200,
+            "mean_episode_reward": -38.1721,
+            "std_episode_reward": 26.8515,
+            "mean_episode_length": 18.075,
+            "episodes_ending_in_failure": 145,
+            "failure_episode_rate_pct": 72.5,
+            "total_decision_steps": 3615,
+            "safety_blocks": 1404,
+            "applied_actions": {
+                "RECHECK_SOON": 3188,
+                "MIGRATE_DATA": 188,
+                "ISOLATE_DRIVE": 187,
+                "NO_OP": 52
+            }
+        },
+        {
+            "policy": "MIGRATION_FIRST",
+            "episodes": 200,
+            "mean_episode_reward": -50.5482,
+            "std_episode_reward": 26.7334,
+            "mean_episode_length": 18.075,
+            "episodes_ending_in_failure": 145,
+            "failure_episode_rate_pct": 72.5,
+            "total_decision_steps": 3615,
+            "safety_blocks": 2699,
+            "applied_actions": {
+                "RECHECK_SOON": 2699,
+                "MIGRATE_DATA": 240,
+                "ISOLATE_DRIVE": 676
+            }
+        }
+    ],
+    "limitations": [
+        "Synthetic failure hazard is not calibrated.",
+        "Intervention effects are provisional assumptions.",
+        "Some mitigation actions remain unavailable.",
+        "Failure probability is independent of mitigation.",
+        "Results are not evidence of production performance."
+    ],
+    "created_utc": "2026-10-15T07:50:44.895512+00:00"
+}
