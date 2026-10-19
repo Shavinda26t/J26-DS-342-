@@ -1,0 +1,3 @@
+config,threshold_table,use_14d,min_severity,persistence,matches_production,failed_hdds,detected_within_60_days,detection_rate_percent,median_lead_time_days,mean_lead_time_days,healthy_hdds,healthy_false_alarms,healthy_false_alarm_rate_percent,role,evaluation_set
+original_7d_sev2_p4,original,False,2,4,False,117,38,32.47863247863248,11.0,19.710526315789473,400,88,22.0,selected_on_tuning,held-out test (reported once)
+deployed_in_degradation_detector,original,False,1,7,True,117,41,35.04273504273504,15.0,20.463414634146343,400,48,12.0,currently_deployed,held-out test (reported once)
