@@ -1,0 +1,31 @@
+{
+  "horizon_days": 30,
+  "n_trials": 40,
+  "study_seconds": 2044.3584682941437,
+  "best_trial_number": 14,
+  "best_validation_pr_auc": 0.20294240870972186,
+  "best_params": {
+    "max_depth": 3,
+    "learning_rate": 0.08017514118060781,
+    "min_child_weight": 17.087496906362716,
+    "subsample": 0.9874994259239145,
+    "colsample_bytree": 0.6830347242613258,
+    "gamma": 0.5896893827059833,
+    "reg_alpha": 1.3814968219757793,
+    "reg_lambda": 1.462748430976401
+  },
+  "best_boosting_rounds": 44,
+  "tuned_threshold": 0.9481850266456604,
+  "baseline_test_pr_auc": 0.0962738889217,
+  "tuned_test_pr_auc": 0.09854131714556674,
+  "pr_auc_absolute_improvement": 0.0022674282238667465,
+  "pr_auc_percent_improvement": 2.3551850343459755,
+  "recall_baseline_test": 0.2224669603524229,
+  "recall_tuned_test": 0.1696035242290749,
+  "f1_baseline_test": 0.2534504391468005,
+  "f1_tuned_test": 0.17035398230088494,
+  "false_alarm_rate_baseline_test": 0.0008680181925135,
+  "false_alarm_rate_tuned_test": 0.001337895809122082,
+  "promotion_decision": "NOT_PROMOTED - awaiting manual review",
+  "note": "Accuracy is reported for completeness only; the dataset is highly imbalanced (test prevalence ~0.16%), so accuracy is not a meaningful primary metric."
+}
