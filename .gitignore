@@ -48,6 +48,9 @@ build/
 logs/
 *.log
 
+# Backend runtime state (live digital twin observation histories)
+05_backend/app/runtime/
+
 # IDE & OS files
 .vscode/
 .idea/

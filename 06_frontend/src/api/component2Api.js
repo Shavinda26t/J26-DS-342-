@@ -22,3 +22,27 @@ export const postComponent2BatchInference = (file) => {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 };
+
+// --- Live Digital Twin: synchronization + enhanced features ---
+export const postComponent2TwinSync = (serialNumber, observation) =>
+  apiClient.post('/api/v1/component2/twin/sync', {
+    serial_number: serialNumber,
+    observation,
+  });
+
+export const getComponent2TwinState = (serialNumber) =>
+  apiClient.get(`/api/v1/component2/twin/${serialNumber}/state`);
+
+export const postComponent2TwinLearn = (serialNumber, actualRulDays) =>
+  apiClient.post(`/api/v1/component2/twin/${serialNumber}/learn`, {
+    actual_rul_days: actualRulDays,
+  });
+
+export const deleteComponent2Twin = (serialNumber) =>
+  apiClient.delete(`/api/v1/component2/twin/${serialNumber}`);
+
+export const getComponent2TwinCalibration = () =>
+  apiClient.get('/api/v1/component2/twin/calibration');
+
+export const getComponent2TwinSerials = () =>
+  apiClient.get('/api/v1/component2/twin/serials');
