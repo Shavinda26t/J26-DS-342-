@@ -25,9 +25,9 @@
         "ent_coef": 0.01
     },
     "versions": {
-        "gymnasium": "1.1.1",
-        "stable_baselines3": "2.7.0",
-        "torch": "2.7.1+cpu"
+        "gymnasium": "1.4.0",
+        "stable_baselines3": "2.9.0",
+        "torch": "2.14.1+cpu"
     },
     "results": [
         {
@@ -388,5 +388,5 @@
         "No real HDD operations",
         "No final performance claim"
     ],
-    "created_utc": "2026-10-17T04:24:41.615431+00:00"
+    "created_utc": "2026-10-18T13:19:04.824625+00:00"
 }
