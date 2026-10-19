@@ -1,0 +1,25 @@
+{
+  "horizon_days": 14,
+  "target": "failure_within_14d",
+  "config": "shallow_es",
+  "config_params": {
+    "n_estimators": 1000,
+    "learning_rate": 0.05,
+    "max_depth": 3,
+    "min_child_weight": 10,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "reg_alpha": 0.1,
+    "reg_lambda": 1.0
+  },
+  "early_stopping_rounds": 50,
+  "trees_used": 58,
+  "number_of_features": 176,
+  "scale_pos_weight": 1161.2055214723925,
+  "validation_threshold": 0.9554150104522705,
+  "baseline_val_pr_auc": 0.128741077391925,
+  "baseline_test_pr_auc": 0.0555244521421055,
+  "retrained_val_pr_auc": 0.14042838586576867,
+  "retrained_test_pr_auc": 0.03976071543910718,
+  "selection_rule": "best config by validation PR-AUC; threshold = validation best-F1"
+}
