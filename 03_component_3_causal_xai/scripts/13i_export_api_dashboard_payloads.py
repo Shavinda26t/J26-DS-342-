@@ -777,6 +777,18 @@ for _, row in temporal_pathways.iterrows():
         "pair_sign_consistency",
 
         "lag_sign_pattern",
+
+        "stable_exact_lag_count",
+
+        "stable_lags_days",
+
+        "strongest_detection_rate",
+
+        "strongest_sign_consistency",
+
+        "minimum_detection_rate_across_stable_lags",
+
+        "minimum_sign_consistency_across_stable_lags",
     ]
 
 
