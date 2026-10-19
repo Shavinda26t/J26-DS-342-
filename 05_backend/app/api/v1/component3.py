@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 from typing import List, Dict, Any
 from app.schemas.component3 import ExplainRequest, ExplainResponse, RootCauseRequest, RootCauseResponse
 from app.services import component3_service
+from app.services import component3_prediction
 
 router = APIRouter()
 
@@ -75,3 +76,13 @@ def explain_hdd_failure(request: ExplainRequest):
 @router.post("/root-cause", response_model=RootCauseResponse)
 def analyze_root_cause(request: RootCauseRequest):
     return component3_service.evaluate_root_cause(request)
+
+@router.post("/predict")
+def predict_from_csv(file: UploadFile = File(...)):
+    """Score a CSV of daily SMART history (serial_number, date, smart_*_raw)
+    and return 7d/14d/30d failure risk with SHAP drivers and causal context."""
+    filename = (file.filename or "").lower()
+    if not filename.endswith(".csv"):
+        raise HTTPException(status_code=400, detail="Upload must be a .csv file.")
+    raw = file.file.read()
+    return component3_prediction.predict_from_csv_bytes(raw)

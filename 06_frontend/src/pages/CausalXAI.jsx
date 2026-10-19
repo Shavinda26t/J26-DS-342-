@@ -6,6 +6,7 @@ import CausalGraph from '../components/component3/CausalGraph';
 import GlobalFeatureImportance from '../components/component3/GlobalFeatureImportance';
 import LocalExplanation from '../components/component3/LocalExplanation';
 import ResearchFigures from '../components/component3/ResearchFigures';
+import PredictPanel from '../components/component3/PredictPanel';
 
 const CausalXAI = () => {
   const [data, setData] = useState(null);
@@ -86,6 +87,9 @@ const CausalXAI = () => {
 
       {/* Summary Cards & Scientific Warning Banner */}
       <FailureExplanation summary={summary} />
+
+      {/* Interactive CSV Upload Prediction */}
+      <PredictPanel />
 
       {/* Root Cause Candidate Hierarchy */}
       <RootCausePanel candidates={rootCauses} />
