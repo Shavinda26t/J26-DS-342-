@@ -7,9 +7,12 @@ always matches ``02_component_2_digital_twin`` results.
 
 from typing import List
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, UploadFile, File
+import io
+import pandas as pd
 
 from app.schemas.component2 import (
+    BatchInferenceResponse,
     ConfigComparisonRow,
     DetectionRecord,
     DigitalTwinRequest,
@@ -20,6 +23,7 @@ from app.schemas.component2 import (
     SweepConfig,
 )
 from app.services import component2_service as service
+from app.services import component2_inference_service as inference_service
 
 router = APIRouter()
 
@@ -85,3 +89,22 @@ def get_digital_twin(request: DigitalTwinRequest) -> DigitalTwinResponse:
             ),
         )
     return detail
+
+
+@router.post("/inference/batch", response_model=BatchInferenceResponse, tags=["Component 2: Digital Twin"])
+async def inference_batch(file: UploadFile = File(...)) -> BatchInferenceResponse:
+    """Run batch inference on uploaded CSV using trained Digital Twin model."""
+    if not file.filename or not file.filename.lower().endswith('.csv'):
+        raise HTTPException(
+            status_code=400,
+            detail="Only CSV files are supported"
+        )
+    try:
+        content = await file.read()
+        df = pd.read_csv(io.BytesIO(content))
+        results = inference_service.predict_batch(df)
+        return {"count": len(results), "predictions": results}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Batch inference failed: {str(e)}")

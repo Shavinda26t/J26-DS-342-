@@ -14,3 +14,11 @@ export const getComponent2ConfigComparison = () =>
 export const getComponent2RulMetrics = () => apiClient.get('/api/v1/component2/rul-metrics');
 export const getComponent2Twin = (serial) =>
   apiClient.post('/api/v1/component2/twin', { serial_number: serial });
+
+export const postComponent2BatchInference = (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return apiClient.post('/api/v1/component2/inference/batch', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};

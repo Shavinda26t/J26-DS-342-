@@ -21,6 +21,7 @@ import {
   getComponent2RulMetrics,
   getComponent2Sweep,
   getComponent2Twin,
+  postComponent2BatchInference,
 } from '../api/component2Api';
 
 const COLORS = {
@@ -106,6 +107,15 @@ export default function DigitalTwin() {
   const [twinLoading, setTwinLoading] = useState(false);
 
   const [statusFilter, setStatusFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState('validation');
+  
+  // Batch inference state
+  const [batchFile, setBatchFile] = useState(null);
+  const [batchPreview, setBatchPreview] = useState([]);
+  const [batchErrors, setBatchErrors] = useState([]);
+  const [batchResults, setBatchResults] = useState(null);
+  const [batchLoading, setBatchLoading] = useState(false);
+  const [batchErrorMsg, setBatchErrorMsg] = useState(null);
 
   const load = () => {
     setLoading(true);
@@ -162,33 +172,69 @@ export default function DigitalTwin() {
       .finally(() => setTwinLoading(false));
   };
 
-  if (loading) {
-    return <div style={{ color: COLORS.subtext, padding: 40 }}>Loading digital twin validation data…</div>;
-  }
+  const downloadTemplate = () => {
+    const template = `serial_number,date,smart_1_normalized,smart_5_normalized,smart_187_normalized,smart_197_normalized,smart_198_normalized,smart_1_normalized_change_7d,smart_1_normalized_change_14d,smart_1_normalized_rolling_std_7,smart_187_normalized_change_7d,smart_187_normalized_change_14d,smart_187_normalized_rolling_std_7,smart_1_available,smart_5_available,smart_187_available,smart_197_available,smart_198_available
+HDD001,2023-01-01,100,100,97,100,100,0,0,2.6367,0,0,0,1,1,1,1,1
+HDD001,2023-01-02,100,100,97,100,100,0,0,2.6367,0,0,0,1,1,1,1,1
+HDD001,2023-01-30,100,100,97,100,100,0,0,2.6367,0,0,0,1,1,1,1,1`;
+    const blob = new Blob([template], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'component2_batch_template.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
-  if (error) {
-    return (
-      <div style={{ ...cardStyle, borderColor: COLORS.bad, maxWidth: 640 }}>
-        <div style={{ color: COLORS.bad, fontWeight: 600, marginBottom: 8 }}>Backend unavailable</div>
-        <div style={{ color: COLORS.subtext, fontSize: 14, marginBottom: 14 }}>{error}</div>
-        <button
-          type="button"
-          onClick={load}
-          style={{
-            background: COLORS.accent,
-            color: '#0f172a',
-            border: 'none',
-            borderRadius: 8,
-            padding: '8px 16px',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
+  const handleBatchFile = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setBatchFile(file);
+    setBatchResults(null);
+    setBatchErrors([]);
+    setBatchErrorMsg(null);
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target.result;
+      const lines = text.split('\n').filter(l => l.trim());
+      if (lines.length <= 1) {
+        setBatchPreview([]);
+        setBatchErrors(['CSV appears to be empty']);
+        return;
+      }
+      const headers = lines[0].split(',').map(h => h.trim());
+      const rows = lines.slice(1, 6).map(line => {
+        const vals = line.split(',').map(v => v.trim());
+        const obj = {};
+        headers.forEach((h, i) => { obj[h] = vals[i] || ''; });
+        return obj;
+      });
+      setBatchPreview(rows);
+      
+      const required = ['serial_number', 'date'];
+      const missing = required.filter(r => !headers.includes(r));
+      if (missing.length > 0) {
+        setBatchErrors(prev => [...prev, `Missing required columns: ${missing.join(', ')}`]);
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const runBatchInference = async () => {
+    if (!batchFile) return;
+    setBatchLoading(true);
+    setBatchErrorMsg(null);
+    setBatchResults(null);
+    try {
+      const res = await postComponent2BatchInference(batchFile);
+      setBatchResults(res.data);
+    } catch (err) {
+      setBatchErrorMsg(err.response?.data?.detail || err.message);
+    } finally {
+      setBatchLoading(false);
+    }
+  };
 
   const s = overview?.summary ?? {};
   const fa = overview?.false_alarms ?? {};
@@ -199,7 +245,149 @@ export default function DigitalTwin() {
     sweep.find((p) => p.config === cfg.config) ??
     null;
 
-  return (
+  const renderSimulator = () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <SectionCard
+        title="Twin Simulator (Batch Inference)"
+        subtitle="Upload CSV with historical observations (≥30 per HDD) to predict RUL using trained BiLSTM. Inference-only, not part of held-out validation."
+      >
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
+          <button
+            type="button"
+            onClick={downloadTemplate}
+            style={{
+              background: 'transparent',
+              color: COLORS.accent,
+              border: `1px solid ${COLORS.accent}`,
+              borderRadius: 8,
+              padding: '8px 16px',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Download Template CSV
+          </button>
+          <label
+            style={{
+              background: COLORS.accent,
+              color: '#0f172a',
+              border: 'none',
+              borderRadius: 8,
+              padding: '8px 16px',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            Choose CSV
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleBatchFile}
+              style={{ display: 'none' }}
+            />
+          </label>
+          {batchFile && (
+            <button
+              type="button"
+              onClick={runBatchInference}
+              disabled={batchLoading}
+              style={{
+                background: batchLoading ? '#94a3b8' : COLORS.good,
+                color: '#0f172a',
+                border: 'none',
+                borderRadius: 8,
+                padding: '8px 16px',
+                fontWeight: 700,
+                cursor: batchLoading ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {batchLoading ? 'Running...' : 'Run Inference'}
+            </button>
+          )}
+        </div>
+        
+        {batchFile && (
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ color: COLORS.text, fontSize: 14, marginBottom: 6 }}>
+              Selected: {batchFile.name} ({(batchFile.size/1024).toFixed(1)} KB)
+            </div>
+          </div>
+        )}
+        
+        {batchErrors.length > 0 && (
+          <div style={{ background: 'rgba(248,113,113,0.1)', border: `1px solid ${COLORS.bad}`, borderRadius: 8, padding: 12, marginBottom: 12 }}>
+            {batchErrors.map((err, i) => (
+              <div key={i} style={{ color: COLORS.bad, fontSize: 13 }}>{err}</div>
+            ))}
+          </div>
+        )}
+        
+        {batchPreview.length > 0 && (
+          <div style={{ marginBottom: 16 }}>
+            <div style={{ color: COLORS.subtext, fontSize: 13, marginBottom: 8 }}>Preview (first 5 rows)</div>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={tableStyle}>
+                <thead>
+                  <tr>
+                    {Object.keys(batchPreview[0]).slice(0, 8).map(k => (
+                      <th key={k} style={thStyle}>{k}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {batchPreview.map((row, i) => (
+                    <tr key={i}>
+                      {Object.values(row).slice(0, 8).map((v, j) => (
+                        <td key={j} style={tdStyle}>{v}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+        
+        {batchErrorMsg && (
+          <div style={{ color: COLORS.bad, fontSize: 14, marginBottom: 12 }}>{batchErrorMsg}</div>
+        )}
+        
+        {batchResults && (
+          <div>
+            <div style={{ color: COLORS.subtext, fontSize: 13, marginBottom: 10 }}>
+              Results: {batchResults.count} groups
+            </div>
+            <div style={{ overflowX: 'auto', maxHeight: 400, overflowY: 'auto' }}>
+              <table style={tableStyle}>
+                <thead>
+                  <tr>
+                    <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Serial</th>
+                    <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Status</th>
+                    <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Predicted RUL (days)</th>
+                    <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Obs Used</th>
+                    <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Error</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {batchResults.predictions.map((p, i) => (
+                    <tr key={i}>
+                      <td style={{ ...tdStyle, fontFamily: 'monospace' }}>{p.serial_number}</td>
+                      <td style={tdStyle}>{p.status}</td>
+                      <td style={tdStyle}>{p.predicted_rul_days != null ? p.predicted_rul_days.toFixed(2) : '—'}</td>
+                      <td style={tdStyle}>{p.observations_used ?? p.available ?? '—'}</td>
+                      <td style={{ ...tdStyle, color: COLORS.bad, fontSize: 12 }}>{p.error ?? '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </SectionCard>
+    </div>
+  );
+
+  const renderValidation = () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Header */}
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
@@ -515,6 +703,56 @@ export default function DigitalTwin() {
       </SectionCard>
     </div>
   );
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: 24 }}>
+      <header style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <h1 style={{ color: COLORS.text, margin: 0, fontSize: 26 }}>Component 2 — Adaptive Digital Twin</h1>
+        <p style={{ color: COLORS.subtext, margin: 0 }}>
+          {activeTab === 'validation' 
+            ? 'Held-out validation of the adaptive digital twin and RUL predictor (single source of truth).' 
+            : 'Batch inference using trained BiLSTM on user-provided test data.'}
+        </p>
+      </header>
+      
+      <div style={{ display: 'flex', gap: 8, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 0 }}>
+        <button
+          type="button"
+          onClick={() => setActiveTab('validation')}
+          style={{
+            background: activeTab === 'validation' ? 'rgba(56,189,248,0.12)' : 'transparent',
+            color: activeTab === 'validation' ? COLORS.accent : COLORS.subtext,
+            border: 'none',
+            borderBottom: activeTab === 'validation' ? `2px solid ${COLORS.accent}` : 'none',
+            padding: '10px 16px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            marginBottom: -1,
+          }}
+        >
+          Validation
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('simulator')}
+          style={{
+            background: activeTab === 'simulator' ? 'rgba(52,211,153,0.12)' : 'transparent',
+            color: activeTab === 'simulator' ? COLORS.good : COLORS.subtext,
+            border: 'none',
+            borderBottom: activeTab === 'simulator' ? `2px solid ${COLORS.good}` : 'none',
+            padding: '10px 16px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            marginBottom: -1,
+          }}
+        >
+          Twin Simulator
+        </button>
+      </div>
+      
+      {activeTab === 'validation' ? renderValidation() : renderSimulator()}
+    </div>
+  );
 }
 
 const pillStyle = {
@@ -549,6 +787,148 @@ const tdStyle = {
   color: COLORS.text,
   borderBottom: `1px solid rgba(51,65,85,0.6)`,
 };
+
+const renderSimulator = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <SectionCard
+      title="Twin Simulator (Batch Inference)"
+      subtitle="Upload CSV with historical observations (≥30 per HDD) to predict RUL using trained BiLSTM. Inference-only, not part of held-out validation."
+    >
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
+        <button
+          type="button"
+          onClick={downloadTemplate}
+          style={{
+            background: 'transparent',
+            color: COLORS.accent,
+            border: `1px solid ${COLORS.accent}`,
+            borderRadius: 8,
+            padding: '8px 16px',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          Download Template CSV
+        </button>
+        <label
+          style={{
+            background: COLORS.accent,
+            color: '#0f172a',
+            border: 'none',
+            borderRadius: 8,
+            padding: '8px 16px',
+            fontWeight: 700,
+            cursor: 'pointer',
+          }}
+        >
+          Choose CSV
+          <input
+            type="file"
+            accept=".csv"
+            onChange={handleBatchFile}
+            style={{ display: 'none' }}
+          />
+        </label>
+        {batchFile && (
+          <button
+            type="button"
+            onClick={runBatchInference}
+            disabled={batchLoading}
+            style={{
+              background: batchLoading ? '#94a3b8' : COLORS.good,
+              color: '#0f172a',
+              border: 'none',
+              borderRadius: 8,
+              padding: '8px 16px',
+              fontWeight: 700,
+              cursor: batchLoading ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {batchLoading ? 'Running...' : 'Run Inference'}
+          </button>
+        )}
+      </div>
+      
+      {batchFile && (
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ color: COLORS.text, fontSize: 14, marginBottom: 6 }}>
+            Selected: {batchFile.name} ({(batchFile.size/1024).toFixed(1)} KB)
+          </div>
+        </div>
+      )}
+      
+      {batchErrors.length > 0 && (
+        <div style={{ background: 'rgba(248,113,113,0.1)', border: `1px solid ${COLORS.bad}`, borderRadius: 8, padding: 12, marginBottom: 12 }}>
+          {batchErrors.map((err, i) => (
+            <div key={i} style={{ color: COLORS.bad, fontSize: 13 }}>{err}</div>
+          ))}
+        </div>
+      )}
+      
+      {batchPreview.length > 0 && (
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ color: COLORS.subtext, fontSize: 13, marginBottom: 8 }}>Preview (first 5 rows)</div>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={tableStyle}>
+              <thead>
+                <tr>
+                  {Object.keys(batchPreview[0]).slice(0, 8).map(k => (
+                    <th key={k} style={thStyle}>{k}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {batchPreview.map((row, i) => (
+                  <tr key={i}>
+                    {Object.values(row).slice(0, 8).map((v, j) => (
+                      <td key={j} style={tdStyle}>{v}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+      
+      {batchErrorMsg && (
+        <div style={{ color: COLORS.bad, fontSize: 14, marginBottom: 12 }}>{batchErrorMsg}</div>
+      )}
+      
+      {batchResults && (
+        <div>
+          <div style={{ color: COLORS.subtext, fontSize: 13, marginBottom: 10 }}>
+            Results: {batchResults.count} groups
+          </div>
+          <div style={{ overflowX: 'auto', maxHeight: 400, overflowY: 'auto' }}>
+            <table style={tableStyle}>
+              <thead>
+                <tr>
+                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Serial</th>
+                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Status</th>
+                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Predicted RUL (days)</th>
+                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Obs Used</th>
+                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Error</th>
+                </tr>
+              </thead>
+              <tbody>
+                {batchResults.predictions.map((p, i) => (
+                  <tr key={i}>
+                    <td style={{ ...tdStyle, fontFamily: 'monospace' }}>{p.serial_number}</td>
+                    <td style={tdStyle}>{p.status}</td>
+                    <td style={tdStyle}>{p.predicted_rul_days != null ? p.predicted_rul_days.toFixed(2) : '—'}</td>
+                    <td style={tdStyle}>{p.observations_used ?? p.available ?? '—'}</td>
+                    <td style={{ ...tdStyle, color: COLORS.bad, fontSize: 12 }}>{p.error ?? '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </SectionCard>
+  </div>
+);
 
 function Detail({ label, value, good }) {
   return (

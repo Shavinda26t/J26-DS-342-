@@ -146,3 +146,18 @@ class DigitalTwinResponse(BaseModel):
     lead_time_days: Optional[float]
     persistence_span_days: Optional[float]
     longest_persistence_run: int
+
+
+class BatchInferenceResult(BaseModel):
+    serial_number: str
+    status: str
+    predicted_rul_days: Optional[float] = None
+    observations_used: Optional[int] = None
+    required: Optional[int] = None
+    available: Optional[int] = None
+    error: Optional[str] = None
+
+
+class BatchInferenceResponse(BaseModel):
+    count: int
+    predictions: List[BatchInferenceResult]
