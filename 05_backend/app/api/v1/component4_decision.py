@@ -38,3 +38,27 @@ def decide_hdd_mitigation(
     """Return an independently safety-checked decision."""
 
     return generate_safe_recommendation(request)
+
+
+# ---------------------------------------------------------
+# Step 171 - Actual trained DQN inference
+# ---------------------------------------------------------
+
+from app.services.component4_rl_service import (
+    generate_trained_rl_recommendation,
+)
+
+
+@router.post(
+    "/rl-decide",
+    summary="Generate a trained DQN HDD mitigation recommendation",
+    description=(
+        "Runs the trained experimental DQN policy and "
+        "independent mitigation safety validation. "
+        "No real storage actions are executed."
+    ),
+)
+def decide_hdd_mitigation_with_rl(
+    request: HDDDecisionRequest,
+):
+    return generate_trained_rl_recommendation(request)
