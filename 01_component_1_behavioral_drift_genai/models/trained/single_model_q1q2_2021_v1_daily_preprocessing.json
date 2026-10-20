@@ -1,0 +1,40 @@
+{
+  "features": [
+    "smart_5_raw",
+    "smart_9_raw",
+    "smart_194_raw",
+    "smart_197_raw",
+    "smart_198_raw"
+  ],
+  "log_features": [
+    "smart_5_raw",
+    "smart_9_raw",
+    "smart_197_raw",
+    "smart_198_raw"
+  ],
+  "center": [
+    0.0,
+    9.000729834944558,
+    29.0,
+    0.0,
+    0.0
+  ],
+  "scale": [
+    1.0,
+    0.5288527226594919,
+    8.0,
+    1.0,
+    1.0
+  ],
+  "original_iqr": [
+    0.0,
+    0.5288527226594919,
+    8.0,
+    0.0,
+    0.0
+  ],
+  "fit_rows": 62988,
+  "fit_end": "2021-03-31",
+  "fit_split": "train",
+  "zero_iqr_rule": "scale=1"
+}

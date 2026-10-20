@@ -1,0 +1,27 @@
+{
+  "run_id": "single_model_q1q2_2021_v1",
+  "config_sha256": "892bef21419fb60ce1bc0a5d1c5d03645852e9d992b98b9cb4efb3ca47432bb1",
+  "seed": 42,
+  "quantile": 0.99,
+  "versions": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "sklearn": "1.9.1",
+    "torch": "2.14.1+cpu"
+  },
+  "neural_max_epochs": 50,
+  "neural_epochs_completed": 50,
+  "early_stopping_patience": 7,
+  "real_failure_labels_used": false,
+  "sealed_test_opened": false,
+  "limitations": [
+    "single HDD model",
+    "one training seed",
+    "dependent overlapping windows",
+    "synthetic window sensitivity is not real failure detection",
+    "statistical reference is not a manufacturer SMART-rule baseline",
+    "autoencoder and tabular models use different representations"
+  ],
+  "next_step": "HDD_04_Masked_SSL_Encoder.ipynb: compact masked temporal Transformer using the same saved windows"
+}

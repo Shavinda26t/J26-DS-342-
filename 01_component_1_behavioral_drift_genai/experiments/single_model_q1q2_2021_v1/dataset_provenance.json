@@ -1,0 +1,37 @@
+{
+  "created_utc": "2026-10-20T08:21:55.820286+00:00",
+  "config_sha256": "892bef21419fb60ce1bc0a5d1c5d03645852e9d992b98b9cb4efb3ca47432bb1",
+  "split_sha256": "f3a890d0e773e1467ed6b56e7c97b73dd471825120cd9c5c8e725dd4df90b6b6",
+  "preprocessing_sha256": "b8c37d9c1fe9eb62f6b152b76c85fd062e72576f3e090a636646b894d80a51fc",
+  "archives": {
+    "Q1": {
+      "filename": "data_Q1_2021.zip",
+      "bytes": 889786067,
+      "sha256": "4a45e454f503a9fa1d06ccb7a6dbd5ce071bf7b39e5915d2effb179c9a65a6c2"
+    },
+    "Q2": {
+      "filename": "data_Q2_2021.zip",
+      "bytes": 908205847,
+      "sha256": "a4c151f837a630ee86880a047761957203505b87e5b962262f35f4e99910c836"
+    }
+  },
+  "checks": [
+    {
+      "split": "train",
+      "status": "passed"
+    },
+    {
+      "split": "calibration",
+      "status": "passed"
+    },
+    {
+      "split": "development",
+      "status": "passed"
+    },
+    {
+      "split": "test",
+      "status": "passed"
+    }
+  ],
+  "failure_labels_used_for_fitting": false
+}

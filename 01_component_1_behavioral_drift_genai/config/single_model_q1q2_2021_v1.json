@@ -1,0 +1,44 @@
+{
+  "run_id": "single_model_q1q2_2021_v1",
+  "model": "ST12000NM0008",
+  "seed": 42,
+  "test_selection_seed": 43,
+  "raw_features": [
+    "smart_5_raw",
+    "smart_9_raw",
+    "smart_194_raw",
+    "smart_197_raw",
+    "smart_198_raw"
+  ],
+  "window_days": 30,
+  "stride_days": 1,
+  "scoring_endpoint_periods": {
+    "train": [
+      "2021-01-30",
+      "2021-03-31"
+    ],
+    "calibration": [
+      "2021-04-01",
+      "2021-04-30"
+    ],
+    "development": [
+      "2021-05-01",
+      "2021-05-31"
+    ],
+    "test": [
+      "2021-06-01",
+      "2021-06-30"
+    ]
+  },
+  "pilot_sha256": "055254bb1e689d8be597f62daceb32926eeba815e41a4b2af6900f7650b97112",
+  "missing_rule": "strict: reject any window with missing/nonfinite/negative SMART values; retain masks and audit",
+  "history_rule": "allow earlier context within the same held-out drive; never use future rows",
+  "labels": "failure stored separately; forbidden for fitting and development selection",
+  "test_population": "same-model non-pilot drives present 2021-04-01; June scoring only",
+  "versions": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "sklearn": "1.9.1"
+  }
+}
