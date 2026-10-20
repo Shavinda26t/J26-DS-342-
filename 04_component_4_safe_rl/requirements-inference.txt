@@ -1,0 +1,14 @@
+
+# Component 4 - Trained DQN inference dependencies
+# Tested with Python 3.11 in the hdd-pp1 environment.
+#
+# Install the shared backend dependencies separately:
+# python -m pip install -r 05_backend/requirements.txt
+#
+# Then install Component 4 inference dependencies:
+# python -m pip install -r 04_component_4_safe_rl/requirements-inference.txt
+
+numpy>=1.24,<3
+gymnasium==1.1.1
+stable-baselines3==2.7.0
+torch==2.7.1
