@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { predictComponent3Csv } from '../../api/component3Api';
+import UploadedHddVisualAnalysis from './UploadedHddVisualAnalysis';
 
 const SMART_LABELS = {
   smart_1_raw: 'Read Error Rate',
@@ -211,11 +212,17 @@ export const UploadedHddAnalysis = ({ pred }) => {
   );
 };
 
-const PredictPanel = () => {
+const PredictPanel = ({ onPredictionChange }) => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (onPredictionChange) {
+      onPredictionChange(Boolean(result && result.predictions?.length));
+    }
+  }, [result, onPredictionChange]);
 
   const onFileChange = (e) => {
     setFile(e.target.files?.[0] || null);
@@ -252,9 +259,10 @@ const PredictPanel = () => {
       <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
         <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
           Upload a drive history CSV to run a fully dynamic per-drive analysis: risk scoring, local SHAP,
-          local root-cause factor ranking, and local explanation narrative. Fleet-level research evidence
-          (PCMCI, matched ATT, evidence catalog, figures) is static and is reused read-only — it is never
-          recomputed by an upload.
+          local root-cause factor ranking, local explanation narrative, and the "Uploaded HDD Visual
+          Analysis" charts (local factor bars, ATT overlay, PCMCI overlay, dynamic pathway, SMART history).
+          Fleet-level research evidence (PCMCI, matched ATT, evidence catalog, figures) is static and is
+          reused read-only — it is never recomputed by an upload.
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
           <input type="file" accept=".csv" onChange={onFileChange} style={{ color: '#cbd5e1', fontSize: '0.85rem' }} />
@@ -308,6 +316,8 @@ const PredictPanel = () => {
             </div>
 
             <UploadedHddAnalysis pred={pred} />
+
+            <UploadedHddVisualAnalysis pred={pred} />
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
               {pred.top_factors_by_horizon.map((entry) => (

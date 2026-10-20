@@ -721,6 +721,477 @@ def _local_root_cause_explanation(
 
 
 # ==========================================================
+# DYNAMIC VISUALIZATION PAYLOAD
+# ==========================================================
+
+# Factors counted as "locally important" for a single uploaded HDD.
+LOCAL_IMPORTANCE_SHARE_PCT = 5.0
+LOCAL_IMPORTANCE_MAX = 6
+
+
+def _locally_important_factors(
+    ranking: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+
+    important = [
+        entry
+        for entry in ranking
+        if entry["local_shap_share_pct"] >= LOCAL_IMPORTANCE_SHARE_PCT
+    ][:LOCAL_IMPORTANCE_MAX]
+
+    if not important and ranking:
+        important = ranking[:3]
+
+    return important
+
+
+def _smart_history_traces(
+    df: pd.DataFrame,
+    serial: str,
+    ranking: List[Dict[str, Any]],
+    max_factors: int = 5,
+    max_points: int = 30,
+) -> List[Dict[str, Any]]:
+    """30-day raw SMART trajectories for the top local factors."""
+
+    history = df[df["serial_number"] == serial].copy()
+
+    history["date"] = pd.to_datetime(history["date"], errors="coerce")
+
+    history = (
+        history.dropna(subset=["date"])
+        .sort_values("date")
+        .tail(max_points)
+    )
+
+    traces = []
+
+    for entry in ranking[:max_factors]:
+
+        attribute = entry["dominant_smart_attribute"]
+
+        if attribute not in df.columns:
+            continue
+
+        values = pd.to_numeric(history[attribute], errors="coerce")
+
+        points = [
+            {
+                "date": pd.Timestamp(d).strftime("%Y-%m-%d"),
+                "value": (None if pd.isna(v) else float(v)),
+            }
+            for d, v in zip(history["date"], values)
+        ]
+
+        numeric = [p["value"] for p in points if p["value"] is not None]
+
+        trend = "flat"
+
+        if len(numeric) >= 2:
+            change = numeric[-1] - numeric[0]
+            span = max(abs(numeric[0]), 1e-9)
+            if change > 0.05 * span:
+                trend = "increasing"
+            elif change < -0.05 * span:
+                trend = "decreasing"
+
+        traces.append(
+            {
+                "factor_id": entry["factor_id"],
+                "factor_name": entry["factor_name"],
+                "smart_attribute": attribute,
+                "smart_label": entry["dominant_smart_label"],
+                "local_rank": entry["local_rank"],
+                "local_shap_share_pct": entry["local_shap_share_pct"],
+                "trend": trend,
+                "points": points,
+            }
+        )
+
+    return traces
+
+
+def _att_overlay(ranking: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Fleet ATT contrasts, with local-HDD relevance flags.
+
+    ATT values are reused verbatim from the static fleet payload;
+    only a boolean 'relevant_to_local_hdd' is added per factor.
+    """
+
+    important_ids = {
+        entry["factor_id"] for entry in _locally_important_factors(ranking)
+    }
+
+    local_by_id = {entry["factor_id"]: entry for entry in ranking}
+
+    factors = []
+
+    for entry in ranking:
+
+        fleet = entry["fleet_evidence"]
+
+        att_pp = fleet.get("matched_risk_difference_pp")
+
+        if att_pp is None:
+            continue
+
+        factors.append(
+            {
+                "factor_id": entry["factor_id"],
+                "factor_name": entry["factor_name"],
+                "risk_difference_pp": att_pp,
+                "ci_pp": fleet.get("matched_ci_pp"),
+                "evidence_class": fleet.get("matched_evidence_class"),
+                "relevant_to_local_hdd": entry["factor_id"] in important_ids,
+                "local_shap_share_pct": local_by_id[entry["factor_id"]][
+                    "local_shap_share_pct"
+                ],
+            }
+        )
+
+    factors.sort(
+        key=lambda item: (not item["relevant_to_local_hdd"],
+                          -(item["risk_difference_pp"] or 0))
+    )
+
+    return {
+        "title": "Fleet Matched Failure-Risk Evidence Relevant to This HDD",
+        "disclaimer": (
+            "ATT values are fleet-level observational estimates and are "
+            "not individual treatment effects for this HDD."
+        ),
+        "factors": factors,
+    }
+
+
+def _pcmci_overlay(
+    pathways: List[Dict[str, Any]],
+    ranking: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Static stable PCMCI network + local-HDD highlight flags."""
+
+    important_ids = {
+        entry["factor_id"] for entry in _locally_important_factors(ranking)
+    }
+
+    local_by_id = {entry["factor_id"]: entry for entry in ranking}
+
+    def node(factor_id: str) -> Dict[str, Any]:
+        entry = local_by_id.get(factor_id)
+        return {
+            "factor_id": factor_id,
+            "factor_name": FACTOR_NAMES.get(factor_id, factor_id),
+            "locally_important": factor_id in important_ids,
+            "local_shap_share_pct": (
+                entry["local_shap_share_pct"] if entry else 0.0
+            ),
+        }
+
+    nodes: Dict[str, Dict[str, Any]] = {}
+
+    edges = []
+
+    for pathway in pathways:
+
+        source = pathway.get("source_factor_id")
+        target = pathway.get("target_factor_id")
+
+        if not source or not target:
+            continue
+
+        nodes.setdefault(source, node(source))
+        nodes.setdefault(target, node(target))
+
+        edges.append(
+            {
+                "source_factor_id": source,
+                "source_factor_name": FACTOR_NAMES.get(source, source),
+                "target_factor_id": target,
+                "target_factor_name": FACTOR_NAMES.get(target, target),
+                "strongest_detection_rate": pathway.get(
+                    "strongest_detection_rate"
+                ),
+                "strongest_sign_consistency": pathway.get(
+                    "strongest_sign_consistency"
+                ),
+                "strongest_lag_days": pathway.get("strongest_lag_days"),
+                "relevant_to_local_hdd": (
+                    source in important_ids and target in important_ids
+                ),
+                "touches_local_hdd": (
+                    source in important_ids or target in important_ids
+                ),
+            }
+        )
+
+    return {
+        "title": "Fleet Temporal Dependency Network with Local HDD Overlay",
+        "disclaimer": (
+            "Edges are static fleet-level PCMCI temporal dependencies. "
+            "Highlighted nodes/edges correspond to factors locally "
+            "important for this uploaded HDD's predictive explanation; "
+            "PCMCI is never recomputed from a single drive."
+        ),
+        "nodes": list(nodes.values()),
+        "edges": edges,
+    }
+
+
+def _dynamic_root_cause_pathway(
+    ranking: List[Dict[str, Any]],
+    pathways: List[Dict[str, Any]],
+    risks: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Root-cause-oriented pathway built from local SHAP + fleet evidence."""
+
+    important = _locally_important_factors(ranking)
+
+    important_ids = {entry["factor_id"] for entry in important}
+
+    primary = risks.get("30d") or next(iter(risks.values()), None)
+
+    flagged = bool(primary.get("flagged")) if primary else False
+
+    # Prefer a fleet PCMCI edge where both endpoints are local-important.
+    chosen_edge = None
+
+    for pathway in pathways:
+        source = pathway.get("source_factor_id")
+        target = pathway.get("target_factor_id")
+        if source in important_ids and target in important_ids:
+            chosen_edge = pathway
+            break
+
+    # Otherwise use the strongest local-important factor's own pathway.
+    if chosen_edge is None and important:
+        lead_id = important[0]["factor_id"]
+        for pathway in pathways:
+            if (
+                pathway.get("source_factor_id") == lead_id
+                or pathway.get("target_factor_id") == lead_id
+            ):
+                chosen_edge = pathway
+                break
+
+    steps = []
+
+    edge_source = chosen_edge.get("source_factor_id") if chosen_edge else None
+    edge_target = chosen_edge.get("target_factor_id") if chosen_edge else None
+
+    ordered_ids = []
+
+    if edge_source:
+        ordered_ids.append(edge_source)
+    if edge_target:
+        ordered_ids.append(edge_target)
+
+    for entry in important:
+        if entry["factor_id"] not in ordered_ids:
+            ordered_ids.append(entry["factor_id"])
+
+    local_by_id = {entry["factor_id"]: entry for entry in ranking}
+
+    for factor_id in ordered_ids:
+
+        entry = local_by_id.get(factor_id)
+
+        if entry is None:
+            continue
+
+        fleet = entry["fleet_evidence"]
+
+        temporal_support = (
+            [p for p in fleet.get("temporal_pathways", [])] != []
+            or bool(fleet.get("strongest_temporal_relation"))
+        )
+
+        matched_support = (
+            fleet.get("matched_risk_difference_pp") is not None
+        )
+
+        steps.append(
+            {
+                "factor_id": factor_id,
+                "factor_name": entry["factor_name"],
+                "local_contribution_pct": entry["local_shap_share_pct"],
+                "local_direction": entry["local_direction"],
+                "temporal_support": temporal_support,
+                "matched_risk_support": matched_support,
+                "matched_risk_difference_pp": fleet.get(
+                    "matched_risk_difference_pp"
+                ),
+                "evidence_classification": fleet.get(
+                    "integrated_classification"
+                ),
+            }
+        )
+
+    active = bool(flagged and any(
+        step["local_contribution_pct"] >= LOCAL_IMPORTANCE_SHARE_PCT
+        and (step["temporal_support"] or step["matched_risk_support"])
+        for step in steps
+    ))
+
+    if active:
+        summary = (
+            "Root-cause-oriented pathway active: locally important "
+            "factors for this HDD also carry fleet-level temporal or "
+            "matched observational support."
+        )
+    else:
+        summary = (
+            "Root-cause-oriented pathway weak/inactive for this HDD: "
+            "no locally important factor carries strong fleet-level "
+            "temporal or matched support, or the prediction is not "
+            "flagged. No root cause is claimed."
+        )
+
+    return {
+        "active": active,
+        "flagged": flagged,
+        "summary": summary,
+        "steps": steps,
+        "edge": (
+            {
+                "source_factor_id": edge_source,
+                "source_factor_name": FACTOR_NAMES.get(edge_source, edge_source),
+                "target_factor_id": edge_target,
+                "target_factor_name": FACTOR_NAMES.get(edge_target, edge_target),
+                "strongest_detection_rate": chosen_edge.get(
+                    "strongest_detection_rate"
+                ),
+                "strongest_sign_consistency": chosen_edge.get(
+                    "strongest_sign_consistency"
+                ),
+                "strongest_lag_days": chosen_edge.get("strongest_lag_days"),
+            }
+            if chosen_edge
+            else None
+        ),
+        "scope": (
+            "Local contribution is the drive's local SHAP share; temporal "
+            "and matched risk support are reused fleet-level observational "
+            "estimates, not individual causal effects."
+        ),
+    }
+
+
+def _local_evidence_class_summary(
+    ranking: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Distribution of locally important factors by evidence class."""
+
+    important = _locally_important_factors(ranking)
+
+    counts: Dict[str, int] = {}
+
+    factors = []
+
+    for entry in important:
+        classification = (
+            entry["fleet_evidence"].get("integrated_classification")
+            or "PREDICTIVE_ONLY"
+        )
+        counts[classification] = counts.get(classification, 0) + 1
+        factors.append(
+            {
+                "factor_id": entry["factor_id"],
+                "factor_name": entry["factor_name"],
+                "local_shap_share_pct": entry["local_shap_share_pct"],
+                "evidence_classification": classification,
+            }
+        )
+
+    order = [
+        "HIGH_PRIORITY_ROOT_CAUSE_CANDIDATE",
+        "SUPPORTING_DEGRADATION_FACTOR",
+        "EXPLORATORY_ROOT_CAUSE_CANDIDATE",
+        "PREDICTIVE_TEMPORAL_CONTEXT",
+        "PREDICTIVE_SIGNAL_REQUIRES_SEMANTIC_REVIEW",
+        "PREDICTIVE_ONLY",
+    ]
+
+    classes = [
+        {"classification": name, "count": counts.get(name, 0)}
+        for name in order
+        if counts.get(name, 0) > 0
+    ]
+
+    for name, count in counts.items():
+        if name not in order:
+            classes.append({"classification": name, "count": count})
+
+    return {
+        "total_local_factors": len(important),
+        "classes": classes,
+        "factors": factors,
+    }
+
+
+def _build_visual_payload(
+    df: pd.DataFrame,
+    serial: str,
+    ranking: List[Dict[str, Any]],
+    pathways: List[Dict[str, Any]],
+    risks: Dict[str, Any],
+) -> Dict[str, Any]:
+
+    important = _locally_important_factors(ranking)
+
+    importance_flags = {
+        entry["factor_id"]: True for entry in important
+    }
+
+    local_bars = []
+
+    for entry in ranking[:10]:
+        fleet = entry["fleet_evidence"]
+        local_bars.append(
+            {
+                "factor_id": entry["factor_id"],
+                "factor_name": entry["factor_name"],
+                "local_shap_share_pct": entry["local_shap_share_pct"],
+                "local_direction": entry["local_direction"],
+                "pcmci_support": bool(
+                    fleet.get("temporal_pathways")
+                    or fleet.get("strongest_temporal_relation")
+                ),
+                "matched_att_support": (
+                    fleet.get("matched_risk_difference_pp") is not None
+                ),
+                "integrated_evidence_class": fleet.get(
+                    "integrated_classification"
+                ),
+                "locally_important": entry["factor_id"]
+                in importance_flags,
+            }
+        )
+
+    return {
+        "local_factor_bars": local_bars,
+        "att_overlay": _att_overlay(ranking),
+        "pcmci_overlay": _pcmci_overlay(pathways, ranking),
+        "dynamic_root_cause_pathway": _dynamic_root_cause_pathway(
+            ranking, pathways, risks
+        ),
+        "local_evidence_class_summary": _local_evidence_class_summary(
+            ranking
+        ),
+        "smart_history_traces": _smart_history_traces(
+            df, serial, ranking
+        ),
+        "rules": {
+            "pcmci_recomputed": False,
+            "att_recomputed": False,
+            "note": (
+                "Fleet PCMCI coefficients and matched ATT values are "
+                "reused unchanged; only local overlay flags are added."
+            ),
+        },
+    }
+
+
+# ==========================================================
 # PREDICTION ENTRY POINT
 # ==========================================================
 def predict_from_csv_bytes(raw_bytes: bytes) -> Dict[str, Any]:
@@ -788,6 +1259,11 @@ def predict_from_csv_bytes(raw_bytes: bytes) -> Dict[str, Any]:
     X = engineered.reindex(columns=features).astype("float32")
 
     evidence_index = _fleet_evidence_index()
+
+    try:
+        fleet_pathways = component3_service.get_temporal_pathways()
+    except HTTPException:
+        fleet_pathways = []
 
     predictions = []
 
@@ -864,6 +1340,14 @@ def predict_from_csv_bytes(raw_bytes: bytes) -> Dict[str, Any]:
             local_ranking,
         )
 
+        visual_payload = _build_visual_payload(
+            df,
+            serial,
+            local_ranking,
+            fleet_pathways,
+            risks,
+        )
+
         predictions.append(
             {
                 "serial_number": serial,
@@ -878,6 +1362,7 @@ def predict_from_csv_bytes(raw_bytes: bytes) -> Dict[str, Any]:
                 "top_factors_by_horizon": top_factors_all,
                 "local_factor_ranking": local_ranking,
                 "local_root_cause_explanation": local_explanation,
+                "visual_analysis": visual_payload,
                 "causal_context": _causal_context(primary_top),
                 "warnings": warnings,
             }

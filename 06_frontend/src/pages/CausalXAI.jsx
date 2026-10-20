@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getComponent3Dashboard, getComponent3Factors } from '../api/component3Api';
 import FailureExplanation from '../components/component3/FailureExplanation';
 import RootCausePanel from '../components/component3/RootCausePanel';
@@ -13,6 +13,13 @@ const CausalXAI = () => {
   const [factors, setFactors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [hasPrediction, setHasPrediction] = useState(false);
+  const [showStatic, setShowStatic] = useState(false);
+
+  const handlePredictionChange = useCallback((active) => {
+    setHasPrediction(active);
+    setShowStatic(false);
+  }, []);
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -89,22 +96,56 @@ const CausalXAI = () => {
       <FailureExplanation summary={summary} />
 
       {/* Interactive CSV Upload Prediction */}
-      <PredictPanel />
+      <PredictPanel onPredictionChange={handlePredictionChange} />
 
-      {/* Root Cause Candidate Hierarchy */}
-      <RootCausePanel candidates={rootCauses} />
+      {/* Fleet-level static research evidence (hidden while a prediction is shown) */}
+      {hasPrediction && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '12px',
+            padding: '14px 18px',
+            borderRadius: '10px',
+            border: '1px solid #334155',
+            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+          }}
+        >
+          <div>
+            <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#e2e8f0' }}>
+              Fleet-Level Research Evidence
+            </div>
+            <p style={{ fontSize: '0.78rem', color: '#94a3b8', margin: '4px 0 0 0' }}>
+              Population-level causal findings (PCMCI, matched ATT, evidence catalog, research
+              figures, representative cases) are hidden while an uploaded-HDD prediction is displayed.
+            </p>
+          </div>
+          <button className="btn-retry" onClick={() => setShowStatic((v) => !v)}>
+            {showStatic ? 'Hide fleet-level evidence' : 'Show fleet-level evidence'}
+          </button>
+        </div>
+      )}
 
-      {/* Temporal Pathways & ATT Forest / Matched Effects */}
-      <CausalGraph pathways={temporalPathways} matchedEffects={matchedEffects} />
+      {(!hasPrediction || showStatic) && (
+        <>
+          {/* Root Cause Candidate Hierarchy */}
+          <RootCausePanel candidates={rootCauses} />
 
-      {/* Integrated Evidence Catalog Table */}
-      <GlobalFeatureImportance factors={factors} />
+          {/* Temporal Pathways & ATT Forest / Matched Effects */}
+          <CausalGraph pathways={temporalPathways} matchedEffects={matchedEffects} />
 
-      {/* Research Visualizations */}
-      <ResearchFigures />
+          {/* Integrated Evidence Catalog Table */}
+          <GlobalFeatureImportance factors={factors} />
 
-      {/* Local Explanation Section (TP / FP / FN / TN) */}
-      <LocalExplanation />
+          {/* Research Visualizations */}
+          <ResearchFigures />
+
+          {/* Local Explanation Section (TP / FP / FN / TN) */}
+          <LocalExplanation />
+        </>
+      )}
     </div>
   );
 };
