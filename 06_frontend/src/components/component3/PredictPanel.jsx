@@ -3,19 +3,19 @@ import { predictComponent3Csv } from '../../api/component3Api';
 
 const SMART_LABELS = {
   smart_1_raw: 'Read Error Rate',
-  smart_4_raw: 'Seek Error Rate',
+  smart_4_raw: 'Start/Stop Activity',
   smart_5_raw: 'Reallocated Sectors',
-  smart_7_raw: 'Seek Time / Retryable Errors',
+  smart_7_raw: 'Seek Error Rate',
   smart_9_raw: 'Power-On Hours',
   smart_12_raw: 'Power Cycle Count',
-  smart_187_raw: 'Command Timeout',
-  smart_188_raw: 'Unused Reserved Blocks',
-  smart_192_raw: 'Unsafe Shutdown Count',
+  smart_187_raw: 'Reported Uncorrectable Errors',
+  smart_188_raw: 'Command Timeout',
+  smart_192_raw: 'Power-Off Retract Activity',
   smart_193_raw: 'Load/Unload Cycle Count',
   smart_194_raw: 'Temperature',
   smart_197_raw: 'Current Pending Sectors',
   smart_199_raw: 'UDMA CRC Errors',
-  smart_240_raw: 'Workload (Host HM)',
+  smart_240_raw: 'Head Flying Hours',
   smart_241_raw: 'Total LBAs Written',
   smart_242_raw: 'Total LBAs Read',
 };
@@ -62,6 +62,155 @@ const RiskCard = ({ horizon, risk }) => {
   );
 };
 
+const EvidenceAlignment = ({ entry }) => {
+  const fleet = entry.fleet_evidence || {};
+  const facts = [];
+  if (fleet.matched_risk_difference_pp != null) {
+    facts.push(`${fleet.matched_risk_difference_pp >= 0 ? '+' : ''}${fleet.matched_risk_difference_pp.toFixed(1)} pp matched ATT`);
+  }
+  if (fleet.matched_evidence_class) {
+    facts.push(fleet.matched_evidence_class.replace(/_/g, ' ').toLowerCase());
+  }
+  const pathway = (fleet.temporal_pathways || [])[0];
+  if (pathway && pathway.counterpart_factor_name) {
+    const arrow = pathway.direction === 'outgoing' ? '\u2192' : '\u2190';
+    facts.push(`PCMCI ${arrow} ${pathway.counterpart_factor_name}`);
+  }
+  if (fleet.integrated_classification) {
+    facts.push(fleet.integrated_classification.replace(/_/g, ' ').toLowerCase());
+  }
+  if (facts.length === 0) {
+    facts.push('model-only, no strong fleet-level alignment');
+  }
+  return (
+    <span style={{ fontSize: '0.68rem', color: '#94a3b8' }}>
+      {facts.join(' · ')}
+    </span>
+  );
+};
+
+export const UploadedHddAnalysis = ({ pred }) => {
+  const ranking = pred.local_factor_ranking || [];
+  const narrative = pred.local_root_cause_explanation;
+  const primaryRisk = pred.risks['30d'] || {};
+  const predictedClass = primaryRisk.flagged ? 'HIGH RISK (flagged)' : 'LOW RISK (not flagged)';
+  const sufficiency = pred.sufficient_history || {};
+  const historyOk = sufficiency['30d'];
+
+  return (
+    <div
+      style={{
+        border: '1px solid #1e40af',
+        backgroundColor: 'rgba(30, 58, 138, 0.18)',
+        borderRadius: '8px',
+        padding: '14px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+        <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#93c5fd' }}>
+          Uploaded HDD Analysis
+        </span>
+        <span className="badge badge-blue" style={{ fontSize: '0.65rem' }}>
+          Dynamic · This Drive Only
+        </span>
+      </div>
+
+      <div className="evidence-metrics" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))' }}>
+        <div className="evidence-metric-item">
+          <span className="stat-label">Serial Number</span>
+          <span className="stat-val" style={{ fontSize: '0.95rem' }}>{pred.serial_number}</span>
+        </div>
+        <div className="evidence-metric-item">
+          <span className="stat-label">Observation Date</span>
+          <span className="stat-val" style={{ fontSize: '0.95rem' }}>{pred.as_of_date}</span>
+        </div>
+        <div className="evidence-metric-item">
+          <span className="stat-label">History Status</span>
+          <span className="stat-val" style={{ fontSize: '0.95rem' }}>
+            {pred.history_rows} rows
+          </span>
+          <span style={{ fontSize: '0.68rem', color: historyOk ? '#4ade80' : '#fbbf24' }}>
+            {historyOk ? 'sufficient (30d)' : 'partial window'}
+          </span>
+        </div>
+        <div className="evidence-metric-item">
+          <span className="stat-label">30d Risk Score</span>
+          <span className="stat-val" style={{ fontSize: '0.95rem', color: primaryRisk.flagged ? '#f87171' : '#38bdf8' }}>
+            {primaryRisk.risk_percent != null ? `${primaryRisk.risk_percent.toFixed(2)}%` : 'n/a'}
+          </span>
+        </div>
+        <div className="evidence-metric-item">
+          <span className="stat-label">Threshold</span>
+          <span className="stat-val" style={{ fontSize: '0.95rem' }}>
+            {primaryRisk.decision_threshold != null ? primaryRisk.decision_threshold.toFixed(4) : 'n/a'}
+          </span>
+        </div>
+        <div className="evidence-metric-item">
+          <span className="stat-label">Predicted Class</span>
+          <span className="stat-val" style={{ fontSize: '0.8rem', color: primaryRisk.flagged ? '#f87171' : '#4ade80' }}>
+            {predictedClass}
+          </span>
+        </div>
+      </div>
+
+      {narrative && (
+        <div style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.55 }}>
+          <div style={{ fontWeight: 600, color: '#e2e8f0', marginBottom: '4px' }}>
+            Local Root-Cause Explanation
+          </div>
+          <p style={{ margin: '0 0 6px 0' }}>{narrative.headline}</p>
+          <p style={{ margin: '0 0 6px 0' }}>{narrative.dominant_driver}</p>
+          <p style={{ margin: '0 0 6px 0', color: '#93c5fd' }}>{narrative.fleet_alignment}</p>
+          <p style={{ margin: 0, fontSize: '0.74rem', color: '#64748b' }}>{narrative.scope}</p>
+        </div>
+      )}
+
+      <div>
+        <div style={{ fontWeight: 600, color: '#e2e8f0', fontSize: '0.82rem', marginBottom: '8px' }}>
+          Local Root-Cause Factor Ranking (30d)
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          {ranking.slice(0, 8).map((entry) => {
+            const increases = entry.local_direction === 'increases_risk';
+            return (
+              <div
+                key={entry.factor_id}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '3px',
+                  padding: '6px 8px',
+                  backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                  borderRadius: '6px',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', alignItems: 'baseline' }}>
+                  <span style={{ fontSize: '0.8rem', color: '#e2e8f0' }}>
+                    <span style={{ color: '#64748b', marginRight: '6px' }}>#{entry.local_rank}</span>
+                    {entry.factor_name}
+                  </span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 600, color: increases ? '#f87171' : '#4ade80', whiteSpace: 'nowrap' }}>
+                    {increases ? '▲' : '▼'} {entry.local_shap_share_pct.toFixed(1)}%
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
+                  <span style={{ fontSize: '0.68rem', color: '#94a3b8' }}>
+                    {entry.dominant_smart_label} · {entry.dominant_metric}
+                  </span>
+                  <EvidenceAlignment entry={entry} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const PredictPanel = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -97,10 +246,16 @@ const PredictPanel = () => {
     <div>
       <div className="section-header">
         <h2 className="section-title">Interactive Failure Prediction</h2>
-        <span className="badge badge-blue">CSV Upload · Live Model</span>
+        <span className="badge badge-blue">CSV Upload · Live Model · Dynamic</span>
       </div>
 
       <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
+          Upload a drive history CSV to run a fully dynamic per-drive analysis: risk scoring, local SHAP,
+          local root-cause factor ranking, and local explanation narrative. Fleet-level research evidence
+          (PCMCI, matched ATT, evidence catalog, figures) is static and is reused read-only — it is never
+          recomputed by an upload.
+        </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
           <input type="file" accept=".csv" onChange={onFileChange} style={{ color: '#cbd5e1', fontSize: '0.85rem' }} />
           <button
@@ -152,6 +307,8 @@ const PredictPanel = () => {
               ))}
             </div>
 
+            <UploadedHddAnalysis pred={pred} />
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
               {pred.top_factors_by_horizon.map((entry) => (
                 <div key={entry.horizon} style={{ fontSize: '0.78rem' }}>
@@ -189,9 +346,17 @@ const PredictPanel = () => {
         ))}
 
         {result?.model_info && (
-          <div style={{ fontSize: '0.75rem', color: '#64748b', borderTop: '1px solid #334155', paddingTop: '8px' }}>
-            {result.model_info.model} · {result.model_info.features} features · thresholds from validation best-F1.{' '}
-            {result.model_info.note}
+          <div style={{ fontSize: '0.75rem', color: '#64748b', borderTop: '1px solid #334155', paddingTop: '8px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <span>
+              {result.model_info.model} · {result.model_info.features} features · thresholds from validation best-F1.{' '}
+              {result.model_info.note}
+            </span>
+            {result.model_info.dynamic_scope && (
+              <span>
+                <strong style={{ color: '#94a3b8' }}>Dynamic:</strong> {result.model_info.dynamic_scope}{' '}
+                <strong style={{ color: '#94a3b8' }}>Static:</strong> {result.model_info.static_scope}
+              </span>
+            )}
           </div>
         )}
       </div>
