@@ -372,11 +372,11 @@ export default function LiveTwin() {
             >
               {forecast.first_escalation ? (
                 <div style={{ background: 'rgba(167,139,250,0.1)', border: `1px solid ${COLORS.purple}`, borderRadius: 8, padding: 10, marginBottom: 12, color: COLORS.purple, fontSize: 13 }}>
-                  Escalates to <b>{forecast.first_escalation.to_state_name}</b> by day {forecast.first_escalation.day} if degradation persists.
+                  Conditional forecast: reaches <b>{forecast.first_escalation.to_state_name}</b> by day {forecast.first_escalation.day} <b>if degradation evidence persists</b> — not an observed trend.
                 </div>
               ) : (
                 <div style={{ background: 'rgba(52,211,153,0.1)', border: `1px solid ${COLORS.good}`, borderRadius: 8, padding: 10, marginBottom: 12, color: COLORS.good, fontSize: 13 }}>
-                  No state escalation projected within the forecast horizon.
+                  No supported state escalation projected within the forecast horizon under any scenario.
                 </div>
               )}
               <div style={{ overflowX: 'auto' }}>
@@ -399,12 +399,12 @@ export default function LiveTwin() {
                         <td style={{ ...tdStyle, color: COLORS.subtext, fontSize: 13 }}>
                           {t.rul_low != null ? `[${fmt(t.rul_low, 1)}, ${fmt(t.rul_high, 1)}]` : '—'}
                         </td>
-                        <td style={tdStyle}>{t.projected_streak}</td>
+                        <td style={tdStyle}>{t.projected_streak != null ? t.projected_streak : '—'}</td>
                         <td style={{ ...tdStyle, color: STATE_COLORS[t.projected_state] || COLORS.text }}>
-                          {t.projected_state_name}
+                          {t.projected_state_name != null ? t.projected_state_name : '—'}
                         </td>
                         <td style={{ ...tdStyle, color: t.escalates_from_current ? COLORS.warn : COLORS.muted }}>
-                          {t.escalates_from_current ? '▲ yes' : '—'}
+                          {t.escalates_from_current ? '▲ yes' : (t.unexplained_escalation ? 'conditional' : '—')}
                         </td>
                       </tr>
                     ))}
@@ -412,6 +412,11 @@ export default function LiveTwin() {
                 </table>
               </div>
               <div style={{ color: COLORS.subtext, fontSize: 12, marginTop: 10 }}>
+                {forecast.interval_calibration && (
+                  <div style={{ marginBottom: 4 }}>
+                    RUL bands: {forecast.interval_calibration.note}
+                  </div>
+                )}
                 Assumptions: {forecast.assumptions.join(' · ')}
               </div>
             </SectionCard>

@@ -9,6 +9,7 @@ from typing import Any, Dict, List
 
 from fastapi import APIRouter, HTTPException, UploadFile, File
 import io
+import logging
 import pandas as pd
 
 from app.schemas.component2 import (
@@ -28,6 +29,8 @@ from app.schemas.component2 import (
 from app.services import component2_service as service
 from app.services import component2_inference_service as inference_service
 from app.services import twin_sync_service as sync_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -123,11 +126,28 @@ def sync_twin(request: TwinSyncRequest) -> Dict[str, Any]:
 
     Runs adaptive thresholds, RUL + online adaptation, conformal confidence,
     data-quality and the multi-horizon forecast in one call.
+
+    A malformed payload is rejected with **422** *before* the twin is mutated
+    (the observation lifecycle is validate -> dedup -> compute -> persist), so a
+    rejected request never leaves a partially updated twin.  If the resulting
+    state cannot be durably persisted the request fails with **503** and the
+    in-memory twin is rolled back: a sync is never reported as successful unless
+    it was written to disk.
     """
     try:
         return sync_service.sync_observation(
             request.serial_number, request.observation
         )
+    except sync_service.TwinPersistenceError as e:
+        # Technical cause is logged in the service; the client only sees a
+        # stable, non-sensitive message (no paths, no traceback).
+        logger.error("twin sync persistence failure: %s", e)
+        raise HTTPException(
+            status_code=503,
+            detail="Twin state could not be persisted",
+        )
+    except sync_service.ObservationValidationError as e:
+        raise HTTPException(status_code=422, detail=str(e))
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
