@@ -1,0 +1,107 @@
+{
+    "experiment": "C4_V2_MIGRATION_BENEFIT_BY_RISK_BAND",
+    "simulation_only": true,
+    "seed_start": 50000,
+    "episodes_per_policy": 600,
+    "matched_seeds": true,
+    "environment_configuration": {
+        "episode_days": 30,
+        "initial_risk_mode": "stratified",
+        "risk_drift_per_day": 0.0,
+        "risk_noise_std": 0.0
+    },
+    "summary": {
+        "ALL": {
+            "episodes": 600,
+            "mean_no_op_reward": -16.29813,
+            "mean_migration_reward": -12.4485,
+            "mean_reward_advantage": 3.84963,
+            "approximate_95pct_interval": [
+                2.75092,
+                4.94833
+            ],
+            "positive_advantage_episodes": 119,
+            "initially_actionable": 176,
+            "completed_migrations": 155,
+            "safety_blocks": 0
+        },
+        "VERY_LOW": {
+            "episodes": 200,
+            "mean_no_op_reward": -1.19491,
+            "mean_migration_reward": -1.43823,
+            "mean_reward_advantage": -0.24332,
+            "approximate_95pct_interval": [
+                -0.3082,
+                -0.17844
+            ],
+            "positive_advantage_episodes": 1,
+            "initially_actionable": 54,
+            "completed_migrations": 54,
+            "safety_blocks": 0
+        },
+        "NOT_ACTIONABLE_AT_RESET": {
+            "episodes": 424,
+            "mean_no_op_reward": -15.13662,
+            "mean_migration_reward": -15.13662,
+            "mean_reward_advantage": 0.0,
+            "approximate_95pct_interval": [
+                0.0,
+                0.0
+            ],
+            "positive_advantage_episodes": 0,
+            "initially_actionable": 0,
+            "completed_migrations": 0,
+            "safety_blocks": 0
+        },
+        "MODERATE": {
+            "episodes": 203,
+            "mean_no_op_reward": -12.55989,
+            "mean_migration_reward": -10.28771,
+            "mean_reward_advantage": 2.27219,
+            "approximate_95pct_interval": [
+                1.59516,
+                2.94921
+            ],
+            "positive_advantage_episodes": 52,
+            "initially_actionable": 55,
+            "completed_migrations": 53,
+            "safety_blocks": 0
+        },
+        "ACTIONABLE_AT_RESET": {
+            "episodes": 176,
+            "mean_no_op_reward": -19.0963,
+            "mean_migration_reward": -5.97257,
+            "mean_reward_advantage": 13.12373,
+            "approximate_95pct_interval": [
+                9.74523,
+                16.50222
+            ],
+            "positive_advantage_episodes": 119,
+            "initially_actionable": 176,
+            "completed_migrations": 155,
+            "safety_blocks": 0
+        },
+        "HIGH": {
+            "episodes": 197,
+            "mean_no_op_reward": -35.48343,
+            "mean_migration_reward": -25.85304,
+            "mean_reward_advantage": 9.63039,
+            "approximate_95pct_interval": [
+                6.51488,
+                12.7459
+            ],
+            "positive_advantage_episodes": 66,
+            "initially_actionable": 67,
+            "completed_migrations": 48,
+            "safety_blocks": 0
+        }
+    },
+    "limitations": [
+        "Synthetic and uncalibrated environment",
+        "Equal risk-band sampling is not fleet prevalence",
+        "Paired interval is exploratory",
+        "Approved states use simulated authorization",
+        "Migration changes failure consequences only",
+        "No real HDD operations"
+    ]
+}
