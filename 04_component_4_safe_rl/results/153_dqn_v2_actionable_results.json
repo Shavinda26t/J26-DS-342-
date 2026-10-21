@@ -31,9 +31,9 @@
         "exploration_final_eps": 0.1
     },
     "versions": {
-        "gymnasium": "1.1.1",
-        "stable_baselines3": "2.7.0",
-        "torch": "2.7.1+cpu"
+        "gymnasium": "1.4.0",
+        "stable_baselines3": "2.9.0",
+        "torch": "2.14.1+cpu"
     },
     "results": [
         {
@@ -96,5 +96,5 @@
         "Mitigation reduces consequences, not physical failures",
         "No evidence of production safety or effectiveness"
     ],
-    "created_utc": "2026-10-17T04:58:29.801910+00:00"
+    "created_utc": "2026-10-18T13:22:09.119648+00:00"
 }

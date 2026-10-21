@@ -1,0 +1,16 @@
+{
+  "horizon_days": 30,
+  "target": "failure_within_30d",
+  "number_of_features": 176,
+  "scale_pos_weight": 597.9631384939441,
+  "selected_threshold": 0.9481850266456604,
+  "best_boosting_rounds": 44,
+  "best_trial_number": 14,
+  "best_validation_pr_auc": 0.20294240870972186,
+  "n_trials": 40,
+  "tuning_objective": "validation PR-AUC (test untouched)",
+  "threshold_rule": "validation best-F1 (same as 09B)",
+  "training_seconds": 42.717589139938354,
+  "tuning_seconds": 2044.3584682941437,
+  "random_state": 42
+}

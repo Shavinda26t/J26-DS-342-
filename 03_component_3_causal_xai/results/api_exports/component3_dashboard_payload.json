@@ -67,6 +67,12 @@
             "pair_detection_rate": null,
             "pair_sign_consistency": null,
             "lag_sign_pattern": "MIXED_ACROSS_LAGS",
+            "stable_exact_lag_count": 3.0,
+            "stable_lags_days": "1;3;4",
+            "strongest_detection_rate": 1.0,
+            "strongest_sign_consistency": 0.8,
+            "minimum_detection_rate_across_stable_lags": 1.0,
+            "minimum_sign_consistency_across_stable_lags": 0.8,
             "interpretation": "Stable fleet-level temporal dependency. This relationship supports temporal ordering but does not independently prove a physical causal mechanism."
         }
     ],

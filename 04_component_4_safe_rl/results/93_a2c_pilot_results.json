@@ -49,9 +49,9 @@
         "max_grad_norm": 0.5
     },
     "versions": {
-        "torch": "2.7.1+cpu",
-        "gymnasium": "1.1.1",
-        "stable_baselines3": "2.7.0"
+        "torch": "2.14.1+cpu",
+        "gymnasium": "1.4.0",
+        "stable_baselines3": "2.9.0"
     },
     "results": [
         {
@@ -147,5 +147,5 @@
         "No final policy selection",
         "No real storage actions performed"
     ],
-    "created_utc": "2026-10-15T08:47:09.955918+00:00"
+    "created_utc": "2026-10-18T13:18:10.738711+00:00"
 }

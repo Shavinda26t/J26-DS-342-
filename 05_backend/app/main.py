@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.router import api_router
+from app.api.router import DISABLED_COMPONENTS, api_router
 from app.api.v1.component3 import router as component3_router
 from app.config import settings
 
@@ -23,5 +23,7 @@ app.include_router(component3_router, prefix="/api/component3", tags=["Component
 
 @app.get("/")
 def root():
-    return {"message": "HDD Failure Prediction & Self-Healing Framework Backend API"}
-
+    return {
+        "message": "HDD Failure Prediction & Self-Healing Framework Backend API",
+        "disabled_components": DISABLED_COMPONENTS,
+    }

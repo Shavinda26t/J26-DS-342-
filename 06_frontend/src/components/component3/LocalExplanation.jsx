@@ -40,6 +40,14 @@ const LocalExplanation = () => {
           <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
             Instance-level SHAP predictive explanations cross-referenced with fleet-level evidence classes.
           </p>
+          <div style={{ marginTop: '8px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <span className="badge badge-purple" style={{ fontSize: '0.65rem' }}>
+              Research Reference Cases
+            </span>
+            <span style={{ fontSize: '0.72rem', color: '#64748b', alignSelf: 'center' }}>
+              Static fleet-level examples — not affected by CSV uploads.
+            </span>
+          </div>
         </div>
       </div>
 
