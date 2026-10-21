@@ -82,6 +82,7 @@ class TestTwinOnlineFeedback(unittest.TestCase):
     def setUp(self) -> None:
         """Cold adapter per test, without paying the predictor reload cost."""
         sync_service._adapter.reset()
+        sync_service._risk_gate.reset()
         sync_service._last_predicted.clear()
         sync_service._managers.clear()
         sync_service._thresholds.clear()
@@ -173,6 +174,26 @@ class TestTwinOnlineFeedback(unittest.TestCase):
         self.assertEqual(sync_service._adapter.serial_adapters, {})
         self.assertEqual(sync_service._adapter.global_adapter.n_updates, 0)
         self.assertEqual(sync_service._last_predicted, {})
+
+    # ------------------------------------------------------------------
+    def test_learn_outcome_reports_a_risk_gate_decision(self):
+        state = self._sync_history(self.SERIAL)
+        gate = state["risk_gate"]
+        self.assertEqual(gate["status"]["mode"], "shadow")
+        self.assertFalse(gate["deployed"])
+        # shadow mode: production is untouched by the gate
+        self.assertEqual(state["predicted_rul_days"],
+                         state["raw_predicted_rul_days"])
+
+        raw = state["raw_predicted_rul_days"]
+        learned = sync_service.learn_outcome(self.SERIAL, raw - 5.0)
+        decision = learned["risk_gate_decision"]
+        self.assertIn(decision["action"], ("ADAPT", "WAIT", "REJECT", "ROLLBACK"))
+        self.assertEqual(decision["usable"], 1)
+        self.assertIn("e_promote", decision["evidence_before_decision"])
+
+        snapshot = sync_service.risk_gate_snapshot()
+        self.assertEqual(len(snapshot["decisions"]), 1)
 
     # ------------------------------------------------------------------
     def test_read_only_state_access_does_not_advance_the_learner(self):

@@ -58,6 +58,13 @@ const fmt = (v, d = 1) =>
 
 const STATE_COLORS = [COLORS.good, COLORS.accent, COLORS.warn, COLORS.bad];
 
+const GATE_COLORS = {
+  ADAPT: COLORS.good,
+  WAIT: COLORS.accent,
+  REJECT: COLORS.warn,
+  ROLLBACK: COLORS.bad,
+};
+
 const SMART_FIELDS = [
   { key: 'smart_1_normalized', label: 'SMART 1' },
   { key: 'smart_5_normalized', label: 'SMART 5' },
@@ -209,6 +216,8 @@ export default function LiveTwin() {
   const interval = liveState?.interval;
   const adaptation = liveState?.online_adaptation;
   const thresholds = liveState?.adaptive_thresholds;
+  const riskGate = liveState?.risk_gate;
+  const gateDecision = liveState?.risk_gate_decision;
   const stateLevel = liveState?.adaptive_state ?? 0;
 
   return (
@@ -454,6 +463,50 @@ export default function LiveTwin() {
               </div>
             )}
           </SectionCard>
+
+          {/* Risk-gated adaptation (novelty) */}
+          {riskGate?.status && (
+            <SectionCard
+              title="Risk-gated adaptation (novelty)"
+              subtitle="Decides WHETHER an update may reach production: ADAPT / WAIT / REJECT / ROLLBACK via anytime-valid e-value tests (P(false acceptance) ≤ α), degradation-safe corrections and drift-aware bets."
+              accent={COLORS.bad}
+            >
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+                <div style={{ display: 'grid', gap: 6 }}>
+                  <Row
+                    k="Last decision"
+                    v={gateDecision?.action || riskGate.status.last_action || '—'}
+                    color={GATE_COLORS[gateDecision?.action || riskGate.status.last_action] || COLORS.text}
+                  />
+                  <Row k="Reason" v={gateDecision?.reason || riskGate.status.last_reason || '—'} />
+                  <Row k="Mode" v={riskGate.status.mode === 'active' ? 'ACTIVE (adapting, monitored)' : 'SHADOW (production = raw/checkpoint)'} />
+                  <Row k="Approved version" v={fmt(riskGate.status.version, 0)} />
+                  <Row k="Gated RUL" v={`${fmt(riskGate.adapted, 2)} d`} color={COLORS.good} />
+                  <Row
+                    k="Optimistic update blocked"
+                    v={riskGate.blocked_optimistic ? 'Yes (drive degrading)' : 'No'}
+                    color={riskGate.blocked_optimistic ? COLORS.warn : COLORS.text}
+                  />
+                </div>
+                <div style={{ display: 'grid', gap: 6 }}>
+                  <Row k={`Evidence to ADAPT (≥ ${fmt(riskGate.status.threshold, 0)})`} v={fmt(riskGate.status.e_promote, 3)} />
+                  <Row k="Evidence to REJECT" v={fmt(riskGate.status.e_reject, 3)} />
+                  <Row k="Evidence to ROLLBACK" v={fmt(riskGate.status.e_rollback, 3)} />
+                  <Row k="α (max false acceptance)" v={fmt(riskGate.status.alpha, 2)} />
+                  <Row
+                    k="Decisions A / W / R / RB"
+                    v={['ADAPT', 'WAIT', 'REJECT', 'ROLLBACK'].map((a) => riskGate.status.counts?.[a] ?? 0).join(' / ')}
+                  />
+                  {gateDecision && (
+                    <Row
+                      k="Drift score (this outcome)"
+                      v={gateDecision.drift_score != null ? `${fmt(gateDecision.drift_score, 2)}${gateDecision.drift_detected ? ' · drift' : ''}` : '—'}
+                    />
+                  )}
+                </div>
+              </div>
+            </SectionCard>
+          )}
         </>
       )}
 

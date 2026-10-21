@@ -197,6 +197,12 @@ def list_twin_serials() -> Dict[str, Any]:
     return {"count": len(serials), "serials": serials}
 
 
+@router.get("/twin/risk-gate", tags=["Component 2: Digital Twin"])
+def get_twin_risk_gate() -> Dict[str, Any]:
+    """Risk-gated adaptation controller: mode, e-values and decision log."""
+    return sync_service.risk_gate_snapshot()
+
+
 @router.get("/twin/calibration", tags=["Component 2: Digital Twin"])
 def get_twin_calibration() -> Dict[str, Any]:
     """Conformal calibration + online-adapter learning diagnostics."""

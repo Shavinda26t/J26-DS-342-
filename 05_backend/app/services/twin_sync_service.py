@@ -10,6 +10,9 @@ per-HDD twin that:
   **genuine online learner** (Feature 1).
 * Wraps it in a **quality-gated conformal interval + confidence** (Feature 2).
 * Projects a **multi-horizon health forecast** (Feature 4).
+* Decides **whether** an update may reach production with the risk-gated,
+  degradation-aware controller (ADAPT / WAIT / REJECT / ROLLBACK, see
+  :mod:`app.ml.risk_gate`).
 
 Observation histories are persisted to disk so twin state survives restarts and
 can be re-synchronised.
@@ -35,6 +38,7 @@ from app.ml.adaptive_thresholds import AdaptiveThresholds
 from app.ml.conformal import ConformalCalibrator, data_quality_score
 from app.ml.forecaster import STATE_NAMES, forecast
 from app.ml.online_adapter import DualRulAdapter
+from app.ml.risk_gate import Outcome, RiskGatedAdapter
 from app.ml.warning_decision import (
     PRESERVE_GLOBAL_WARNINGS,
     AdaptiveWarningTracker,
@@ -118,6 +122,9 @@ _predictor_error: Optional[str] = None
 
 _conformal = ConformalCalibrator(alpha=0.1)
 _adapter = DualRulAdapter()
+# Risk-gated controller: once it has approved adaptation (ADAPT) its gated
+# correction replaces the ungated adapter output as the production RUL.
+_risk_gate = RiskGatedAdapter()
 _conformal_seeded = False
 # Why calibration seeding failed, if it did (surfaced by the diagnostics API).
 _conformal_error: Optional[str] = None
@@ -594,6 +601,14 @@ def _seed_calibration() -> None:
         # final evaluation split); the adapter's own gate decides whether the
         # correction may switch on at all.
         _adapter.seed_population(data.pairs, data.serials)
+        # Shadow challenger of the risk gate: same scaler, one batch per
+        # calibration drive.  Seeding never deploys anything.
+        _risk_gate.center, _risk_gate.scale = _adapter.center, _adapter.scale
+        _risk_gate.reset()
+        batches: Dict[str, List[Outcome]] = {}
+        for (predicted, actual), serial in zip(data.pairs, data.serials):
+            batches.setdefault(serial, []).append(Outcome(predicted, actual))
+        _risk_gate.seed(list(batches.values()))
     except Exception as exc:  # pragma: no cover - defensive
         _conformal_error = f"{type(exc).__name__}: {exc}"
 
@@ -622,6 +637,7 @@ def reset_service() -> None:
         _deleted.clear()
         _conformal.reset()
         _adapter.reset()
+        _risk_gate.reset()
         _conformal_seeded = False
         _conformal_error = None
         _rul_predictor = None
@@ -981,7 +997,52 @@ def learn_outcome(serial_number: str, actual_rul_days: float) -> dict:
         _conformal.add_residual(predicted, actual_rul_days)
         _adapter.update(serial_number, predicted, actual_rul_days)
         manager, thresholds = _ensure_twin(serial_number)
-        return _build_state(serial_number, manager, thresholds)
+        context = _gate_context(manager)
+        decision = _risk_gate.observe([
+            Outcome(
+                predicted=predicted,
+                actual=actual_rul_days,
+                degrading=context["degrading"],
+                quality=context["quality"],
+                features=context["features"],
+            )
+        ])
+        state = _build_state(serial_number, manager, thresholds)
+        state["risk_gate_decision"] = decision
+        return state
+
+
+def _gate_context(manager) -> dict:
+    """Degradation flag, data quality and operating signature of the latest
+    observation -- the context the risk gate needs for one outcome."""
+    detector = _detector_module()
+    deg = manager.calculate_degradation_state()
+    severity = deg["combined_severity"] if deg else np.nan
+    temporal = manager.calculate_temporal_features()
+    features: Dict[str, float] = {}
+    health_available = None
+    valid_fraction = None
+    if temporal is not None and not temporal.empty:
+        row = temporal.iloc[-1]
+        for name in ("smart_1_normalized", "smart_1_normalized_rolling_std_7"):
+            if not _missing(row.get(name)):
+                features[name] = float(row.get(name))
+        health_available = sum(1 for f in AVAILABILITY_FLAGS if row.get(f))
+        valid_fraction = sum(
+            1 for f in TEMPORAL_FEATURES if not _missing(row.get(f))
+        ) / len(TEMPORAL_FEATURES)
+    quality = data_quality_score(
+        health_features_available=health_available,
+        history_length=manager.get_history_length(),
+        history_target=SEQUENCE_LENGTH,
+        temporal_valid_fraction=valid_fraction,
+    )
+    return {
+        "degrading": (not _missing(severity))
+        and severity >= detector.MIN_SEVERITY,
+        "quality": quality,
+        "features": features,
+    }
 
 
 def calibration_snapshot() -> dict:
@@ -990,8 +1051,19 @@ def calibration_snapshot() -> dict:
     return {
         "conformal": _conformal.snapshot(),
         "online_adapter": _adapter.snapshot(),
+        "risk_gate": _risk_gate.snapshot(),
         "calibration_error": _conformal_error,
     }
+
+
+def risk_gate_snapshot() -> dict:
+    """Risk-gate status plus its recent ADAPT/WAIT/REJECT/ROLLBACK decisions."""
+    _seed_calibration()
+    with _lock:
+        return {
+            "risk_gate": _risk_gate.snapshot(),
+            "decisions": _risk_gate.decisions(),
+        }
 
 
 # ----------------------------------------------------------------------
@@ -1066,6 +1138,7 @@ def _build_state(serial: str, manager, thresholds) -> dict:
 
     adapted: Optional[dict] = None
     final_rul: Optional[float] = None
+    gate_view: Optional[dict] = None
     if raw_rul is not None:
         # ``adapt`` is a pure read of the adapter: it forwards the raw value to
         # compute the correction and never trains.  ``_last_predicted`` is
@@ -1073,6 +1146,14 @@ def _build_state(serial: str, manager, thresholds) -> dict:
         # a GET cannot change the stored feedback reference.
         adapted = _adapter.adapt(serial, raw_rul)
         final_rul = adapted["adapted"]
+        degrading = (not _missing(global_sev)) and (
+            global_sev >= detector.MIN_SEVERITY
+        )
+        gate_view = _risk_gate.apply(raw_rul, degrading)
+        if _risk_gate.deployed:
+            # The gate has approved adaptation: its degradation-safe
+            # correction is the production RUL.
+            final_rul = gate_view["adapted"]
 
     interval = None
     confidence = None
@@ -1174,6 +1255,10 @@ def _build_state(serial: str, manager, thresholds) -> dict:
             round(raw_rul, 3) if raw_rul is not None else None
         ),
         "online_adaptation": adapted,
+        "risk_gate": {
+            **(gate_view or {}),
+            "status": _risk_gate.snapshot_brief(),
+        },
         "interval": interval,
         "confidence": confidence,
         "data_quality": round(quality, 3),
