@@ -1,36 +1,29 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getComponent3Dashboard, getComponent3Factors } from '../api/component3Api';
+import { getComponent3Dashboard } from '../api/component3Api';
 import FailureExplanation from '../components/component3/FailureExplanation';
 import RootCausePanel from '../components/component3/RootCausePanel';
-import CausalGraph from '../components/component3/CausalGraph';
-import GlobalFeatureImportance from '../components/component3/GlobalFeatureImportance';
 import LocalExplanation from '../components/component3/LocalExplanation';
 import ResearchFigures from '../components/component3/ResearchFigures';
 import PredictPanel from '../components/component3/PredictPanel';
 
 const CausalXAI = () => {
   const [data, setData] = useState(null);
-  const [factors, setFactors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [hasPrediction, setHasPrediction] = useState(false);
   const [showStatic, setShowStatic] = useState(false);
 
   const handlePredictionChange = useCallback((active) => {
-    setHasPrediction(active);
-    setShowStatic(false);
+    if (active) {
+      setShowStatic(false);
+    }
   }, []);
 
   const fetchDashboardData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const [dashRes, factorsRes] = await Promise.all([
-        getComponent3Dashboard(),
-        getComponent3Factors().catch(() => [])
-      ]);
+      const dashRes = await getComponent3Dashboard();
       setData(dashRes);
-      setFactors(Array.isArray(factorsRes) ? factorsRes : []);
     } catch (err) {
       console.error('Failed to load Component 3 dashboard:', err);
       setError(err.message || 'Failed to connect to Component 3 backend API.');
@@ -70,8 +63,6 @@ const CausalXAI = () => {
 
   const summary = data?.summary || {};
   const rootCauses = data?.root_cause_candidates || [];
-  const temporalPathways = data?.temporal_pathways || [];
-  const matchedEffects = data?.matched_failure_risk_evidence || [];
 
   return (
     <div className="c3-dashboard">
@@ -92,52 +83,47 @@ const CausalXAI = () => {
         </p>
       </div>
 
-      {/* Summary Cards & Scientific Warning Banner */}
-      <FailureExplanation summary={summary} />
+      {/* Scientific Warning Banner (always visible) */}
+      <FailureExplanation summary={summary} showMetrics={false} />
 
-      {/* Interactive CSV Upload Prediction */}
+      {/* Single HDD Prediction Dashboard (primary view) */}
       <PredictPanel onPredictionChange={handlePredictionChange} />
 
-      {/* Fleet-level static research evidence (hidden while a prediction is shown) */}
-      {hasPrediction && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '12px',
-            padding: '14px 18px',
-            borderRadius: '10px',
-            border: '1px solid #334155',
-            backgroundColor: 'rgba(15, 23, 42, 0.5)',
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#e2e8f0' }}>
-              Fleet-Level Research Evidence
-            </div>
-            <p style={{ fontSize: '0.78rem', color: '#94a3b8', margin: '4px 0 0 0' }}>
-              Population-level causal findings (PCMCI, matched ATT, evidence catalog, research
-              figures, representative cases) are hidden while an uploaded-HDD prediction is displayed.
-            </p>
+      {/* Fleet-level static research evidence (collapsed by default) */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+          padding: '14px 18px',
+          borderRadius: '10px',
+          border: '1px solid #334155',
+          backgroundColor: 'rgba(15, 23, 42, 0.5)',
+        }}
+      >
+        <div>
+          <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#e2e8f0' }}>
+            Fleet-Level Research Evidence
           </div>
-          <button className="btn-retry" onClick={() => setShowStatic((v) => !v)}>
-            {showStatic ? 'Hide fleet-level evidence' : 'Show fleet-level evidence'}
-          </button>
+          <p style={{ fontSize: '0.78rem', color: '#94a3b8', margin: '4px 0 0 0' }}>
+            Population-level causal findings (PCMCI, matched ATT, evidence catalog, research
+            figures, representative cases). Static and read-only — never recomputed by an upload.
+          </p>
         </div>
-      )}
+        <button className="btn-retry" onClick={() => setShowStatic((v) => !v)}>
+          {showStatic ? 'Hide fleet-level evidence' : 'Show fleet-level evidence'}
+        </button>
+      </div>
 
-      {(!hasPrediction || showStatic) && (
+      {showStatic && (
         <>
+          {/* Fleet Metric Summary Cards */}
+          <FailureExplanation summary={summary} showWarning={false} />
+
           {/* Root Cause Candidate Hierarchy */}
           <RootCausePanel candidates={rootCauses} />
-
-          {/* Temporal Pathways & ATT Forest / Matched Effects */}
-          <CausalGraph pathways={temporalPathways} matchedEffects={matchedEffects} />
-
-          {/* Integrated Evidence Catalog Table */}
-          <GlobalFeatureImportance factors={factors} />
 
           {/* Research Visualizations */}
           <ResearchFigures />

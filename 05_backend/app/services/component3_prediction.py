@@ -461,6 +461,10 @@ def _fleet_evidence_index():
                 other_id = pathway.get(other)
                 evidence[factor_id]["temporal_pathways"].append(
                     {
+                        "subject_factor_id": factor_id,
+                        "subject_factor_name": FACTOR_NAMES.get(
+                            factor_id, factor_id
+                        ),
                         "direction": "outgoing"
                         if side == "source_factor_id"
                         else "incoming",
@@ -494,6 +498,10 @@ def _fleet_evidence_index():
                     ),
                     "evidence_class": effect.get("evidence_class"),
                     "analysis_role": effect.get("analysis_role"),
+                    "matched_pairs": effect.get("matched_pairs"),
+                    "treated_failures": effect.get("treated_failures"),
+                    "control_failures": effect.get("control_failures"),
+                    "interpretation": effect.get("interpretation"),
                 }
             )
 
@@ -602,11 +610,34 @@ def _local_factor_ranking(
                     "matched_risk_difference_pp": matched.get(
                         "risk_difference_pp"
                     ),
-                    "matched_ci_pp": fleet.get("matched_effects", [{}])[0].get(
-                        "cluster_bootstrap_95ci_pp"
-                    )
-                    if fleet.get("matched_effects")
-                    else None,
+                    "matched_ci_pp": (
+                        fleet.get("matched_effects", [{}])[0].get(
+                            "cluster_bootstrap_95ci_pp"
+                        )
+                        if fleet.get("matched_effects")
+                        else None
+                    ),
+                    "matched_pairs": (
+                        fleet.get("matched_effects", [{}])[0].get(
+                            "matched_pairs"
+                        )
+                        if fleet.get("matched_effects")
+                        else None
+                    ),
+                    "matched_treated_failures": (
+                        fleet.get("matched_effects", [{}])[0].get(
+                            "treated_failures"
+                        )
+                        if fleet.get("matched_effects")
+                        else None
+                    ),
+                    "matched_control_failures": (
+                        fleet.get("matched_effects", [{}])[0].get(
+                            "control_failures"
+                        )
+                        if fleet.get("matched_effects")
+                        else None
+                    ),
                     "matched_evidence_class": matched.get("evidence_class"),
                     "integrated_classification": integrated.get(
                         "classification"
@@ -615,6 +646,7 @@ def _local_factor_ranking(
                         "root_cause_candidate"
                     ),
                     "temporal_pathways": fleet.get("temporal_pathways", []),
+                    "matched_effects_detail": fleet.get("matched_effects", []),
                 },
             }
         )
@@ -630,6 +662,82 @@ def smart_metric_suffix(feature_name: str, raw_base: str) -> str:
     return suffix or "raw"
 
 
+def _relation_text(relation: Dict[str, Any]) -> str:
+    """Human-readable description of one stable fleet PCMCI relation.
+
+    The relation is always expressed source -> target, so the same edge
+    never reads differently depending on which endpoint is the subject.
+    """
+
+    subject = relation.get("subject_factor_name") or "this factor"
+    counterpart = relation.get("counterpart_factor_name") or "an unidentified factor"
+
+    if relation.get("direction") == "outgoing":
+        source, target = subject, counterpart
+    else:
+        source, target = counterpart, subject
+
+    text = f"{source} -> {target}"
+
+    details = []
+
+    lag = relation.get("strongest_lag_days")
+    if lag is not None:
+        lag_label = int(lag) if float(lag).is_integer() else lag
+        details.append(f"strongest lag {lag_label} day(s)")
+
+    rate = relation.get("strongest_detection_rate")
+    if rate is not None:
+        details.append(f"detected in {round(rate * 5)}/5 resampling runs")
+
+    sign = relation.get("strongest_sign_consistency")
+    if sign is not None:
+        details.append(f"{round(sign * 100)}% sign consistency")
+
+    if details:
+        text += " (" + ", ".join(details) + ")"
+
+    return text
+
+
+def _deduplicate_relations(
+    relations: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Keep one entry per unordered factor pair, preferring the strongest.
+
+    Without this, an edge such as "Load Cycle Activity -> Read Workload"
+    is reported once for each endpoint, which reads as a duplicated claim.
+    """
+
+    best: Dict[tuple, Dict[str, Any]] = {}
+
+    for relation in relations:
+        subject = relation.get("subject_factor_name") or ""
+        counterpart = relation.get("counterpart_factor_name") or ""
+        key = tuple(sorted([subject, counterpart]))
+
+        current = best.get(key)
+
+        if current is None:
+            best[key] = relation
+            continue
+
+        def strength(item: Dict[str, Any]) -> tuple:
+            rate = item.get("strongest_detection_rate")
+            sign = item.get("strongest_sign_consistency")
+            lag = item.get("strongest_lag_days")
+            return (
+                rate if rate is not None else 0.0,
+                sign if sign is not None else 0.0,
+                -(lag if lag is not None else 99),
+            )
+
+        if strength(relation) > strength(current):
+            best[key] = relation
+
+    return list(best.values())
+
+
 def _local_root_cause_explanation(
     serial: str,
     as_of_date: str,
@@ -643,80 +751,425 @@ def _local_root_cause_explanation(
     probability = primary.get("risk_probability") if primary else None
     flagged = primary.get("flagged") if primary else None
 
-    lead = []
-
     top = ranking[:3]
 
-    for entry in top:
-        lead.append(entry["factor_name"])
-
+    # ---------------------------------------------------------------
+    # 1) HEADLINE - what the score means for this drive
+    # ---------------------------------------------------------------
     if probability is not None:
-        decision_text = (
-            "above the validation-selected decision threshold "
-            f"({threshold:.4f}) and is flagged as high risk"
-            if flagged
-            else "below the validation-selected decision threshold "
-            f"({threshold:.4f}) and is not flagged"
-        )
-        headline = (
-            f"Drive {serial} as of {as_of_date} has a 30-day failure "
-            f"probability of {probability * 100:.2f}%, which is "
-            f"{decision_text}."
-        )
+        if flagged:
+            headline = (
+                f"Drive {serial} as of {as_of_date} carries a 30-day failure "
+                f"probability of {probability * 100:.2f}%. That is above the "
+                f"validation-selected decision threshold of {threshold:.4f} "
+                "(chosen for best F1 on the held-out October 2025 split), so "
+                "this drive is flagged as high risk. The score is an "
+                "out-of-time estimate: the reference model was trained only "
+                "on August-September 2025 data, so it has not seen this "
+                "drive's own history during training."
+            )
+        else:
+            headline = (
+                f"Drive {serial} as of {as_of_date} carries a 30-day failure "
+                f"probability of {probability * 100:.2f}%. That is below the "
+                f"validation-selected decision threshold of {threshold:.4f} "
+                "(chosen for best F1 on the held-out October 2025 split), so "
+                "this drive is not flagged. The score is an out-of-time "
+                "estimate: the reference model was trained only on "
+                "August-September 2025 data, so it has not seen this drive's "
+                "own history during training."
+            )
     else:
         headline = (
-            f"Drive {serial} as of {as_of_date}: model scoring "
-            "unavailable."
+            f"Drive {serial} as of {as_of_date}: model scoring unavailable "
+            "for this upload."
         )
+
+    # ---------------------------------------------------------------
+    # 2) DOMINANT DRIVER - what the model reacted to
+    # ---------------------------------------------------------------
+    if top:
+        dominant = top[0]
+
+        direction_word = (
+            "increases"
+            if dominant["local_direction"] == "increases_risk"
+            else "decreases"
+        )
+
+        value_text = ""
+        if dominant.get("dominant_feature_value") is not None:
+            value_text = (
+                f", observed at {dominant['dominant_feature_value']:,.2f}"
+            )
+
+        smart_attr = str(
+            dominant.get("dominant_smart_attribute") or ""
+        )
+        if smart_attr.startswith("smart_"):
+            smart_attr = smart_attr[len("smart_"):]
+        if smart_attr.endswith("_raw"):
+            smart_attr = smart_attr[: -len("_raw")]
+        smart_attr = smart_attr or "n/a"
+
+        driver_text = (
+            f"The dominant local driver is {dominant['factor_name']}, which "
+            f"carries {dominant['local_shap_share_pct']:.1f}% of this "
+            f"drive's local SHAP mass and {direction_word} predicted risk. "
+            f"Its strongest single signal was {dominant['dominant_metric']} "
+            f"({dominant['dominant_smart_label']}, SMART attribute "
+            f"{smart_attr}{value_text})."
+        )
+
+        if len(top) > 1:
+            others = "; ".join(
+                f"{entry['factor_name']} ({entry['local_shap_share_pct']:.1f}%)"
+                for entry in top[1:]
+            )
+            driver_text += (
+                f" The remaining local mass sits on {others}, so the "
+                "prediction is a multi-factor signal rather than a single "
+                "isolated reading."
+            )
+    else:
+        driver_text = (
+            "No factor-level local drivers could be mapped for this drive."
+        )
+
+    # ---------------------------------------------------------------
+    # 3) FLEET ALIGNMENT - does fleet research evidence back this driver
+    # ---------------------------------------------------------------
+    fleet_sentences: List[str] = []
 
     if top:
         dominant = top[0]
-        driver_text = (
-            f"The dominant local driver is {dominant['factor_name']} "
-            f"({dominant['local_shap_share_pct']:.1f}% of local SHAP mass, "
-            f"{dominant['local_direction'].replace('_', ' ')}, "
-            f"metric {dominant['dominant_metric']})."
+        fleet = dominant.get("fleet_evidence") or {}
+
+        matched_pp = fleet.get("matched_risk_difference_pp")
+
+        if matched_pp is not None:
+            pairs = fleet.get("matched_pairs")
+            treated = fleet.get("matched_treated_failures")
+            control = fleet.get("matched_control_failures")
+            ci = fleet.get("matched_ci_pp")
+
+            parts = [
+                f"Fleet-level evidence supports {dominant['factor_name']} as a "
+                f"degradation signal: across {pairs if pairs is not None else 'the'} "
+                "propensity-matched incident pairs, drives with elevated "
+                f"{dominant['factor_name']} failed within 30 days "
+            ]
+
+            if treated is not None and control is not None:
+                parts.append(
+                    f"{treated} times versus {control} for matched controls, "
+                )
+
+            parts.append(
+                f"a matched failure-risk difference of {matched_pp:+.1f} "
+                "percentage points"
+            )
+
+            if ci:
+                parts.append(
+                    f" (clustered-bootstrap 95% CI {ci[0]:.1f} to {ci[1]:.1f} pp)"
+                )
+
+            parts.append(".")
+
+            fleet_sentences.append("".join(parts))
+
+        relations = _deduplicate_relations(
+            fleet.get("temporal_pathways") or []
+        )
+
+        if relations:
+            relation_texts = [
+                _relation_text(relation) for relation in relations[:3]
+            ]
+            fleet_sentences.append(
+                "The same factor also sits inside a stable fleet-level "
+                "temporal pathway detected by PCMCI: "
+                + "; ".join(relation_texts)
+                + ". These are stable lagged conditional dependencies across "
+                "five resampling runs, not proof of a physical mechanism."
+            )
+        elif matched_pp is None:
+            fleet_sentences.append(
+                f"The fleet evidence catalog holds no matched failure-risk "
+                f"contrast and no stable PCMCI pathway for "
+                f"{dominant['factor_name']}, so it behaves as workload / "
+                "context signal rather than an established degradation "
+                "factor. It should be read as a contributor to the score, "
+                "not as a root cause."
+            )
+
+        classification = fleet.get("integrated_classification")
+        if classification:
+            candidate = fleet.get("root_cause_candidate")
+            fleet_sentences.append(
+                "In the fleet evidence catalog this factor is classified as "
+                f"{classification.replace('_', ' ').lower()}"
+                + (
+                    ", and it is flagged as a root-cause candidate for the "
+                    "fleet population."
+                    if candidate
+                    else ", and it is not treated as a root-cause candidate."
+                )
+            )
+
+        if not flagged:
+            fleet_sentences.append(
+                "Because the drive is not flagged, no root cause is claimed "
+                "for it; the fleet evidence above is context, not a "
+                "diagnosis of this drive."
+            )
+    else:
+        fleet_sentences.append(
+            "No dominant local driver was available to align against "
+            "fleet-level research evidence."
+        )
+
+    if fleet_sentences:
+        fleet_text = "Fleet-level evidence alignment: " + " ".join(
+            fleet_sentences
         )
     else:
-        driver_text = "No factor-level local drivers could be mapped."
-
-    fleet_bits = []
-
-    for entry in top:
-        fleet = entry["fleet_evidence"]
-        if fleet.get("matched_risk_difference_pp") is not None:
-            fleet_bits.append(
-                f"{entry['factor_name']} is associated with a "
-                f"{fleet['matched_risk_difference_pp']:+.1f} pp fleet-level "
-                "matched failure-risk difference"
-            )
-        if fleet.get("strongest_temporal_relation"):
-            fleet_bits.append(
-                f"fleet PCMCI links {fleet['strongest_temporal_relation']}"
-            )
-
-    if fleet_bits:
         fleet_text = (
-            "Fleet-level evidence alignment: " + "; ".join(fleet_bits) + "."
+            "Fleet-level evidence alignment: the top local drivers do not "
+            "map to any factor with strong fleet-level matched or temporal "
+            "evidence, so this should be read as a model-only prediction."
+        )
+
+    # ---------------------------------------------------------------
+    # 4) SUPPORTING DRIVERS - the rest of the local picture
+    # ---------------------------------------------------------------
+    supporting_bits: List[str] = []
+
+    seen_relations: set = set()
+
+    for entry in top[1:]:
+        fleet = entry.get("fleet_evidence") or {}
+
+        note = ""
+
+        matched_pp = fleet.get("matched_risk_difference_pp")
+        if matched_pp is not None:
+            note = (
+                f"matched fleet failure-risk difference {matched_pp:+.1f} pp"
+            )
+
+        relation_bits = []
+        for relation in _deduplicate_relations(
+            fleet.get("temporal_pathways") or []
+        ):
+            text = _relation_text(relation)
+            if text in seen_relations:
+                continue
+            seen_relations.add(text)
+            relation_bits.append(text)
+
+        if relation_bits:
+            relation_note = (
+                "temporal link " + "; ".join(relation_bits[:2])
+            )
+            note = f"{note}; {relation_note}" if note else relation_note
+
+        if not note:
+            note = "no strong fleet-level matched or temporal evidence"
+
+        supporting_bits.append(
+            f"{entry['factor_name']} ({entry['local_shap_share_pct']:.1f}% of "
+            f"local SHAP mass, {entry['local_direction'].replace('_', ' ')}) "
+            f"- {note}"
+        )
+
+    if supporting_bits:
+        supporting_text = (
+            "Other locally important factors and their fleet alignment: "
+            + "; ".join(supporting_bits)
+            + "."
         )
     else:
-        fleet_text = (
-            "Top local drivers do not align with strong fleet-level "
-            "matched or temporal evidence; treat as model-only."
+        supporting_text = (
+            "No secondary local drivers were significant enough to report."
         )
 
+    # ---------------------------------------------------------------
+    # 5) SCOPE - what this explanation is and is not
+    # ---------------------------------------------------------------
     scope = (
-        "Local explanation operates on this drive's uploaded history "
-        "only. Fleet-level agreement is reused from static PCMCI and "
-        "matched-ATT research evidence and is not recomputed per upload."
+        f"Scope: this explanation is computed only from the uploaded history "
+        f"of drive {serial}. Fleet PCMCI links, matched failure-risk contrasts "
+        "and evidence classifications are reused unchanged from the static "
+        "research artifacts and are never recomputed per upload. Local SHAP "
+        "values are predictive attribution for this drive; they are not "
+        "individual causal effects and do not prove that any factor "
+        "physically caused failure on this drive."
     )
 
+    # ---------------------------------------------------------------
+    # 6) PLAIN-LANGUAGE SUMMARY
+    #
+    # Short, jargon-free version for a non-technical reader. Every
+    # number here is the same number used in the detailed version.
+    # ---------------------------------------------------------------
+    risk_label = (
+        "HIGH RISK" if flagged else "LOW RISK"
+    ) if flagged is not None else "UNSCORED"
+
+    if probability is not None:
+        pct_value = probability * 100
+        if pct_value < 0.01:
+            chance_text = "less than a 0.01% chance"
+            article = "a"
+        else:
+            pct_text = f"{pct_value:.1f}"
+            article = (
+                "an"
+                if pct_text[0] in "8" or pct_text.startswith(("11", "18"))
+                else "a"
+            )
+            chance_text = f"{article} {pct_text}% chance"
+
+        simple_headline = (
+            f"{risk_label}: drive {serial} is estimated to have "
+            f"{chance_text} of failing within the next 30 days."
+        )
+    else:
+        simple_headline = f"Drive {serial} could not be scored."
+
+    if top:
+        dominant = top[0]
+        direction_word = (
+            "pushes the risk up"
+            if dominant["local_direction"] == "increases_risk"
+            else "pushes the risk down"
+        )
+        value_text = ""
+        if dominant.get("dominant_feature_value") is not None:
+            value_text = (
+                f" (currently {dominant['dominant_feature_value']:,.1f})"
+            )
+        simple_reason = (
+            f"The main reason is {dominant['factor_name']}. Its 30-day "
+            f"reading{value_text} is what the model reacted to most, and it "
+            f"is the biggest single reason the risk score is where it is. "
+            f"This factor {direction_word}."
+        )
+        if len(top) > 1:
+            others = ", ".join(
+                f"{entry['factor_name']} ({entry['local_shap_share_pct']:.0f}%)"
+                for entry in top[1:]
+            )
+            simple_reason += f" Two other factors also contributed: {others}."
+
+        if not flagged:
+            simple_reason = (
+                "No failure warning is raised for this drive. "
+                + simple_reason
+            )
+    else:
+        simple_reason = "No specific reason could be identified for this drive."
+
+    if top:
+        dominant = top[0]
+        fleet = dominant.get("fleet_evidence") or {}
+        matched_pp = fleet.get("matched_risk_difference_pp")
+        ci = fleet.get("matched_ci_pp")
+
+        if matched_pp is not None:
+            support_bits = [
+                "Our research on the whole drive population supports this: "
+                f"drives with high {dominant['factor_name']} failed within 30 "
+                f"days about {matched_pp:.0f} percentage points more often "
+                "than comparable drives that were healthy on that measure."
+            ]
+            if ci:
+                support_bits.append(
+                    f" The confidence range for that figure is "
+                    f"{ci[0]:.0f} to {ci[1]:.0f} percentage points."
+                )
+
+            relations = _deduplicate_relations(
+                fleet.get("temporal_pathways") or []
+            )
+            if relations:
+                relation = relations[0]
+                subject = relation.get("subject_factor_name") or ""
+                counterpart = relation.get("counterpart_factor_name") or ""
+                if relation.get("direction") == "outgoing":
+                    source, target = subject, counterpart
+                else:
+                    source, target = counterpart, subject
+                lag = relation.get("strongest_lag_days")
+                lag_label = (
+                    int(lag)
+                    if lag is not None and float(lag).is_integer()
+                    else lag
+                )
+                support_bits.append(
+                    f"We also see this in the data over time: {source} tends "
+                    f"to change about {lag_label} "
+                    f"day{'' if lag_label == 1 else 's'} before {target} "
+                    "does, and that pattern held up when we re-ran the "
+                    "analysis on different samples of drives."
+                )
+
+            simple_support = " ".join(support_bits)
+        else:
+            simple_support = (
+                f"We do not have strong fleet-wide research evidence that "
+                f"{dominant['factor_name']} causes failures, so treat it as a "
+                "signal worth watching rather than a confirmed cause."
+            )
+    else:
+        simple_support = (
+            "No fleet-wide research evidence could be matched to this drive."
+        )
+
+    if flagged:
+        simple_caveat = (
+            "This is a warning sign, not a proven cause. The population "
+            "figures come from our research on the whole drive fleet and are "
+            "not recalculated for this drive."
+        )
+    else:
+        simple_caveat = (
+            "This is a risk estimate, not a diagnosis. The population figures "
+            "come from our research on the whole drive fleet and are not "
+            "recalculated for this drive."
+        )
+
     return {
+        "simple": {
+            "headline": simple_headline,
+            "reason": simple_reason,
+            "support": simple_support,
+            "caveat": simple_caveat,
+            "text": " ".join(
+                [
+                    simple_headline,
+                    simple_reason,
+                    simple_support,
+                    simple_caveat,
+                ]
+            ),
+        },
         "headline": headline,
         "dominant_driver": driver_text,
         "fleet_alignment": fleet_text,
+        "supporting_drivers": supporting_text,
         "scope": scope,
-        "text": " ".join([headline, driver_text, fleet_text, scope]),
+        "text": " ".join(
+            [
+                headline,
+                driver_text,
+                fleet_text,
+                supporting_text,
+                scope,
+            ]
+        ),
     }
 
 

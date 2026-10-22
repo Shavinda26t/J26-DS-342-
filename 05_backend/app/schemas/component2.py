@@ -127,6 +127,7 @@ class RulTrajectoryPoint(BaseModel):
 class RulMetrics(BaseModel):
     by_state: List[RulByState]
     trajectory: List[RulTrajectoryPoint]
+    notes: List[str] = []
 
 
 class DigitalTwinResponse(BaseModel):

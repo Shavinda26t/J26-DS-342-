@@ -97,6 +97,7 @@ export const UploadedHddAnalysis = ({ pred }) => {
   const predictedClass = primaryRisk.flagged ? 'HIGH RISK (flagged)' : 'LOW RISK (not flagged)';
   const sufficiency = pred.sufficient_history || {};
   const historyOk = sufficiency['30d'];
+  const [showDetail, setShowDetail] = useState(false);
 
   return (
     <div
@@ -159,13 +160,87 @@ export const UploadedHddAnalysis = ({ pred }) => {
 
       {narrative && (
         <div style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.55 }}>
-          <div style={{ fontWeight: 600, color: '#e2e8f0', marginBottom: '4px' }}>
+          <div style={{ fontWeight: 600, color: '#e2e8f0', marginBottom: '8px' }}>
             Local Root-Cause Explanation
           </div>
-          <p style={{ margin: '0 0 6px 0' }}>{narrative.headline}</p>
-          <p style={{ margin: '0 0 6px 0' }}>{narrative.dominant_driver}</p>
-          <p style={{ margin: '0 0 6px 0', color: '#93c5fd' }}>{narrative.fleet_alignment}</p>
-          <p style={{ margin: 0, fontSize: '0.74rem', color: '#64748b' }}>{narrative.scope}</p>
+
+          {/* Plain-language summary (default) */}
+          {narrative.simple && (
+            <div
+              style={{
+                backgroundColor: 'rgba(15, 23, 42, 0.6)',
+                border: '1px solid #334155',
+                borderRadius: '8px',
+                padding: '12px 14px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+              }}
+            >
+              {[
+                { label: 'Result', text: narrative.simple.headline, color: '#e2e8f0' },
+                { label: 'Main reason', text: narrative.simple.reason, color: '#cbd5e1' },
+                { label: 'Research backing', text: narrative.simple.support, color: '#93c5fd' },
+                { label: 'Important', text: narrative.simple.caveat, color: '#94a3b8' },
+              ].filter((part) => part.text).map((part) => (
+                <div key={part.label}>
+                  <div
+                    style={{
+                      fontSize: '0.66rem',
+                      fontWeight: 700,
+                      letterSpacing: '0.05em',
+                      textTransform: 'uppercase',
+                      color: '#64748b',
+                      marginBottom: '2px',
+                    }}
+                  >
+                    {part.label}
+                  </div>
+                  <p style={{ margin: 0, color: part.color }}>{part.text}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Technical detail (collapsed by default) */}
+          <div style={{ marginTop: '10px' }}>
+            <button
+              type="button"
+              className="btn-retry"
+              onClick={() => setShowDetail((v) => !v)}
+              style={{ fontSize: '0.72rem', padding: '4px 10px' }}
+            >
+              {showDetail ? 'Hide technical details' : 'Show technical details'}
+            </button>
+
+            {showDetail && (
+              <div style={{ marginTop: '10px' }}>
+                {[
+                  { label: 'Risk Assessment', text: narrative.headline, color: '#e2e8f0' },
+                  { label: 'Dominant Driver', text: narrative.dominant_driver, color: '#cbd5e1' },
+                  { label: 'Fleet-Level Evidence Alignment', text: narrative.fleet_alignment, color: '#93c5fd' },
+                  { label: 'Other Locally Important Factors', text: narrative.supporting_drivers, color: '#cbd5e1' },
+                  { label: 'Scope & Limitations', text: narrative.scope, color: '#64748b' },
+                ].filter((part) => part.text).map((part) => (
+                  <div key={part.label} style={{ marginBottom: '10px' }}>
+                    <div
+                      style={{
+                        fontSize: '0.68rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.04em',
+                        textTransform: 'uppercase',
+                        color: '#64748b',
+                        marginBottom: '3px',
+                      }}
+                    >
+                      {part.label}
+                    </div>
+                    <p style={{ margin: 0, color: part.color }}>{part.text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -259,8 +334,8 @@ const PredictPanel = ({ onPredictionChange }) => {
       <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
         <p style={{ fontSize: '0.8rem', color: '#94a3b8', margin: 0 }}>
           Upload a drive history CSV to run a fully dynamic per-drive analysis: risk scoring, local SHAP,
-          local root-cause factor ranking, local explanation narrative, and the "Uploaded HDD Visual
-          Analysis" charts (local factor bars, ATT overlay, PCMCI overlay, dynamic pathway, SMART history).
+          local root-cause factor ranking, local explanation narrative, and the single-HDD prediction
+          dashboard (local factor evidence bars and the dynamic root-cause pathway for this drive).
           Fleet-level research evidence (PCMCI, matched ATT, evidence catalog, figures) is static and is
           reused read-only — it is never recomputed by an upload.
         </p>

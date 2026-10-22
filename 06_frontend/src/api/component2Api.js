@@ -44,5 +44,8 @@ export const deleteComponent2Twin = (serialNumber) =>
 export const getComponent2TwinCalibration = () =>
   apiClient.get('/api/v1/component2/twin/calibration');
 
+export const getComponent2TwinRiskGate = () =>
+  apiClient.get('/api/v1/component2/twin/risk-gate');
+
 export const getComponent2TwinSerials = () =>
   apiClient.get('/api/v1/component2/twin/serials');
