@@ -8,7 +8,7 @@ const COLLAPSE_KEY = 'hddui.sidebar.collapsed';
 
 const PAGE_META = {
   '/dashboard': { title: 'System Overview', subtitle: 'Fleet health, drift and reliability at a glance' },
-  '/fleet': { title: 'Fleet Intelligence', subtitle: 'Behavioural drift & GenAI monitoring (C1)' },
+  '/fleet': { title: 'Fleet Intelligence', subtitle: 'SMART anomaly monitoring (C1)' },
   '/digital-twin': { title: 'Digital Twin', subtitle: 'Simulation & scenario modelling (C2)' },
   '/causal-xai': { title: 'Causal XAI', subtitle: 'Root-cause explanations & evidence (C3)' },
   '/safe-rl': { title: 'Safe Optimization', subtitle: 'Risk-aware migration policies (C4)' },
