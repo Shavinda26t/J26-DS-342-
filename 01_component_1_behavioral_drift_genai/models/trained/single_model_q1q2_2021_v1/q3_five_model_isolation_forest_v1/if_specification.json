@@ -1,0 +1,38 @@
+{
+  "training_identity": "7cb53ca9e43eb1cdc1b7f9a442be95da81a1969782561d90be1b2544ad8511f9",
+  "artifact_sha256": "1daa5334ba18adbcd259b43b50472369562a549d0c79529b2f262532f51c0d09",
+  "thresholds": {
+    "TOSHIBA MG07ACA14TA": {
+      "fit_drives": 15374,
+      "calibration_windows": 80930,
+      "calibration_drives": 5059,
+      "threshold": 0.6190100577274577
+    },
+    "ST12000NM0008": {
+      "fit_drives": 9044,
+      "calibration_windows": 46916,
+      "calibration_drives": 2938,
+      "threshold": 0.6500983119094251
+    },
+    "ST4000DM000": {
+      "fit_drives": 9001,
+      "calibration_windows": 46666,
+      "calibration_drives": 2918,
+      "threshold": 0.7519426704888462
+    },
+    "ST8000NM0055": {
+      "fit_drives": 6864,
+      "calibration_windows": 37263,
+      "calibration_drives": 2333,
+      "threshold": 0.7326522426264707
+    },
+    "HGST HMS5C4040BLE640": {
+      "fit_drives": 6089,
+      "calibration_windows": 31624,
+      "calibration_drives": 1981,
+      "threshold": 0.6206983962398507
+    }
+  },
+  "failure_labels_used": false,
+  "future_test_opened": false
+}

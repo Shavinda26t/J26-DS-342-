@@ -1,0 +1,14 @@
+{
+  "created_utc": "2026-10-22T11:30:32.717202+00:00",
+  "analysis_complete": true,
+  "candidate_lock_sha256": "b56973f430150300ed07696ba88bacfa53d37eae6d80b129debabe84185fd0d4",
+  "protocol_sha256": "ace790db5c5d7a6cca949aca7234e7225c7612f24eb05017265de20c66849595",
+  "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "primary_method": "transformer_sector_error",
+  "future_test_drives": 19351,
+  "q4_archive_opened": false,
+  "q4_outcomes_opened": false,
+  "sealed_June_test_opened": false,
+  "no_retraining_or_threshold_changes": true,
+  "next_gate": "Q4 unlabeled score manifest, then Q4 labels"
+}

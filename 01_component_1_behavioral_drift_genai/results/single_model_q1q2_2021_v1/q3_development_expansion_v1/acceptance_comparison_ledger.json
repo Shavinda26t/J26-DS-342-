@@ -1,0 +1,7 @@
+{
+  "candidate_sha256": "f7fbd8ecf84b9e678c54ae4b6b01b66c39c48a49bc2f0b87b7cade8ace4c087c",
+  "trial_identity": "0df70044b4759381d889b4c2bb27a8778dfbbe2ba6e421f5b46313b0c54c69c5",
+  "policy_sha256": "d7b1c7dc31edf129f616dabb1981fe81dfce247e1effa74a9a8c201dba3df2c4",
+  "training_settings_sha256": "9f6e007cf41fecd765c577b4e585c615e6d87316aff8a575d619ff2661785448",
+  "acceptance_raw_sha256": "75416330c6fe71511f57fa6229b67ae286626dbd1aed51418d3166b17a9c78fb"
+}

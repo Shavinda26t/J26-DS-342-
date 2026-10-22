@@ -16,3 +16,19 @@ export const getComponent4SafeDecision = async (request) => {
 
   return response.data;
 };
+
+
+/**
+ * Component 4 - Actual trained DQN inference.
+ *
+ * Runs the saved DQN model through FastAPI.
+ * The backend independently validates the proposed action.
+ */
+export const getComponent4RLDecision = async (request) => {
+  const response = await apiClient.post(
+    '/api/v1/component4/rl-decide',
+    request
+  );
+
+  return response.data;
+};

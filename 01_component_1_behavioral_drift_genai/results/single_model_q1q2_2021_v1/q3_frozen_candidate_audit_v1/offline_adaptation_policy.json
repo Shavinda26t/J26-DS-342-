@@ -1,0 +1,26 @@
+{
+  "candidate_comparisons_allowed": 1,
+  "seed": 42,
+  "fine_tuning_epochs": 5,
+  "learning_rate": 1e-05,
+  "historical_replay_fraction": 0.5,
+  "thresholds_refitted": false,
+  "partition_model_refitted": false,
+  "old_replay_mse_max_ratio": 1.1,
+  "old_replay_mse_absolute_slack": 1e-06,
+  "acceptance_alert_fraction_max_increase": 0.01,
+  "synthetic_new_alert_rate_max_absolute_drop": 0.05,
+  "requirements": [
+    "Use a separate candidate checkpoint; never overwrite frozen weights",
+    "Compare identical masked targets, raw units, feature order and preprocessing",
+    "Report old replay retention separately from independent acceptance outcomes",
+    "Keep frozen partition geometry: changing encoder embeddings can invalidate it; report assignment/distance shifts",
+    "Do not choose epochs or settings using acceptance results",
+    "Exercise checkpoint restoration and verify the original checkpoint hash",
+    "If any retention/sensitivity/coverage check fails, reject candidate",
+    "Report sparse/sector sensitivity failures even when unchanged by adaptation"
+  ],
+  "automatic_promotion_enabled": false,
+  "failure_labels_used": false,
+  "acceptance_scores_inspected": false
+}

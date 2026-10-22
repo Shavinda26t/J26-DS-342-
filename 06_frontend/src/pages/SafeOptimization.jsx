@@ -1,6 +1,11 @@
 
 import React, { useState } from 'react';
-import { getComponent4SafeDecision } from '../api/component4Api';
+
+import {
+  getComponent4SafeDecision,
+  getComponent4RLDecision,
+} from '../api/component4Api';
+
 
 const initialForm = {
   disk_id: 'DEMO_HDD_001',
@@ -44,16 +49,24 @@ const labelStyle = {
 
 function SafeOptimization() {
   const [form, setForm] = useState(initialForm);
+  const [policyMode, setPolicyMode] = useState('TRAINED_DQN');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const update = (key, value) => {
-    setForm((previous) => ({
-      ...previous,
-      [key]: value,
-    }));
-  };
+
+const update = (key, value) => {
+  setForm((previous) => ({
+    ...previous,
+    [key]: value,
+  }));
+
+  // A previous recommendation no longer matches
+  // the HDD inputs after any field is changed.
+  setResult(null);
+  setError('');
+};
+
 
   const submitDecision = async (event) => {
     event.preventDefault();
@@ -103,9 +116,12 @@ function SafeOptimization() {
 
     setLoading(true);
 
-    try {
-      const response = await getComponent4SafeDecision(request);
-      setResult(response);
+    try {const response =
+        policyMode === 'TRAINED_DQN'
+            ? await getComponent4RLDecision(request)
+            : await getComponent4SafeDecision(request);
+
+        setResult(response);
     } catch (err) {
       const detail = err.response?.data?.detail;
       const message = typeof detail === 'string'
@@ -140,20 +156,62 @@ function SafeOptimization() {
         </p>
       </header>
 
-      <div className="warning-banner">
-        <div>
-          <strong>Research demonstration — DRY RUN ONLY</strong>
-          <p style={{ marginTop: 6, fontSize: 14 }}>
-            Inputs are manually entered demonstration scenarios.
-            The seven-day risk is not currently retrieved from a
-            calibrated predictive model. This page uses the
-            rule-based baseline, not a trained RL agent.
-            No real HDD operations are executed.
-          </p>
+      
+    <div style={{ marginBottom: 20 }}>
+
+        <div
+            style={{
+                padding: '10px 14px',
+                border: '1px solid #334155',
+                borderRadius: 8,
+                color: '#94a3b8',
+                fontSize: 13,
+            }}
+            >
+            {policyMode === 'TRAINED_DQN'
+                ? (
+                'Model: Trained DQN with independent safety validation. ' +
+                'Risk and RUL are supplied as inputs. ' +
+                'Recommendations are advisory; no physical HDD operations occur.'
+                )
+                : (
+                'Model: Rule-based mitigation baseline with independent ' +
+                'safety validation. Recommendations are advisory.'
+                )
+            }
         </div>
       </div>
 
       <form onSubmit={submitDecision} className="card">
+        
+        <div style={{ marginBottom: 20 }}>
+        <label style={labelStyle}>
+            Mitigation Decision Model
+
+            <select
+            value={policyMode}
+            onChange={(event) => {
+                setPolicyMode(event.target.value);
+                setResult(null);
+                setError('');
+            }}
+            style={{
+                ...inputStyle,
+                maxWidth: 420,
+                cursor: 'pointer',
+            }}
+            >
+            <option value="TRAINED_DQN">
+                Trained DQN + Independent Safety Validator
+            </option>
+
+            <option value="RULE_BASED">
+                Rule-Based Safety Baseline
+            </option>
+            </select>
+        </label>
+        </div>
+
         <h2 className="section-title" style={{ marginBottom: 8 }}>
           HDD Risk and Storage Context
         </h2>
@@ -262,10 +320,21 @@ function SafeOptimization() {
 
           <div className="metrics-grid">
             {[
-              ['Risk classification', result.risk_level],
-              ['Proposed action', result.proposed_action],
-              ['Safe recommendation', result.recommended_action],
+            [
+                'Decision source',
+                result.model_checkpoint
+                ? 'Trained DQN'
+                : 'Rule-based baseline',
+            ],
+
+            ...(result.risk_level
+                ? [['Risk classification', result.risk_level]]
+                : []),
+
+            ['Proposed action', result.proposed_action],
+            ['Safe recommendation', result.recommended_action],
             ].map(([label, value]) => (
+
               <div className="card metric-card" key={label}>
                 <span className="metric-label">{label}</span>
                 <strong style={{
@@ -292,6 +361,25 @@ function SafeOptimization() {
               {result.explanation}
             </p>
           </div>
+
+            {result.model_checkpoint && (
+            <div
+                style={{
+                marginTop: 18,
+                color: '#94a3b8',
+                fontSize: 13,
+                }}
+            >
+                <p>
+                Trained checkpoint: {result.model_checkpoint}
+                </p>
+
+                <p>
+                Safety filtering applied:{' '}
+                {result.filtered_by_safety ? 'Yes' : 'No'}
+                </p>
+            </div>
+            )}
 
           <h3 style={{ marginTop: 24, marginBottom: 12 }}>
             Independent Safety Assessment
@@ -324,11 +412,36 @@ function SafeOptimization() {
               </strong>
             </p>
 
+           
             <p>
-              Safety fallback:{' '}
-              <strong>{result.safety?.fallback_action}</strong>
+            {result.model_checkpoint
+                ? 'Validator default fallback: '
+                : 'Safety fallback: '}
+            <strong>{result.safety?.fallback_action}</strong>
             </p>
+
           </div>
+        
+          
+            {result.model_checkpoint &&
+            result.filtered_by_safety &&
+            result.proposed_action === 'MIGRATE_DATA' && (
+                <p
+                style={{
+                    marginTop: 16,
+                    color: '#cbd5e1',
+                    fontSize: 13,
+                }}
+                >
+                DQN safety filter: the proposed migration was
+                rejected by safety checks. The experimental DQN
+                filter substituted{' '}
+                <strong>{result.recommended_action}</strong>.
+                The validator's general fallback is{' '}
+                <strong>{result.safety?.fallback_action}</strong>.
+                </p>
+            )}
+
 
           {result.safety?.violations?.length > 0 && (
             <div style={{ marginTop: 18 }}>

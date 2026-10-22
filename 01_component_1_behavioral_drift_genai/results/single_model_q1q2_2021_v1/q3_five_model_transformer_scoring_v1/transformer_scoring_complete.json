@@ -1,0 +1,19 @@
+{
+  "created_utc": "2026-10-22T09:15:15.630055+00:00",
+  "analysis_complete": true,
+  "settings_sha256": "b6e0331f97b1838a1b0be782160553ad32cacba6a649bd91f0e29f6d22712aed",
+  "raw_score_manifest_sha256": "c14e149a08222a0266835660c9b9ab1c9e612e30dc4e48487df4b4e78865f31e",
+  "thresholds_sha256": "ba599e366f8941e0a82b8b67d05e2805f79cb93c7752f3bddc883a61a1d5b881",
+  "evaluation_flag_manifest_sha256": "21a694a8866d0c27ee8d19e043f57367a39db651b27f5c6aea91868cf9a718e7",
+  "failure_labels_used": false,
+  "calibration_drives_disjoint_from_evaluation": true,
+  "future_test_opened": false,
+  "sealed_June_test_opened": false,
+  "transition_score_enabled": false,
+  "limitations": [
+    "one shared encoder checkpoint and one final-day mask rule",
+    "thresholds are development choices, not validated false-alarm guarantees",
+    "no five-model regime discovery yet",
+    "no recorded-failure metrics in this notebook"
+  ]
+}

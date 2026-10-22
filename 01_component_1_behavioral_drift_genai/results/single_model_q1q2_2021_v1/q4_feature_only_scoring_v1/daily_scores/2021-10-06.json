@@ -1,0 +1,17 @@
+{
+  "identity": "01b137cfcf55dbac0de07fcff0dfcaedb8112a4d19078b2a8e1d3b68edf8fc03",
+  "sha256": "b88fce33e447e979dbd35f7290d4ca2316976d704debc5bb5e373c56ceec89c8",
+  "stats": {
+    "observed_rows": 19290,
+    "invalid_rows": 1,
+    "gap_resets": 0,
+    "scored_rows": 19164,
+    "scored_by_model": {
+      "TOSHIBA MG07ACA14TA": 6387,
+      "ST12000NM0008": 3725,
+      "ST4000DM000": 3733,
+      "ST8000NM0055": 2829,
+      "HGST HMS5C4040BLE640": 2490
+    }
+  }
+}

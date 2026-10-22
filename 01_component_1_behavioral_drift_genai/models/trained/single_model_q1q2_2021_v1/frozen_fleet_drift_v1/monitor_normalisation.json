@@ -1,0 +1,20 @@
+{
+  "temperature_median": {
+    "log1p": false,
+    "center": 28.0,
+    "scale": 7.0,
+    "scale_rule": "IQR"
+  },
+  "E_median": {
+    "log1p": true,
+    "center": 0.004391122609376907,
+    "scale": 0.014759434387087822,
+    "scale_rule": "IQR"
+  },
+  "D_median": {
+    "log1p": true,
+    "center": 0.45571267382580827,
+    "scale": 0.24639097500635815,
+    "scale_rule": "IQR"
+  }
+}

@@ -17,3 +17,6 @@ shap>=0.43.0
 
 # Required by FastAPI for the CSV upload endpoints (UploadFile / File).
 python-multipart>=0.0.6
+
+# Cross-process serialization of shadow state transactions.
+filelock>=3.12

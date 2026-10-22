@@ -1,0 +1,29 @@
+{
+  "notebook20_complete_sha256": "17b32b3b791d1d40848a33bebd0cf8547ad278672459d501e319a33401b70373",
+  "notebook21_complete_sha256": "e3e52cb1198fea61c477244a8494e59446cc9979a4560f70ced60d17f05c5e72",
+  "embeddings_sha256": "d2034b52ae1d9ff5b5427300e543372c252191f4dd6b7dab67c2d49a49aa1dd3",
+  "q3_zip_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "snapshots": [
+    "2021-08-01",
+    "2021-08-08",
+    "2021-08-15"
+  ],
+  "nuisance_features": [
+    "smart_5_raw",
+    "smart_9_raw",
+    "smart_194_raw",
+    "smart_197_raw",
+    "smart_198_raw"
+  ],
+  "nuisance_transform": "log1p five raw values plus binary sector-positive; StandardScaler on Aug15 train",
+  "residualizer": "per-model Ridge alpha=10; predicts 64D embedding from nuisance",
+  "residual_pca_dimensions": 8,
+  "cluster_min_size_fraction": 0.01,
+  "cluster_min_size_floor": 30,
+  "min_samples": 15,
+  "projection": "nearest centroid within train-cluster 95th percentile radius",
+  "shuffle_repetitions": 100,
+  "seed": 42,
+  "labels_used": false,
+  "production_ready": false
+}

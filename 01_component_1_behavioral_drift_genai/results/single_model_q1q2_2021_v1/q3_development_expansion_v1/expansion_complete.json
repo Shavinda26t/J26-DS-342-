@@ -1,0 +1,56 @@
+{
+  "created_utc": "2026-10-22T05:45:39.850228+00:00",
+  "analysis_complete": true,
+  "dataset_feasible": true,
+  "run_id": "single_model_q1q2_2021_v1",
+  "expansion_id": "q3_development_expansion_v1",
+  "settings": {
+    "model": "ST12000NM0008",
+    "features": [
+      "smart_5_raw",
+      "smart_9_raw",
+      "smart_194_raw",
+      "smart_197_raw",
+      "smart_198_raw"
+    ],
+    "window_days": 30,
+    "cohort_date": "2021-07-01",
+    "adaptation_start": "2021-07-30",
+    "adaptation_end": "2021-08-31",
+    "acceptance_start": "2021-09-01",
+    "acceptance_end": "2021-09-30",
+    "adaptation_target": 200,
+    "acceptance_target": 100,
+    "minimum_drives_per_group": 30,
+    "assignment_salt": "q3-development-v1-seed42",
+    "missing_rule": "reject any window with absent day or nonfinite/negative feature",
+    "upstream_complete_sha256": "a7e66992cd4f449c2b20dd5bfda5944b68b71c8d21d18bf1e5277d2e66d4827b",
+    "original_splits_sha256": "f3a890d0e773e1467ed6b56e7c97b73dd471825120cd9c5c8e725dd4df90b6b6",
+    "archive_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+    "failure_labels_read": false
+  },
+  "split_sha256": "16fb0be6506eca80b42020b20e75291648a9955ef6fa319fd26309b0909ad3b7",
+  "artifact_sha256": {
+    "data\\features\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\acceptance\\daily_raw.parquet": "7657ec0c2379673830917bd35e6239bf0353a985718a861da69f60cf26963e34",
+    "data\\features\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\acceptance\\metadata.parquet": "daa1fce63dc5a5e0b456af5e74d1dbf996f3c229b9ed9e9f69593b7efa3c8d6f",
+    "data\\features\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\acceptance\\windows_raw.npz": "75416330c6fe71511f57fa6229b67ae286626dbd1aed51418d3166b17a9c78fb",
+    "data\\features\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\adaptation\\daily_raw.parquet": "d9609481563e619b50cc1a9e4fd733aa9181e0a12d4f62b42c671ab09b93b758",
+    "data\\features\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\adaptation\\metadata.parquet": "f6e7af9b66ed7022d909ad5d00004e72c0eb3471557114cda8b01768afaac408",
+    "data\\features\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\adaptation\\windows_raw.npz": "a2bf57821553f3304789dc454d885521eae65eb56e27a86bc5a7e2363effe34a",
+    "results\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\acceptance_window_audit.csv": "f7e0a228bdd8c1416d95f3b3634aad723fb8063080577b1002e2bc2212b60a2d",
+    "results\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\adaptation_window_audit.csv": "0f424418173cea1551c4c053ce7a774526a26069d935f0387bc491a31784b2ca",
+    "results\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\expansion_window_counts.csv": "26907f42dc7562fb4a1d7b8b580132abf40bcf07716554131688738345434d5f",
+    "results\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\source_daily_coverage.csv": "65b71474e2f68e1d92d6ce6375fe868c1321b22159b49ec230b4a3a1a6d9ad90"
+  },
+  "failure_labels_read": false,
+  "sealed_June_test_opened": false,
+  "acceptance_scores_inspected": false,
+  "models_updated": 0,
+  "limitations": [
+    "one model",
+    "development acceptance is not a healthy-labelled population",
+    "Q3 is development and later than the reserved June benchmark",
+    "no scaling, inference or training performed",
+    "complete-window rejection can produce coverage bias; retain audit counts"
+  ]
+}

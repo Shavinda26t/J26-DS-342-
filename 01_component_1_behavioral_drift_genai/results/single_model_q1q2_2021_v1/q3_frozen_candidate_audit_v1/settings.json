@@ -1,0 +1,12 @@
+{
+  "minimum_strength": 0.5,
+  "screen_span_calendar_days": 14,
+  "minimum_daily_drives": 30,
+  "minimum_block_windows": 200,
+  "minimum_partition_share": 0.8,
+  "sector_guard": "exclude any positive sector count or positive daily sector change anywhere in window",
+  "score_guard": "exclude any global R/E/D/RD alert",
+  "upstream_expansion_sha256": "9d12d218eeaa62c6104d74f6866b32fbe0f5ff46a256e188dc765368bc1f05ff",
+  "score_specification_sha256": "9f47dd7a270cd94b9fd0d36fafa68c4a86cb3169750d76c4fd067f7a6bab1a6d",
+  "automatic_adaptation": false
+}

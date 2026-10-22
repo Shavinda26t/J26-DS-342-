@@ -1,0 +1,19 @@
+{
+  "created_utc": "2026-10-22T11:16:32.341384+00:00",
+  "analysis_complete": true,
+  "settings_sha256": "47a5f24cbe4bcce62af9875d5c493102f0d076355f6a72314d3c2a50f015ec34",
+  "paired_scores_sha256": "beee221f70082c1419b66b59e78b39866c94a01b89d42f3065a0b0e47c96c4ac",
+  "summary_sha256": "25918eaeef8467be3c4af45861cf77709d8388ffbbca02be83c9566957a466ed",
+  "failure_labels_used": false,
+  "evaluation_drives_used": false,
+  "future_test_opened": false,
+  "sealed_June_test_opened": false,
+  "winner_selected": false,
+  "limitations": [
+    "injected perturbations are not natural HDD failure cases",
+    "only one August 15 stop window per sampled drive",
+    "calibration thresholds applied to a different stop-drive cohort",
+    "no inference about real failure recall or false-alert rate",
+    "regime and drift components not approved"
+  ]
+}

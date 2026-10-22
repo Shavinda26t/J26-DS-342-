@@ -1,0 +1,35 @@
+{
+  "status": "scored",
+  "serial_number": "1030A011F97G",
+  "model": "TOSHIBA MG07ACA14TA",
+  "end_date": "2021-09-15",
+  "history_days": 30,
+  "scores": {
+    "temp_error": 0.0018954514525830746,
+    "sector_error": 0.00018883524171542376,
+    "joint_error": 0.0006154892616905272
+  },
+  "thresholds": {
+    "temp_error": 1.0100409984588623,
+    "sector_error": 0.012183227576315403,
+    "joint_error": 0.27318981289863586
+  },
+  "flags": {
+    "temp_error": false,
+    "sector_error": false,
+    "joint_error": false
+  },
+  "sensor_residuals": {
+    "smart_5_raw": 3.9515538219347945e-07,
+    "smart_194_raw": 0.0018954514525830746,
+    "smart_197_raw": 0.00040752164204604924,
+    "smart_198_raw": 0.00015858892584219575
+  },
+  "smart_evidence": {
+    "sector_positive": false,
+    "sector_delta": 0.0
+  },
+  "regime_id": null,
+  "drift_event": null,
+  "model_version": "6bc0e42fe995d1dddc00f9ebe7379b7ca3aa1762ab1fd2278a012c3ae2f0e172"
+}

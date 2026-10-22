@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-10-22T08:22:15.596876+00:00",
+  "analysis_complete": true,
+  "protocol_sha256": "134c731500841304dff14cd64a6cf8992fabd60d8706478e33e321a8428d1df9",
+  "score_lock_sha256": "74b23722f9a0996f7c2cd9c40ad50730a72867031ce4cfedb26e158b41c8ebee",
+  "metrics_sha256": "914a9851513b9a6deb765d1ce15e4dfef026645d0e3d2f30460b329c18e98ec6",
+  "matched_rows": 945649,
+  "comparison_method_count": 5,
+  "failure_labels_used_for_thresholds": false,
+  "failure_labels_used_for_evaluation": true,
+  "q4_outcomes_opened": false,
+  "sealed_June_test_opened": false,
+  "winner_selected": false,
+  "limitations": [
+    "Q3 aggregate outcomes previously inspected",
+    "small complete-event sample; HGST may have no complete events",
+    "30-day negative follow-up absent at Q3 end",
+    "calibration quantile does not guarantee equal September alert burden",
+    "Isolation Forest is a baseline; five-model masked Transformer is not evaluated here"
+  ]
+}

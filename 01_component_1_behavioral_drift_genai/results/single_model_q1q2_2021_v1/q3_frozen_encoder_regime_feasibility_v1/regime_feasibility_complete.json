@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-10-22T09:41:54.830071+00:00",
+  "analysis_complete": true,
+  "settings_sha256": "ef0641ea8c72437c87773c4b17afbbc61f23971998b6f5128a728b5781084da6",
+  "embeddings_sha256": "d2034b52ae1d9ff5b5427300e543372c252191f4dd6b7dab67c2d49a49aa1dd3",
+  "assignments_sha256": "28b514fed82db9d7437e30585ce3bf3aaf8f8ca7fc35fc208464b272d7f2e717",
+  "summary_sha256": "7f7d7f54813c0826c7118238325dfca13a9a9568747d21270312c2fd8a6641cb",
+  "persistence_sha256": "6863e6c5a0f90ca1fd616cacf0bbe7a5340a59004a72426302cd83dd023e6a11",
+  "failure_labels_used": false,
+  "evaluation_drives_used": false,
+  "future_test_opened": false,
+  "sealed_June_test_opened": false,
+  "regime_model_approved": false,
+  "limitations": [
+    "HDBSCAN fitted on one August snapshot only",
+    "centroid-radius projection approximates out-of-sample membership",
+    "three snapshots cannot establish longer-term persistence or drift",
+    "silhouette and shuffle diagnostics are descriptive; no seed stability estimate",
+    "regime health meaning and failure-warning utility remain untested"
+  ]
+}

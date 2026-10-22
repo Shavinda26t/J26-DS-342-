@@ -1,0 +1,8 @@
+{
+  "quantile": 0.99,
+  "thresholds": {
+    "isolation_forest": 0.6033936902771472,
+    "robust_deviation": 8.206583614320753,
+    "dense_autoencoder": 0.017936071380972862
+  }
+}

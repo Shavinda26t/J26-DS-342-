@@ -1,0 +1,25 @@
+{
+  "checkpoint_sha256": "6bc0e42fe995d1dddc00f9ebe7379b7ca3aa1762ab1fd2278a012c3ae2f0e172",
+  "preprocessing_sha256": "bdf52e05f24a1239d184b02b7667b2edb42bd2d556fc3ff5b80aec20301eb9b8",
+  "fit_windows_sha256": "ee60ef1843c0ea5b7204eb3fcc022e561cdb2d30cafd856a37357aeff7666e9e",
+  "transformer_threshold_sha256": "ba599e366f8941e0a82b8b67d05e2805f79cb93c7752f3bddc883a61a1d5b881",
+  "baseline_threshold_sha256": "fb545c4e50b8934749a1d1dfb4701ae76b20b137a000bf37474eb2bdfb93990d",
+  "ablation_complete_sha256": "6e114183d2473cba07fac8c478c0058dc5c0b67d5b53b803a9aafeb8c71ab5ca",
+  "source": "August 15 stop drives with all 30 days of SMART 5,197,198 zero",
+  "sample_per_model": 200,
+  "seed": 42,
+  "perturbations": [
+    "unchanged",
+    "temp_spike_final_8C",
+    "temp_shift_last7_6C",
+    "sector_onset_final",
+    "sector_ramp_last7",
+    "temp_flatline_last7"
+  ],
+  "sector_onset": "final SMART 5=8, 197=2, 198=2",
+  "sector_ramp": "last 7 days SMART 5=2,4,...14; 197 and 198=1 on final 4 days",
+  "temp_flatline": "last 7 days SMART 194 repeats day -8",
+  "threshold_rule": "strict greater than frozen per-model thresholds",
+  "failure_labels_used": false,
+  "winner_selection_enabled": false
+}

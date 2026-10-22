@@ -1,0 +1,25 @@
+{
+  "model": "ST12000NM0008",
+  "features": [
+    "smart_5_raw",
+    "smart_9_raw",
+    "smart_194_raw",
+    "smart_197_raw",
+    "smart_198_raw"
+  ],
+  "window_days": 30,
+  "cohort_date": "2021-07-01",
+  "adaptation_start": "2021-07-30",
+  "adaptation_end": "2021-08-31",
+  "acceptance_start": "2021-09-01",
+  "acceptance_end": "2021-09-30",
+  "adaptation_target": 200,
+  "acceptance_target": 100,
+  "minimum_drives_per_group": 30,
+  "assignment_salt": "q3-development-v1-seed42",
+  "missing_rule": "reject any window with absent day or nonfinite/negative feature",
+  "upstream_complete_sha256": "a7e66992cd4f449c2b20dd5bfda5944b68b71c8d21d18bf1e5277d2e66d4827b",
+  "original_splits_sha256": "f3a890d0e773e1467ed6b56e7c97b73dd471825120cd9c5c8e725dd4df90b6b6",
+  "archive_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "failure_labels_read": false
+}
