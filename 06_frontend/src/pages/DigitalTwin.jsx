@@ -174,10 +174,14 @@ export default function DigitalTwin() {
   };
 
   const downloadTemplate = () => {
-    const template = `serial_number,date,smart_1_normalized,smart_5_normalized,smart_187_normalized,smart_197_normalized,smart_198_normalized,smart_1_normalized_change_7d,smart_1_normalized_change_14d,smart_1_normalized_rolling_std_7,smart_187_normalized_change_7d,smart_187_normalized_change_14d,smart_187_normalized_rolling_std_7,smart_1_available,smart_5_available,smart_187_available,smart_197_available,smart_198_available
-HDD001,2023-01-01,100,100,97,100,100,0,0,2.6367,0,0,0,1,1,1,1,1
-HDD001,2023-01-02,100,100,97,100,100,0,0,2.6367,0,0,0,1,1,1,1,1
-HDD001,2023-01-30,100,100,97,100,100,0,0,2.6367,0,0,0,1,1,1,1,1`;
+    // The BiLSTM needs >= 30 observations per HDD, so the template ships
+    // 30 consecutive days (fewer rows -> "insufficient_data", no RUL).
+    const header = 'serial_number,date,smart_1_normalized,smart_5_normalized,smart_187_normalized,smart_197_normalized,smart_198_normalized,smart_1_normalized_change_7d,smart_1_normalized_change_14d,smart_1_normalized_rolling_std_7,smart_187_normalized_change_7d,smart_187_normalized_change_14d,smart_187_normalized_rolling_std_7,smart_1_available,smart_5_available,smart_187_available,smart_197_available,smart_198_available';
+    const rows = Array.from({ length: 30 }, (_, i) => {
+      const date = new Date(Date.UTC(2023, 0, 1 + i)).toISOString().slice(0, 10);
+      return `HDD001,${date},100,100,97,100,100,0,0,2.6367,0,0,0,1,1,1,1,1`;
+    });
+    const template = [header, ...rows].join('\n');
     const blob = new Blob([template], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -376,7 +380,12 @@ HDD001,2023-01-30,100,100,97,100,100,0,0,2.6367,0,0,0,1,1,1,1,1`;
                       <td style={tdStyle}>{p.status}</td>
                       <td style={tdStyle}>{p.predicted_rul_days != null ? p.predicted_rul_days.toFixed(2) : '—'}</td>
                       <td style={tdStyle}>{p.observations_used ?? p.available ?? '—'}</td>
-                      <td style={{ ...tdStyle, color: COLORS.bad, fontSize: 12 }}>{p.error ?? '—'}</td>
+                      <td style={{ ...tdStyle, color: COLORS.bad, fontSize: 12 }}>
+                        {p.error
+                          ?? (p.status === 'insufficient_data'
+                            ? `Needs ${p.required} observations, file has ${p.available}`
+                            : '—')}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
