@@ -5,6 +5,5 @@ Constructs virtual digital twins for individual HDDs to track degradation curves
 
 ## Structure
 - `data/`: Independent raw, interim, processed, feature, and split data pipelines.
-- `models/`: Digital twin neural ODEs and health state estimators.
-- `src/`: Core simulation and twin state logic.
-- `config/`: Component configuration parameters.
+- `scripts/`: Core detector, RUL predictor, streaming state manager, and analysis scripts.
+- `results/`: Outputs including thresholds sweeps, validation CSVs, and figures.

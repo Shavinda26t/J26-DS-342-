@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getComponent3Dashboard, getComponent3Factors } from '../api/component3Api';
 import FailureExplanation from '../components/component3/FailureExplanation';
 import RootCausePanel from '../components/component3/RootCausePanel';
@@ -6,12 +6,20 @@ import CausalGraph from '../components/component3/CausalGraph';
 import GlobalFeatureImportance from '../components/component3/GlobalFeatureImportance';
 import LocalExplanation from '../components/component3/LocalExplanation';
 import ResearchFigures from '../components/component3/ResearchFigures';
+import PredictPanel from '../components/component3/PredictPanel';
 
 const CausalXAI = () => {
   const [data, setData] = useState(null);
   const [factors, setFactors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [hasPrediction, setHasPrediction] = useState(false);
+  const [showStatic, setShowStatic] = useState(false);
+
+  const handlePredictionChange = useCallback((active) => {
+    setHasPrediction(active);
+    setShowStatic(false);
+  }, []);
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -87,20 +95,57 @@ const CausalXAI = () => {
       {/* Summary Cards & Scientific Warning Banner */}
       <FailureExplanation summary={summary} />
 
-      {/* Root Cause Candidate Hierarchy */}
-      <RootCausePanel candidates={rootCauses} />
+      {/* Interactive CSV Upload Prediction */}
+      <PredictPanel onPredictionChange={handlePredictionChange} />
 
-      {/* Temporal Pathways & ATT Forest / Matched Effects */}
-      <CausalGraph pathways={temporalPathways} matchedEffects={matchedEffects} />
+      {/* Fleet-level static research evidence (hidden while a prediction is shown) */}
+      {hasPrediction && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '12px',
+            padding: '14px 18px',
+            borderRadius: '10px',
+            border: '1px solid #334155',
+            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+          }}
+        >
+          <div>
+            <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#e2e8f0' }}>
+              Fleet-Level Research Evidence
+            </div>
+            <p style={{ fontSize: '0.78rem', color: '#94a3b8', margin: '4px 0 0 0' }}>
+              Population-level causal findings (PCMCI, matched ATT, evidence catalog, research
+              figures, representative cases) are hidden while an uploaded-HDD prediction is displayed.
+            </p>
+          </div>
+          <button className="btn-retry" onClick={() => setShowStatic((v) => !v)}>
+            {showStatic ? 'Hide fleet-level evidence' : 'Show fleet-level evidence'}
+          </button>
+        </div>
+      )}
 
-      {/* Integrated Evidence Catalog Table */}
-      <GlobalFeatureImportance factors={factors} />
+      {(!hasPrediction || showStatic) && (
+        <>
+          {/* Root Cause Candidate Hierarchy */}
+          <RootCausePanel candidates={rootCauses} />
 
-      {/* Research Visualizations */}
-      <ResearchFigures />
+          {/* Temporal Pathways & ATT Forest / Matched Effects */}
+          <CausalGraph pathways={temporalPathways} matchedEffects={matchedEffects} />
 
-      {/* Local Explanation Section (TP / FP / FN / TN) */}
-      <LocalExplanation />
+          {/* Integrated Evidence Catalog Table */}
+          <GlobalFeatureImportance factors={factors} />
+
+          {/* Research Visualizations */}
+          <ResearchFigures />
+
+          {/* Local Explanation Section (TP / FP / FN / TN) */}
+          <LocalExplanation />
+        </>
+      )}
     </div>
   );
 };

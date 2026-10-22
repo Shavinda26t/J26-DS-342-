@@ -1,0 +1,18 @@
+{
+  "best_trial_number": 14,
+  "best_validation_pr_auc": 0.20294240870972186,
+  "params": {
+    "max_depth": 3,
+    "learning_rate": 0.08017514118060781,
+    "min_child_weight": 17.087496906362716,
+    "subsample": 0.9874994259239145,
+    "colsample_bytree": 0.6830347242613258,
+    "gamma": 0.5896893827059833,
+    "reg_alpha": 1.3814968219757793,
+    "reg_lambda": 1.462748430976401
+  },
+  "best_boosting_rounds": 44,
+  "early_stopping_rounds": 50,
+  "n_estimators_upper_bound": 2500,
+  "scale_pos_weight": 597.9631384939441
+}

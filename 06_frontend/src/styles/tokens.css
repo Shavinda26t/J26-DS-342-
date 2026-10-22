@@ -1,0 +1,88 @@
+:root,
+[data-ui-theme='dark'] {
+  --ui-font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  --ui-bg: #0f172a;
+  --ui-bg-elevated: #020617;
+  --ui-surface: #1e293b;
+  --ui-surface-hover: #334155;
+  --ui-border: #334155;
+  --ui-border-strong: #475569;
+
+  --ui-text: #f8fafc;
+  --ui-text-muted: #94a3b8;
+
+  --ui-primary: #38bdf8;
+  --ui-primary-strong: #0ea5e9;
+  --ui-primary-contrast: #0f172a;
+  --ui-primary-soft: rgba(56, 189, 248, 0.12);
+
+  --ui-secondary: #6366f1;
+  --ui-secondary-soft: rgba(99, 102, 241, 0.12);
+
+  --ui-danger: #ef4444;
+  --ui-danger-soft: rgba(239, 68, 68, 0.1);
+  --ui-danger-text: #fca5a5;
+
+  --ui-success: #10b981;
+  --ui-success-soft: rgba(16, 185, 129, 0.1);
+  --ui-success-text: #6ee7b7;
+
+  --ui-warning: #f59e0b;
+  --ui-warning-soft: rgba(245, 158, 11, 0.1);
+  --ui-warning-text: #fcd34d;
+
+  --ui-info-text: #7dd3fc;
+  --ui-demo-text: #c7d2fe;
+
+  --ui-input-bg: #0f172a;
+  --ui-header-bg: rgba(15, 23, 42, 0.85);
+  --ui-mono-bg: rgba(0, 0, 0, 0.3);
+
+  --ui-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --ui-header-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --ui-overlay-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+
+  --ui-hero-grid: rgba(148, 163, 184, 0.07);
+
+  --ui-radius-sm: 8px;
+  --ui-radius: 12px;
+  --ui-radius-lg: 16px;
+  --ui-header-h: 64px;
+}
+
+[data-ui-theme='light'] {
+  --ui-bg: #f8fafc;
+  --ui-bg-elevated: #ffffff;
+  --ui-surface: #ffffff;
+  --ui-surface-hover: #f1f5f9;
+  --ui-border: #e2e8f0;
+  --ui-border-strong: #cbd5e1;
+
+  --ui-text: #0f172a;
+  --ui-text-muted: #64748b;
+
+  --ui-primary: #0284c7;
+  --ui-primary-strong: #0369a1;
+  --ui-primary-contrast: #ffffff;
+  --ui-primary-soft: rgba(2, 132, 199, 0.1);
+
+  --ui-secondary-soft: rgba(79, 70, 229, 0.1);
+
+  --ui-danger-text: #b91c1c;
+  --ui-success-text: #047857;
+  --ui-warning-text: #b45309;
+
+  --ui-info-text: #0369a1;
+  --ui-demo-text: #4338ca;
+
+  --ui-input-bg: #ffffff;
+  --ui-header-bg: rgba(255, 255, 255, 0.85);
+  --ui-mono-bg: rgba(15, 23, 42, 0.06);
+
+  --ui-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.07);
+  --ui-header-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --ui-overlay-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+
+  --ui-hero-grid: rgba(15, 23, 42, 0.05);
+}

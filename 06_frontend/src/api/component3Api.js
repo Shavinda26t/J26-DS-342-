@@ -74,3 +74,11 @@ export const getComponent3Explain = (serial) =>
 
 export const getComponent3RootCause = (serial) => 
   apiClient.post(getEndpointPath('/root-cause'), { serial_number: serial });
+
+// Interactive prediction (CSV upload)
+export const predictComponent3Csv = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await apiClient.post(getEndpointPath('/predict'), formData);
+  return res.data;
+};

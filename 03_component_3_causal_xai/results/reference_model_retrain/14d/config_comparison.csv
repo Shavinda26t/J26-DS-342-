@@ -1,0 +1,3 @@
+config,val_pr_auc,trees_used,train_seconds
+original_es,0.09607548778781345,44,31.3
+shallow_es,0.14042838586576867,58,32.6
