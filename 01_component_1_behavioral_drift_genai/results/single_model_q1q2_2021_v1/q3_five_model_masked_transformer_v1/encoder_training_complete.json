@@ -1,0 +1,18 @@
+{
+  "created_utc": "2026-10-22T09:01:41.122023+00:00",
+  "analysis_complete": true,
+  "settings_sha256": "f38a31cdee0e8119cec6bc9cd5ed519043d69a662bf1a1f9c547010b3fdf522a",
+  "preprocessing_sha256": "bdf52e05f24a1239d184b02b7667b2edb42bd2d556fc3ff5b80aec20301eb9b8",
+  "fit_windows_sha256": "ee60ef1843c0ea5b7204eb3fcc022e561cdb2d30cafd856a37357aeff7666e9e",
+  "best_checkpoint_sha256": "6bc0e42fe995d1dddc00f9ebe7379b7ca3aa1762ab1fd2278a012c3ae2f0e172",
+  "best_stopping_mse": 0.01165902755626453,
+  "epochs_completed": 25,
+  "train_drives": 41756,
+  "stopping_drives": 4616,
+  "failure_labels_used": false,
+  "calibration_or_evaluation_drives_used": false,
+  "future_test_outcomes_opened": false,
+  "sealed_June_test_opened": false,
+  "regime_discovery_validated": false,
+  "failure_detection_validated": false
+}

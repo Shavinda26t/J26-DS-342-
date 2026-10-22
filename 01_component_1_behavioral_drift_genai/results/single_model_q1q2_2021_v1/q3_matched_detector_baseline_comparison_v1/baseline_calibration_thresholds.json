@@ -1,0 +1,22 @@
+{
+  "TOSHIBA MG07ACA14TA": {
+    "sector_positive": 2.0,
+    "sector_delta": 0.0
+  },
+  "ST12000NM0008": {
+    "sector_positive": 576.0,
+    "sector_delta": 0.0
+  },
+  "ST4000DM000": {
+    "sector_positive": 1760.0,
+    "sector_delta": 0.0
+  },
+  "ST8000NM0055": {
+    "sector_positive": 2360.0,
+    "sector_delta": 8.0
+  },
+  "HGST HMS5C4040BLE640": {
+    "sector_positive": 96.0,
+    "sector_delta": 0.0
+  }
+}

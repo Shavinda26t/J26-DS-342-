@@ -1,0 +1,30 @@
+{
+  "notebook16_protocol_sha256": "134c731500841304dff14cd64a6cf8992fabd60d8706478e33e321a8428d1df9",
+  "notebook16_score_lock_sha256": "74b23722f9a0996f7c2cd9c40ad50730a72867031ce4cfedb26e158b41c8ebee",
+  "notebook16_metrics_sha256": "914a9851513b9a6deb765d1ce15e4dfef026645d0e3d2f30460b329c18e98ec6",
+  "notebook18_settings_sha256": "b6e0331f97b1838a1b0be782160553ad32cacba6a649bd91f0e29f6d22712aed",
+  "notebook18_flag_manifest_sha256": "21a694a8866d0c27ee8d19e043f57367a39db651b27f5c6aea91868cf9a718e7",
+  "notebook18_threshold_sha256": "ba599e366f8941e0a82b8b67d05e2805f79cb93c7752f3bddc883a61a1d5b881",
+  "q3_zip_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "matched_population": "Notebook 16 Aug-Sep evaluation-drive score keys, exact one-to-one join",
+  "metric_dates": [
+    "2021-09-01",
+    "2021-09-30"
+  ],
+  "horizons_days": [
+    7,
+    14,
+    30
+  ],
+  "targets": "Notebook 16 observed-follow-up and first-failure rules",
+  "event_rule": "Notebook 16 all h pre-failure scored endpoints present",
+  "transformer_methods": [
+    "temp_error",
+    "sector_error",
+    "joint_error"
+  ],
+  "winner_selection_enabled": false,
+  "q4_opened": false,
+  "sealed_June_test_opened": false
+}

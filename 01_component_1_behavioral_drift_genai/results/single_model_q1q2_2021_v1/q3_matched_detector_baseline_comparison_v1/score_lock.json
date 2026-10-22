@@ -1,0 +1,7 @@
+{
+  "protocol_sha256": "134c731500841304dff14cd64a6cf8992fabd60d8706478e33e321a8428d1df9",
+  "baseline_threshold_sha256": "fb545c4e50b8934749a1d1dfb4701ae76b20b137a000bf37474eb2bdfb93990d",
+  "matched_scores_sha256": "c5a30c23f3d1e45c8144ae97cbc7dbf473bbbfa452aba3b4d2f8b8fffb6dce7e",
+  "rows": 945649,
+  "failure_labels_used_for_scoring": false
+}

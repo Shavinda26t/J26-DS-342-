@@ -1,0 +1,19 @@
+{
+  "notebook20_complete_sha256": "17b32b3b791d1d40848a33bebd0cf8547ad278672459d501e319a33401b70373",
+  "notebook20_embeddings_sha256": "d2034b52ae1d9ff5b5427300e543372c252191f4dd6b7dab67c2d49a49aa1dd3",
+  "notebook20_assignments_sha256": "28b514fed82db9d7437e30585ce3bf3aaf8f8ca7fc35fc208464b272d7f2e717",
+  "notebook20_projection_spec_sha256": "451bf5f2e106aa09da35fa26b7a0fdeb4964dd28ad12b065b0f8e687d87ace73",
+  "fit_windows_sha256": "ee60ef1843c0ea5b7204eb3fcc022e561cdb2d30cafd856a37357aeff7666e9e",
+  "fit_date": "2021-08-15",
+  "seeds": [
+    41,
+    42,
+    43
+  ],
+  "drive_resample_fraction": 0.8,
+  "retrain_preprocessing": false,
+  "age_bins": "fit-train SMART 9 quintiles, fitted independently by model",
+  "sector_condition": "any of SMART 5, 197, 198 is positive",
+  "failure_labels_used": false,
+  "winner_selection_enabled": false
+}

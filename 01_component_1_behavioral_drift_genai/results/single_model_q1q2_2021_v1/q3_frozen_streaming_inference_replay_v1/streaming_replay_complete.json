@@ -1,0 +1,20 @@
+{
+  "created_utc": "2026-10-22T11:22:19.671882+00:00",
+  "analysis_complete": true,
+  "settings_sha256": "6e7b67b4f58d0a30f0c7bd89d89abdc111aa9dc93a6f8f7886115e928da2baa3",
+  "contract_sha256": "7269e47403c5a780d91afdb072138fe5018cd504c801264210c6b11b0c69e525",
+  "parity_sha256": "a2e97c7c8e8ffc15c459230efd61eba4d35da60448881ef396a08e1e5bc3c656",
+  "parity_drives": 50,
+  "edge_case_checks_passed": true,
+  "failure_labels_used": false,
+  "future_test_opened": false,
+  "sealed_June_test_opened": false,
+  "regime_and_drift_enabled": false,
+  "automatic_healing_enabled": false,
+  "limitations": [
+    "agent field schema and timestamp convention must be confirmed against actual agent",
+    "only fifty drives and one replay endpoint tested",
+    "threshold flags are research candidates; operational alert policy not approved",
+    "no persistence/deduplication of repeated anomaly episodes"
+  ]
+}

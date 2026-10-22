@@ -1,0 +1,39 @@
+{
+  "schema_version": "research_smart_daily_v1",
+  "input": {
+    "serial_number": "nonempty string",
+    "model": "one of the five frozen HDD models",
+    "date": "ISO 8601 calendar day YYYY-MM-DD; one record per drive/day",
+    "smart_5_raw": "finite nonnegative observed number",
+    "smart_9_raw": "finite nonnegative observed number",
+    "smart_194_raw": "finite nonnegative observed number",
+    "smart_197_raw": "finite nonnegative observed number",
+    "smart_198_raw": "finite nonnegative observed number"
+  },
+  "readiness": "30 consecutive valid daily observations per drive; gap resets window",
+  "duplicate": "identical same-day record is idempotent; conflicting record rejected",
+  "ordering": "per-drive dates strictly increasing; late/backfilled days rejected",
+  "output": [
+    "serial_number",
+    "model",
+    "end_date",
+    "status",
+    "history_days",
+    "scores",
+    "thresholds",
+    "flags",
+    "sensor_residuals",
+    "smart_evidence",
+    "model_version"
+  ],
+  "risk_semantics": "candidate anomaly flags; not failure probability or automatic healing",
+  "regime_status": "unavailable",
+  "drift_status": "unavailable",
+  "required_for_real_agent_integration": [
+    "confirm agent field names and units",
+    "daily timestamp timezone and end-of-day policy",
+    "device identity and model mapping",
+    "missing-value semantics",
+    "deduplication and storage policy"
+  ]
+}

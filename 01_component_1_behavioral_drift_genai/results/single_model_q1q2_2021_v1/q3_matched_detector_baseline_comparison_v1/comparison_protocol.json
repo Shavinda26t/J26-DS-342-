@@ -1,0 +1,26 @@
+{
+  "pilot_score_manifest_sha256": "1be346ff79c77f776414ee98a0dba28d6ed82a4fc668c5db10b46b17a03030bc",
+  "baseline_score_manifest_sha256": "4eed2ecae7d0a5d2326542883b467fa02098857f1746044e39109e1ee9b47be7",
+  "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "q3_zip_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "population": "Notebook 15 evaluation drives and their scored Aug-Sep endpoints",
+  "endpoint_metric_dates": [
+    "2021-09-01",
+    "2021-09-30"
+  ],
+  "event_dates": [
+    "2021-09-01",
+    "2021-09-30"
+  ],
+  "horizons_days": [
+    7,
+    14,
+    30
+  ],
+  "fixed_baseline_rule": "score > 0",
+  "calibrated_baseline_rule": "score > per-model higher 0.998 quantile on distinct calibration drives Aug 16-31",
+  "negative_rule": "every following calendar day observed within Q3 and no failure in horizon",
+  "event_rule": "all h pre-failure endpoints have both detector and baseline score",
+  "winner_selection_enabled": false,
+  "test_outcomes_opened": false
+}

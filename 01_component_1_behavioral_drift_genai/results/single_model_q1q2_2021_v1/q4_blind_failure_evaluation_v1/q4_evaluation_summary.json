@@ -1,0 +1,20 @@
+{
+  "first_failure_drives": 51,
+  "failure_rows": 51,
+  "reserved_drives": 19351,
+  "observed_drive_days": 1771961,
+  "scored_endpoints": 1758728,
+  "observed_drives": 19292,
+  "unscored_failure_drives": 2,
+  "daily_quality_totals": {
+    "observed_rows": 1771961,
+    "invalid_rows": 323,
+    "gap_resets": 155,
+    "scored_rows": 1758728
+  },
+  "primary_method": "transformer_sector_error",
+  "primary_horizon_days": 14,
+  "score_lock_sha256": "9cb0fd0ee69d8cfbe7e23f6824d8a2137b581e76dbb8158f83a283541dd79941",
+  "winner_selection_after_q4": false,
+  "uncertainty": "Drive-level primary-event recall bootstrap reported only for groups with at least ten complete event drives; other intervals are undefined."
+}

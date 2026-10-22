@@ -1,0 +1,65 @@
+{
+  "id": "q4_blind_candidate_protocol_v1",
+  "population": "exact July 1 reserved future_test serials, all five provisional HDD models",
+  "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "q3_archive_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "q4_archive_expected_relative_path": "data/raw/data_Q4_2021.zip",
+  "q4_archive_contents_opened_by_this_notebook": false,
+  "warmup": "Q3 September SMART features only for future_test drives; never Q3/Q4 failure flags during scoring",
+  "scoring_endpoint_dates": [
+    "2021-10-01",
+    "2021-12-31"
+  ],
+  "window_days": 30,
+  "require_consecutive_observed_valid_days": true,
+  "primary_method": "transformer_sector_error",
+  "primary_score": "mean squared normalized final-day hidden residual for SMART 5,197,198",
+  "primary_alarm_rule": "score > frozen per-model higher 0.998 calibration quantile",
+  "secondary_methods": [
+    "transformer_temp_error",
+    "transformer_joint_error"
+  ],
+  "comparators": [
+    "isolation_forest",
+    "sector_positive_fixed",
+    "sector_delta_fixed",
+    "sector_positive_calibrated",
+    "sector_delta_calibrated"
+  ],
+  "fixed_smart_rule": "score > 0",
+  "calibrated_smart_rule": "score > frozen per-model higher 0.998 quantile",
+  "methods_on_identical_endpoints": true,
+  "primary_horizon_days": 14,
+  "other_horizons_days": [
+    7,
+    30
+  ],
+  "negative_rule": "all following h calendar days observed in Q4 and no first failure in horizon",
+  "post_failure_rule": "first failure on/before endpoint is excluded from endpoint targets",
+  "strict_event_rule": "all h pre-failure daily score endpoints present for every method",
+  "incomplete_events": "preserve all recorded future-test failures and report incomplete/unscoreable separately",
+  "metrics": [
+    "per-model and pooled descriptive average_precision when both classes present",
+    "positive prevalence",
+    "positive endpoint recall",
+    "strict complete-history event recall",
+    "false alerts per 1000 observed negative endpoints",
+    "all alerts per 1000 scored endpoints",
+    "median first warning lead days",
+    "paired event outcomes"
+  ],
+  "30_day_note": "do not compute AP/false-alert rate without observed negative follow-up",
+  "uncertainty": "drive-level bootstrap intervals only if enough distinct positive drives; otherwise report undefined",
+  "score_lock_before_labels": true,
+  "q4_label_use": "one read after complete score manifest and protocol hash are frozen; no feedback to candidate selection",
+  "winner_selection_after_q4": false,
+  "regime_score_enabled": false,
+  "drift_update_enabled": false,
+  "automatic_healing_enabled": false,
+  "ssd_generalization_claim": false,
+  "limitations": [
+    "Q3 failures were inspected during development",
+    "four provisional HDD model names lack independently verified device type",
+    "the number of Q4 future-test failures is unknown"
+  ]
+}

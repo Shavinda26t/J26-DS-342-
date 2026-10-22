@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-10-22T09:59:40.912022+00:00",
+  "analysis_complete": true,
+  "settings_sha256": "312b88bcf64daa5c129383744af4fce47e1154f2fb67d90be83d248347799eff",
+  "assignments_sha256": "f44e033317f3b9efadd2c8d9f9d8050979cfc3a8e00386d3d872c8c384ca9515",
+  "summary_sha256": "52faecb2545ea384ae32dc7feb7c26aec004f9b3b5c7276ea5f9980096a78f7d",
+  "confounds_sha256": "3f96536b5c7aabc4d37fceb83894c8646a52e930d413faeba85802946b22f275",
+  "persistence_sha256": "96cc2700a96a625b484b13e2def2b6e6b0f3121760aed0a6a2b1f586115def0e",
+  "failure_labels_used": false,
+  "evaluation_drives_used": false,
+  "future_test_opened": false,
+  "sealed_June_test_opened": false,
+  "regime_model_approved": false,
+  "limitations": [
+    "linear residualization removes information as well as nuisance",
+    "three temporal snapshots cannot establish drift or transition warning value",
+    "centroid-radius projection is approximate",
+    "no post-ablation resampling stability yet",
+    "no calibration/evaluation drive scoring or blind-test result"
+  ]
+}

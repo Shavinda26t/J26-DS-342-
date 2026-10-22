@@ -1,0 +1,15 @@
+{
+  "created_utc": "2026-10-22T12:14:47.055070+00:00",
+  "analysis_complete": true,
+  "candidate_lock_sha256": "b56973f430150300ed07696ba88bacfa53d37eae6d80b129debabe84185fd0d4",
+  "score_lock_sha256": "9cb0fd0ee69d8cfbe7e23f6824d8a2137b581e76dbb8158f83a283541dd79941",
+  "settings_sha256": "c2ff1cff17ebd0cc24e0922c2979b7fb62a5c3abcbe982fa35a348076b0220a3",
+  "census_sha256": "5b5615187d1fb6920de630a98e9bc129261f9bd031b7bf917457965b30db5d3f",
+  "uncertainty_sha256": "30b47a898121cfed4782ad7a62863d0a7b8bbd7c61c048811d8150b4d6ae2b74",
+  "metrics_sha256": "9bb6de156b62490d5912942e003965e94a70698f67e9077035d6113c17f83cce",
+  "event_details_sha256": "c4f7d909a3017e6c0063b4464c3e262e4a82b9519f4aec85c679d96a1cbbbd86",
+  "summary_sha256": "0d05b5717261c5ecb310d4eb88dbed09feb028c62e23ca3082dc6cb2ccc49298",
+  "recorded_first_failure_drives": 51,
+  "winner_selection_after_q4": false,
+  "sealed_June_test_opened": false
+}

@@ -1,0 +1,45 @@
+{
+  "created_utc": "2026-10-22T07:52:30.093167+00:00",
+  "analysis_complete": true,
+  "five_models": [
+    "TOSHIBA MG07ACA14TA",
+    "ST12000NM0008",
+    "ST4000DM000",
+    "ST8000NM0055",
+    "HGST HMS5C4040BLE640"
+  ],
+  "group_counts": {
+    "HGST HMS5C4040BLE640 / calibration": 1982,
+    "HGST HMS5C4040BLE640 / evaluation": 2028,
+    "HGST HMS5C4040BLE640 / fit": 6115,
+    "ST12000NM0008 / calibration": 2949,
+    "ST12000NM0008 / evaluation": 3063,
+    "ST12000NM0008 / fit": 9094,
+    "ST4000DM000 / calibration": 2937,
+    "ST4000DM000 / evaluation": 3055,
+    "ST4000DM000 / fit": 9042,
+    "ST8000NM0055 / calibration": 2343,
+    "ST8000NM0055 / evaluation": 2270,
+    "ST8000NM0055 / fit": 6908,
+    "TOSHIBA MG07ACA14TA / calibration": 5067,
+    "TOSHIBA MG07ACA14TA / evaluation": 5173,
+    "TOSHIBA MG07ACA14TA / fit": 15386
+  },
+  "settings_sha256": "3ee24e01ad875e6932e046477f0b2b3d88cef04e897bf84d451c55dde3dda340",
+  "feature_manifest_sha256": "8eb78e30f2ac17e702d56bf9f0550292fe40956cce83e90161363a2126c0f5c2",
+  "model_spec_sha256": "7bc7a77b1c7e3ba22f10911215fb387f1f80f634904d1f4b89139ee175f9cb34",
+  "score_manifest_sha256": "1be346ff79c77f776414ee98a0dba28d6ed82a4fc668c5db10b46b17a03030bc",
+  "metric_sha256": "e82745dca302eaf0821a2c24ccdabccdcafa09874c4979a96a9cf0d3258a8927",
+  "failure_labels_used_for_training_or_calibration": false,
+  "failure_labels_used_for_evaluation": true,
+  "future_test_outcomes_opened": false,
+  "sealed_June_test_opened": false,
+  "masked_transformer_trained_on_five_models": false,
+  "limitations": [
+    "Q3 labels were already seen in Notebook 14; exploratory development only",
+    "Notebook 14 baselines use a different drive/date population; compare only after matched subset evaluation",
+    "one snapshot per drive for fit; single seed and no uncertainty intervals",
+    "device-type verification pending for four models",
+    "HGST event support may be insufficient"
+  ]
+}
