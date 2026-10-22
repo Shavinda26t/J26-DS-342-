@@ -4,7 +4,7 @@ Every field maps to a column produced by the component's held-out
 validation artifacts in ``02_component_2_digital_twin/results/digital_twin_rul``.
 """
 
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -161,3 +161,24 @@ class BatchInferenceResult(BaseModel):
 class BatchInferenceResponse(BaseModel):
     count: int
     predictions: List[BatchInferenceResult]
+
+
+# --- Live Digital Twin (synchronization + enhanced features) ---
+
+
+class TwinSyncRequest(BaseModel):
+    """Push one SMART observation into a live digital twin."""
+
+    serial_number: str
+    observation: Dict[str, Any]
+
+
+class TwinLearnRequest(BaseModel):
+    """Feed a realised RUL back so the twin can genuinely adapt online."""
+
+    actual_rul_days: float
+
+
+class TwinResetResponse(BaseModel):
+    serial_number: str
+    reset: bool

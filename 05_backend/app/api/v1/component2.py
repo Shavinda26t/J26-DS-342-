@@ -5,10 +5,11 @@ artifacts (see ``app.services.component2_service``), so the dashboard
 always matches ``02_component_2_digital_twin`` results.
 """
 
-from typing import List
+from typing import Any, Dict, List
 
 from fastapi import APIRouter, HTTPException, UploadFile, File
 import io
+import logging
 import pandas as pd
 
 from app.schemas.component2 import (
@@ -21,9 +22,15 @@ from app.schemas.component2 import (
     Overview,
     RulMetrics,
     SweepConfig,
+    TwinLearnRequest,
+    TwinResetResponse,
+    TwinSyncRequest,
 )
 from app.services import component2_service as service
 from app.services import component2_inference_service as inference_service
+from app.services import twin_sync_service as sync_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -108,3 +115,95 @@ async def inference_batch(file: UploadFile = File(...)) -> BatchInferenceRespons
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Batch inference failed: {str(e)}")
+
+
+# --- Live Digital Twin: synchronization + enhanced features ---
+
+
+@router.post("/twin/sync", tags=["Component 2: Digital Twin"])
+def sync_twin(request: TwinSyncRequest) -> Dict[str, Any]:
+    """Ingest one observation and return the full live twin state.
+
+    Runs adaptive thresholds, RUL + online adaptation, conformal confidence,
+    data-quality and the multi-horizon forecast in one call.
+
+    A malformed payload is rejected with **422** *before* the twin is mutated
+    (the observation lifecycle is validate -> dedup -> compute -> persist), so a
+    rejected request never leaves a partially updated twin.  If the resulting
+    state cannot be durably persisted the request fails with **503** and the
+    in-memory twin is rolled back: a sync is never reported as successful unless
+    it was written to disk.
+    """
+    try:
+        return sync_service.sync_observation(
+            request.serial_number, request.observation
+        )
+    except sync_service.TwinPersistenceError as e:
+        # Technical cause is logged in the service; the client only sees a
+        # stable, non-sensitive message (no paths, no traceback).
+        logger.error("twin sync persistence failure: %s", e)
+        raise HTTPException(
+            status_code=503,
+            detail="Twin state could not be persisted",
+        )
+    except sync_service.ObservationValidationError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Twin sync failed: {str(e)}")
+
+
+@router.get("/twin/{serial_number}/state", tags=["Component 2: Digital Twin"])
+def get_twin_state(serial_number: str) -> Dict[str, Any]:
+    """Read the current live twin state without ingesting data."""
+    state = sync_service.get_state(serial_number)
+    if state is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No live twin state for serial '{serial_number}'.",
+        )
+    return state
+
+
+@router.post("/twin/{serial_number}/learn", tags=["Component 2: Digital Twin"])
+def learn_twin_outcome(serial_number: str, request: TwinLearnRequest) -> Dict[str, Any]:
+    """Feed a realised RUL back so the twin adapts online (RLS + conformal)."""
+    try:
+        return sync_service.learn_outcome(
+            serial_number, request.actual_rul_days
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Online learning update failed: {str(e)}"
+        )
+
+
+@router.delete("/twin/{serial_number}", tags=["Component 2: Digital Twin"])
+def reset_twin(serial_number: str) -> TwinResetResponse:
+    """Clear a live twin's state and history."""
+    return TwinResetResponse(
+        serial_number=serial_number,
+        reset=sync_service.reset_serial(serial_number),
+    )
+
+
+@router.get("/twin/serials", tags=["Component 2: Digital Twin"])
+def list_twin_serials() -> Dict[str, Any]:
+    """List serials that currently have live twin state."""
+    serials = sync_service.list_serials()
+    return {"count": len(serials), "serials": serials}
+
+
+@router.get("/twin/risk-gate", tags=["Component 2: Digital Twin"])
+def get_twin_risk_gate() -> Dict[str, Any]:
+    """Risk-gated adaptation controller: mode, e-values and decision log."""
+    return sync_service.risk_gate_snapshot()
+
+
+@router.get("/twin/calibration", tags=["Component 2: Digital Twin"])
+def get_twin_calibration() -> Dict[str, Any]:
+    """Conformal calibration + online-adapter learning diagnostics."""
+    return sync_service.calibration_snapshot()

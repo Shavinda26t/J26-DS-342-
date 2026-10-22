@@ -48,8 +48,16 @@ build/
 logs/
 *.log
 
+# Backend runtime state (live digital twin observation histories)
+05_backend/app/runtime/
+
 # IDE & OS files
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+# Vite temporary dependency cache
+/.vite/
+
+# Local raw SMART experiment outputs
+/02_component_2_digital_twin/results/raw_smart_experiment/

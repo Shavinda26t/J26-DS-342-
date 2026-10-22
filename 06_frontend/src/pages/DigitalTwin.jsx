@@ -23,6 +23,7 @@ import {
   getComponent2Twin,
   postComponent2BatchInference,
 } from '../api/component2Api';
+import LiveTwin from './LiveTwin';
 
 const COLORS = {
   accent: '#38bdf8',
@@ -748,9 +749,27 @@ HDD001,2023-01-30,100,100,97,100,100,0,0,2.6367,0,0,0,1,1,1,1,1`;
         >
           Twin Simulator
         </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('live')}
+          style={{
+            background: activeTab === 'live' ? 'rgba(167,139,250,0.12)' : 'transparent',
+            color: activeTab === 'live' ? '#a78bfa' : COLORS.subtext,
+            border: 'none',
+            borderBottom: activeTab === 'live' ? '2px solid #a78bfa' : 'none',
+            padding: '10px 16px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            marginBottom: -1,
+          }}
+        >
+          Live Twin
+        </button>
       </div>
-      
-      {activeTab === 'validation' ? renderValidation() : renderSimulator()}
+
+      {activeTab === 'validation' && renderValidation()}
+      {activeTab === 'simulator' && renderSimulator()}
+      {activeTab === 'live' && <LiveTwin />}
     </div>
   );
 }
@@ -787,148 +806,6 @@ const tdStyle = {
   color: COLORS.text,
   borderBottom: `1px solid rgba(51,65,85,0.6)`,
 };
-
-const renderSimulator = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-    <SectionCard
-      title="Twin Simulator (Batch Inference)"
-      subtitle="Upload CSV with historical observations (≥30 per HDD) to predict RUL using trained BiLSTM. Inference-only, not part of held-out validation."
-    >
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
-        <button
-          type="button"
-          onClick={downloadTemplate}
-          style={{
-            background: 'transparent',
-            color: COLORS.accent,
-            border: `1px solid ${COLORS.accent}`,
-            borderRadius: 8,
-            padding: '8px 16px',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
-        >
-          Download Template CSV
-        </button>
-        <label
-          style={{
-            background: COLORS.accent,
-            color: '#0f172a',
-            border: 'none',
-            borderRadius: 8,
-            padding: '8px 16px',
-            fontWeight: 700,
-            cursor: 'pointer',
-          }}
-        >
-          Choose CSV
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleBatchFile}
-            style={{ display: 'none' }}
-          />
-        </label>
-        {batchFile && (
-          <button
-            type="button"
-            onClick={runBatchInference}
-            disabled={batchLoading}
-            style={{
-              background: batchLoading ? '#94a3b8' : COLORS.good,
-              color: '#0f172a',
-              border: 'none',
-              borderRadius: 8,
-              padding: '8px 16px',
-              fontWeight: 700,
-              cursor: batchLoading ? 'not-allowed' : 'pointer',
-            }}
-          >
-            {batchLoading ? 'Running...' : 'Run Inference'}
-          </button>
-        )}
-      </div>
-      
-      {batchFile && (
-        <div style={{ marginBottom: 12 }}>
-          <div style={{ color: COLORS.text, fontSize: 14, marginBottom: 6 }}>
-            Selected: {batchFile.name} ({(batchFile.size/1024).toFixed(1)} KB)
-          </div>
-        </div>
-      )}
-      
-      {batchErrors.length > 0 && (
-        <div style={{ background: 'rgba(248,113,113,0.1)', border: `1px solid ${COLORS.bad}`, borderRadius: 8, padding: 12, marginBottom: 12 }}>
-          {batchErrors.map((err, i) => (
-            <div key={i} style={{ color: COLORS.bad, fontSize: 13 }}>{err}</div>
-          ))}
-        </div>
-      )}
-      
-      {batchPreview.length > 0 && (
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ color: COLORS.subtext, fontSize: 13, marginBottom: 8 }}>Preview (first 5 rows)</div>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={tableStyle}>
-              <thead>
-                <tr>
-                  {Object.keys(batchPreview[0]).slice(0, 8).map(k => (
-                    <th key={k} style={thStyle}>{k}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {batchPreview.map((row, i) => (
-                  <tr key={i}>
-                    {Object.values(row).slice(0, 8).map((v, j) => (
-                      <td key={j} style={tdStyle}>{v}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-      
-      {batchErrorMsg && (
-        <div style={{ color: COLORS.bad, fontSize: 14, marginBottom: 12 }}>{batchErrorMsg}</div>
-      )}
-      
-      {batchResults && (
-        <div>
-          <div style={{ color: COLORS.subtext, fontSize: 13, marginBottom: 10 }}>
-            Results: {batchResults.count} groups
-          </div>
-          <div style={{ overflowX: 'auto', maxHeight: 400, overflowY: 'auto' }}>
-            <table style={tableStyle}>
-              <thead>
-                <tr>
-                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Serial</th>
-                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Status</th>
-                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Predicted RUL (days)</th>
-                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Obs Used</th>
-                  <th style={{ ...thStyle, position: 'sticky', top: 0, background: COLORS.card }}>Error</th>
-                </tr>
-              </thead>
-              <tbody>
-                {batchResults.predictions.map((p, i) => (
-                  <tr key={i}>
-                    <td style={{ ...tdStyle, fontFamily: 'monospace' }}>{p.serial_number}</td>
-                    <td style={tdStyle}>{p.status}</td>
-                    <td style={tdStyle}>{p.predicted_rul_days != null ? p.predicted_rul_days.toFixed(2) : '—'}</td>
-                    <td style={tdStyle}>{p.observations_used ?? p.available ?? '—'}</td>
-                    <td style={{ ...tdStyle, color: COLORS.bad, fontSize: 12 }}>{p.error ?? '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-    </SectionCard>
-  </div>
-);
 
 function Detail({ label, value, good }) {
   return (
