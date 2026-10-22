@@ -1,0 +1,117 @@
+{
+  "created_utc": "2026-10-22T04:34:12.123241+00:00",
+  "analysis_complete": true,
+  "run_id": "single_model_q1q2_2021_v1",
+  "drift_id": "frozen_fleet_drift_v1",
+  "settings": {
+    "seed": 42,
+    "replay_seeds": [
+      42,
+      43,
+      44
+    ],
+    "replay_observations": 800,
+    "change_index": 300,
+    "adwin_delta": 0.002,
+    "adwin_clock": 1,
+    "adwin_min_window_length": 5,
+    "adwin_grace_period": 10,
+    "minimum_panel_fraction": 0.8,
+    "quarantine_E_fraction": 0.1,
+    "quarantine_sector_change_fraction": 0.05,
+    "quarantine_hold_batches": 10,
+    "sparse_shift_drive_fraction": 0.1,
+    "sparse_shift_seed": 77,
+    "automatic_adaptation": false,
+    "score_specification_sha256": "9f47dd7a270cd94b9fd0d36fafa68c4a86cb3169750d76c4fd067f7a6bab1a6d",
+    "stream_unit": "one synthetic fleet date-block batch; natural stream uses one actual May endpoint date",
+    "monitors": [
+      "temperature_median",
+      "E_median",
+      "D_median",
+      "dominant_partition_fraction"
+    ],
+    "scenarios": [
+      "unchanged_control",
+      "fleet_temperature_plus_2",
+      "fleet_temperature_plus_5",
+      "fleet_sector_shift",
+      "sparse_sector_shift",
+      "isolated_temperature_spike"
+    ]
+  },
+  "normalisation": {
+    "temperature_median": {
+      "log1p": false,
+      "center": 28.0,
+      "scale": 7.0,
+      "scale_rule": "IQR"
+    },
+    "E_median": {
+      "log1p": true,
+      "center": 0.004391122609376907,
+      "scale": 0.014759434387087822,
+      "scale_rule": "IQR"
+    },
+    "D_median": {
+      "log1p": true,
+      "center": 0.45571267382580827,
+      "scale": 0.24639097500635815,
+      "scale_rule": "IQR"
+    }
+  },
+  "input_hashes": {
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\E_global_train_scores.csv": "e903b109f93f105022e7742b8334c8b568083edb46f710bfc1cc3465216dd150",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\D_global_train_scores.csv": "9b99de3c4ebb2fa5bc904b7c98010f289dc26dd24482c84c6aca5ce01055084e",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\train\\representations.npz": "bb4ab2c0d7e154ad1493db55337cc60ce017752567c452ccab69a520c0fe8de5",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\train\\metadata.parquet": "44fa996810808fa84b556a8b2c6a719009b222e893f045b24f433771fe132092",
+    "data\\features\\single_model_q1q2_2021_v1\\train\\windows_raw.npz": "74c1752e6042ac265928816fe6e873d471ef414e88a2a2b27fe5cdb9c6458ec1",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\E_global_development_scores.csv": "14d6389ed8c466776a53084917cd2b9bb0d9ae81da9633855586c331f05bd3b5",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\D_global_development_scores.csv": "690cd143776adeeacbe15594648f866bfa794449417bf809a04e9f3c6a6d25e2",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\development\\representations.npz": "b39408abfbfbff9764821307c403c6a1a0a247b49767eb994a42821041f9365a",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\development\\metadata.parquet": "f22f88ca20d6e5906fdafbbfc2f8f559d781d8ac5d5b4a3c358ff416754f5fc6",
+    "data\\features\\single_model_q1q2_2021_v1\\development\\windows_raw.npz": "1691c68e897bd5d30294405f6e3e4fda26e7a2271bca36d7b312cdb52358c91a",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\temperature_plus_2_last_7_days_E_global.csv": "cec563fcda1b2d97aefb63f46182a46269245261a87a022ebec30779b2b40055",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\temperature_plus_2_last_7_days_D_global.csv": "b84ffb6b180f105324e3c4d6c086c9526feb3adf9c8e352880abcef889342252",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\synthetic_cache\\temperature_plus_2_last_7_days.npz": "d0683256e077744dbd6f8597e0452f6cbf4f7e6b2a508de7939113d87506ee48",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\synthetic_cache\\temperature_plus_2_last_7_days.json": "0f7342697cca6a50f0f43178584caee01ed0fad2dff896aa3c776e2e5cf7bda7",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\temperature_plus_5_last_7_days_E_global.csv": "3718d12e8b6a4d3e65c333ea083fff3c18528546f0479968a4e7bbb423e7ccd9",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\temperature_plus_5_last_7_days_D_global.csv": "62e28d4e72f2a3c09f313b41d8f8d09b41f4fea36feade5d52b184117daff9d5",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\synthetic_cache\\temperature_plus_5_last_7_days.npz": "3ed1241e2a25e3718027e063ef017ee6c09825dfc4d9638fc79581835906dbdc",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\synthetic_cache\\temperature_plus_5_last_7_days.json": "3ffbc5040dce30c9cec3e3d8ff42fdd9dd427501da9fafa9b0a46f04a71c4f78",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\temperature_spike_plus_10_E_global.csv": "8e3c9b29d20faf46d296ec27c581b3fa14568c00fd5bc6256891c0ad54149530",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\temperature_spike_plus_10_D_global.csv": "ba9765614daf968a4cc3b9d27aa91571dd0b1f654f69ff5448366a92c5e971ae",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\synthetic_cache\\temperature_spike_plus_10.npz": "9356030e6c0feab772c3d425e0e01a7bf142149b7680ccfc811c4150f473e397",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\synthetic_cache\\temperature_spike_plus_10.json": "f5cd05e855b0f903d282cb4d9dd8460ebed9844abf1c67d58fbb0af1313d71cb",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\sector_197_198_plus_8_last_7_days_E_global.csv": "19e639ec52a04843ec7cddd8d6e38d4ab92043193a763c5c9ad0e36b0be4de44",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\sector_197_198_plus_8_last_7_days_D_global.csv": "97ab9e993e75923bf996ecdbc890f2d5ae23d1b5fbffb2e2faa56f9039cffcb3",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\synthetic_cache\\sector_197_198_plus_8_last_7_days.npz": "244a19b7645e2881bf190dbc6113a2a5f44862e5973ceaf2f27c5b62316db104",
+    "results\\single_model_q1q2_2021_v1\\partition_scoring_v1\\synthetic_cache\\sector_197_198_plus_8_last_7_days.json": "afcdc6a0508c388a3a14664e7201db206965b2426c076f03967653660f9c8fb1"
+  },
+  "largest_training_partition": 1,
+  "declared_panel_size": 150,
+  "natural_stream_dates": 31,
+  "replay_runs": 18,
+  "real_failure_labels_used": false,
+  "sealed_test_opened": false,
+  "automatic_model_updates": 0,
+  "adaptation_validated": false,
+  "real_day_detection_delay_established": false,
+  "versions": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "river": "0.26.1"
+  },
+  "limitations": [
+    "controlled date-block replays are not independent new operating days",
+    "only 31 natural May endpoints",
+    "sequential development already inspected",
+    "one HDD model and encoder seed",
+    "fleet summaries may miss sparse faults",
+    "proxy quarantine guards are not validated fault labels",
+    "drift can be benign or fault-like",
+    "no neural update/replay-buffer acceptance/rollback or recovery evaluation",
+    "sector sensitivity remains unresolved"
+  ]
+}

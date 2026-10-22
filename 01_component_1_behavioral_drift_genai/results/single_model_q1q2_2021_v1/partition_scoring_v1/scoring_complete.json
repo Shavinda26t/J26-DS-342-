@@ -1,0 +1,29 @@
+{
+  "created_utc": "2026-10-22T04:20:50.312538+00:00",
+  "analysis_complete": true,
+  "score_id": "partition_scoring_v1",
+  "run_id": "single_model_q1q2_2021_v1",
+  "specification_sha256": "9f47dd7a270cd94b9fd0d36fafa68c4a86cb3169750d76c4fd067f7a6bab1a6d",
+  "real_failure_labels_used": false,
+  "sealed_test_opened": false,
+  "transition_score_enabled": false,
+  "temporal_regimes_validated": false,
+  "winner_selected": false,
+  "versions": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "torch": "2.14.1+cpu",
+    "hdbscan": "0.8.44"
+  },
+  "limitations": [
+    "single seed/model",
+    "exploratory sequential development",
+    "unlabeled training/calibration contamination",
+    "stable partitions do not prove temporal operating regimes",
+    "conditional thresholds may mask persistent unusual behaviour",
+    "overlapping windows and correlated synthetic tests",
+    "fixed equal weights, transition component disabled",
+    "no real failure evaluation, quarantine refinement or drift adaptation yet"
+  ]
+}

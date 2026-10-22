@@ -1,0 +1,37 @@
+{
+  "seed": 42,
+  "replay_seeds": [
+    42,
+    43,
+    44
+  ],
+  "replay_observations": 800,
+  "change_index": 300,
+  "adwin_delta": 0.002,
+  "adwin_clock": 1,
+  "adwin_min_window_length": 5,
+  "adwin_grace_period": 10,
+  "minimum_panel_fraction": 0.8,
+  "quarantine_E_fraction": 0.1,
+  "quarantine_sector_change_fraction": 0.05,
+  "quarantine_hold_batches": 10,
+  "sparse_shift_drive_fraction": 0.1,
+  "sparse_shift_seed": 77,
+  "automatic_adaptation": false,
+  "score_specification_sha256": "9f47dd7a270cd94b9fd0d36fafa68c4a86cb3169750d76c4fd067f7a6bab1a6d",
+  "stream_unit": "one synthetic fleet date-block batch; natural stream uses one actual May endpoint date",
+  "monitors": [
+    "temperature_median",
+    "E_median",
+    "D_median",
+    "dominant_partition_fraction"
+  ],
+  "scenarios": [
+    "unchanged_control",
+    "fleet_temperature_plus_2",
+    "fleet_temperature_plus_5",
+    "fleet_sector_shift",
+    "sparse_sector_shift",
+    "isolated_temperature_spike"
+  ]
+}
