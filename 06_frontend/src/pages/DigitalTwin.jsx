@@ -100,6 +100,7 @@ export default function DigitalTwin() {
   const [comparison, setComparison] = useState([]);
   const [rul, setRul] = useState(null);
   const [error, setError] = useState(null);
+  const [loadWarnings, setLoadWarnings] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [serialInput, setSerialInput] = useState('');
@@ -121,29 +122,44 @@ export default function DigitalTwin() {
   const load = () => {
     setLoading(true);
     setError(null);
-    Promise.all([
-      getComponent2Overview(),
-      getComponent2Detections(),
-      getComponent2LeadTimeDistribution(),
-      getComponent2Sweep(),
-      getComponent2ConfigComparison(),
-      getComponent2RulMetrics(),
-    ])
-      .then(([ov, de, di, sw, co, ru]) => {
-        setOverview(ov.data);
-        setDetections(de.data);
-        setDistribution(di.data);
-        setSweep(sw.data);
-        setComparison(co.data);
-        setRul(ru.data);
-      })
-      .catch((err) => {
+    setLoadWarnings([]);
+
+    const sources = [
+      ['overview', getComponent2Overview()],
+      ['detections', getComponent2Detections()],
+      ['lead time', getComponent2LeadTimeDistribution()],
+      ['threshold sweep', getComponent2Sweep()],
+      ['config comparison', getComponent2ConfigComparison()],
+      ['RUL metrics', getComponent2RulMetrics()],
+    ];
+
+    // allSettled: one failing panel must not blank the whole dashboard.
+    Promise.allSettled(sources.map(([, p]) => p)).then((results) => {
+      const failed = [];
+      results.forEach((result, index) => {
+        const name = sources[index][0];
+        if (result.status === 'fulfilled') {
+          const data = result.value.data;
+          if (name === 'overview') setOverview(data);
+          if (name === 'detections') setDetections(data);
+          if (name === 'lead time') setDistribution(data);
+          if (name === 'threshold sweep') setSweep(data);
+          if (name === 'config comparison') setComparison(data);
+          if (name === 'RUL metrics') setRul(data);
+        } else {
+          failed.push(
+            `${name}: ${result.reason?.response?.status ?? result.reason?.message ?? 'failed'}`
+          );
+        }
+      });
+
+      if (failed.length) {
         setError(
-          `Could not reach the backend API (${err.message}). ` +
-            'Is it running on http://localhost:8000 ?'
+          'Could not load: ' + failed.join(', ') +
+            '. The rest of the dashboard is still live.'
         );
-      })
-      .finally(() => setLoading(false));
+      }
+    }).finally(() => setLoading(false));
   };
 
   useEffect(load, []);
@@ -578,6 +594,23 @@ export default function DigitalTwin() {
       {/* RUL trajectory + twin lookup */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: 16 }}>
         <SectionCard title="RUL error by checkpoint" subtitle="MAE / RMSE (days) vs observations before failure">
+          {(rul?.notes ?? []).length > 0 && (
+            <div
+              style={{
+                background: 'rgba(251,191,36,0.08)',
+                border: `1px solid ${COLORS.warn}`,
+                borderRadius: 8,
+                padding: '8px 12px',
+                color: COLORS.warn,
+                fontSize: 12,
+                marginBottom: 10,
+              }}
+            >
+              {rul.notes.map((n, i) => (
+                <div key={i}>{n}</div>
+              ))}
+            </div>
+          )}
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={rul?.trajectory ?? []} margin={{ top: 5, right: 10, bottom: 5, left: -10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.border} />
@@ -724,7 +757,43 @@ export default function DigitalTwin() {
             : 'Batch inference using trained BiLSTM on user-provided test data.'}
         </p>
       </header>
-      
+
+      {error && (
+        <div
+          style={{
+            background: 'rgba(248,113,113,0.1)',
+            border: `1px solid ${COLORS.bad}`,
+            borderRadius: 8,
+            padding: '10px 14px',
+            color: COLORS.bad,
+            fontSize: 13,
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      {loadWarnings.length > 0 && (
+        <div
+          style={{
+            background: 'rgba(251,191,36,0.08)',
+            border: `1px solid ${COLORS.warn}`,
+            borderRadius: 8,
+            padding: '10px 14px',
+            color: COLORS.warn,
+            fontSize: 13,
+          }}
+        >
+          <strong>Partial data</strong>
+          <ul style={{ margin: '6px 0 0 18px', padding: 0 }}>
+            {loadWarnings.map((w, i) => (
+              <li key={i}>{w}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+
       <div style={{ display: 'flex', gap: 8, borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 0 }}>
         <button
           type="button"
@@ -782,7 +851,6 @@ export default function DigitalTwin() {
     </div>
   );
 }
-
 const pillStyle = {
   display: 'inline-block',
   padding: '6px 12px',

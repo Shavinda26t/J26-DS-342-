@@ -49,6 +49,20 @@ def _read_rows(filename: str) -> List[Dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def _read_rows_optional(filename: str) -> List[Dict[str, str]]:
+    """Read a result file, returning an empty list when it is absent.
+
+    Used for secondary artifacts: a missing optional file must degrade one
+    panel instead of failing the whole endpoint. Nothing is re-computed
+    here, so an absent file simply yields no rows for that panel.
+    """
+    path = RESULTS_DIR / filename
+    if not path.exists():
+        return []
+    with path.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
+
+
 def _float(value: Optional[str], default: Optional[float] = None) -> Optional[float]:
     if value is None or value == "":
         return default
@@ -236,10 +250,23 @@ def get_rul_metrics() -> Dict:
             "rmse": _float(row.get("RMSE"), 0.0),
             "bias": _float(row.get("bias"), 0.0),
         }
-        for row in _read_rows(RUL_TRAJECTORY_CSV)
+        for row in _read_rows_optional(RUL_TRAJECTORY_CSV)
     ]
     trajectory.sort(key=lambda p: p["checkpoint_observations"])
-    return {"by_state": by_state, "trajectory": trajectory}
+
+    notes = []
+    if not trajectory:
+        notes.append(
+            f"{RUL_TRAJECTORY_CSV} is not present in the repository, so the "
+            "RUL error-by-checkpoint panel has no data. It is produced by "
+            "scripts/validate_heldout_rul_trajectory.py."
+        )
+
+    return {
+        "by_state": by_state,
+        "trajectory": trajectory,
+        "notes": notes,
+    }
 
 
 @lru_cache(maxsize=1)
