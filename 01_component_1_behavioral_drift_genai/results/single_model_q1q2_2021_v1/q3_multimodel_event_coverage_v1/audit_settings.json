@@ -1,0 +1,21 @@
+{
+  "cohort_date": "2021-07-01",
+  "minimum_fresh_first_day_drives": 500,
+  "minimum_complete_feature_fraction_first_day": 0.9,
+  "minimum_capacity_bytes": 1000000000000,
+  "maximum_provisional_models": 5,
+  "test_drive_fraction": 0.2,
+  "split_salt": "multimodel-q4-reservation-v1-seed42",
+  "window_days": 30,
+  "warning_horizons_days": [
+    7,
+    14,
+    30
+  ],
+  "test_endpoint_start": "2021-10-01",
+  "test_endpoint_end": "2021-12-31",
+  "model_selection_rule": "rank eligible July 1 fresh populations by drive count; break ties by model name; no failure counts used",
+  "archive_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "upstream_evaluation_sha256": "6c54ca2cd920ff14b5ca08badffedeeff247e7d3d69a7800c28e564c33e9a343",
+  "excluded_serials_sha256": "d4b98d616174c18f50a6412197123cec410c557a68f3541a73f3c52d7ba7d15b"
+}

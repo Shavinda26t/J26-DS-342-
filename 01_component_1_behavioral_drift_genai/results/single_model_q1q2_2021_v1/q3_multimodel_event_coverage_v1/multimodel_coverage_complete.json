@@ -1,0 +1,69 @@
+{
+  "created_utc": "2026-10-22T06:39:22.314076+00:00",
+  "analysis_complete": true,
+  "run_id": "single_model_q1q2_2021_v1",
+  "audit_id": "q3_multimodel_event_coverage_v1",
+  "settings": {
+    "cohort_date": "2021-07-01",
+    "minimum_fresh_first_day_drives": 500,
+    "minimum_complete_feature_fraction_first_day": 0.9,
+    "minimum_capacity_bytes": 1000000000000,
+    "maximum_provisional_models": 5,
+    "test_drive_fraction": 0.2,
+    "split_salt": "multimodel-q4-reservation-v1-seed42",
+    "window_days": 30,
+    "warning_horizons_days": [
+      7,
+      14,
+      30
+    ],
+    "test_endpoint_start": "2021-10-01",
+    "test_endpoint_end": "2021-12-31",
+    "model_selection_rule": "rank eligible July 1 fresh populations by drive count; break ties by model name; no failure counts used",
+    "archive_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+    "upstream_evaluation_sha256": "6c54ca2cd920ff14b5ca08badffedeeff247e7d3d69a7800c28e564c33e9a343",
+    "excluded_serials_sha256": "d4b98d616174c18f50a6412197123cec410c557a68f3541a73f3c52d7ba7d15b"
+  },
+  "input_sha256": {
+    "results\\single_model_q1q2_2021_v1\\q3_recorded_failure_evaluation_v1\\recorded_failure_evaluation_complete.json": "6c54ca2cd920ff14b5ca08badffedeeff247e7d3d69a7800c28e564c33e9a343",
+    "results\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\expansion_complete.json": "9d12d218eeaa62c6104d74f6866b32fbe0f5ff46a256e188dc765368bc1f05ff",
+    "data\\raw\\data_Q3_2021.zip": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+    "data\\splits\\single_model_q1q2_2021_v1_serials.json": "f3a890d0e773e1467ed6b56e7c97b73dd471825120cd9c5c8e725dd4df90b6b6",
+    "results\\single_model_q1q2_2021_v1\\q3_development_expansion_v1\\q3_serials.json": "16fb0be6506eca80b42020b20e75291648a9955ef6fa319fd26309b0909ad3b7"
+  },
+  "output_sha256": {
+    "results\\single_model_q1q2_2021_v1\\q3_multimodel_event_coverage_v1\\audit_settings.json": "9933912a42c3278794bef78f9a0fdfaabe3b7af3ecf4468a4fd4c0d2c0f47aad",
+    "results\\single_model_q1q2_2021_v1\\q3_multimodel_event_coverage_v1\\daily_model_coverage.csv": "6166d9b49a9b23116289a4fafcee2fa04cb2511fa1175b9d5993ec0857aa3a0b",
+    "results\\single_model_q1q2_2021_v1\\q3_multimodel_event_coverage_v1\\development_window_support.parquet": "d8d215d7e266e9833ff04446fcba86b948ac54ba8eabe7783157e90d145fe72a",
+    "results\\single_model_q1q2_2021_v1\\q3_multimodel_event_coverage_v1\\first_day_model_eligibility.csv": "a2feeb1c602646a5024f049e8ddcfbfb39a3ddd5529a6594a43eac9b538a369b",
+    "results\\single_model_q1q2_2021_v1\\q3_multimodel_event_coverage_v1\\model_event_coverage_summary.csv": "0053320f527987eaee60e1e7e1b31592fea265e20dc698c3830898de5f6445df",
+    "data\\evaluation_only\\single_model_q1q2_2021_v1\\q3_multimodel_event_coverage_v1\\development_first_failure_support.csv": "b69d513b85ce295b3388b485edc3214de04228e32720965faa87cf18f225c28f"
+  },
+  "split_path": "data\\splits\\q3_multimodel_event_coverage_v1_serials.json",
+  "split_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "provisional_models": [
+    "TOSHIBA MG07ACA14TA",
+    "ST12000NM0008",
+    "ST4000DM000",
+    "ST8000NM0055",
+    "HGST HMS5C4040BLE640"
+  ],
+  "at_least_five_provisional_models": true,
+  "all_device_types_verified": false,
+  "development_failure_events": 230,
+  "future_test_outcomes_opened": false,
+  "sealed_June_test_opened": false,
+  "failure_labels_used_for_event_audit_only": true,
+  "failure_labels_used_for_model_or_drive_selection": false,
+  "model_fits": 0,
+  "final_test_evaluated": false,
+  "limitations": [
+    "Q3 development audit only",
+    "device-type confirmation pending for new model names",
+    "first-day eligibility/ranking conditions the model population",
+    "Q3 initial history limits early warning coverage",
+    "prospective Q4 event sufficiency unknown",
+    "earlier-than-Q3 failure history unavailable for new drives",
+    "no main-study training, baseline/seed comparison or uncertainty estimates performed"
+  ]
+}
