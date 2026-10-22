@@ -1,0 +1,15 @@
+{
+  "seed": 42,
+  "epochs": 5,
+  "learning_rate": 1e-05,
+  "new_windows_per_batch": 32,
+  "weight_decay": 0.0001,
+  "point_mask_probability": 0.15,
+  "span_days": 3,
+  "gradient_clip_norm": 1.0,
+  "maximum_partition_assignment_change_fraction": 0.05,
+  "old_retention_minimum_partition_windows": 30,
+  "old_retention_minimum_partition_drives": 5,
+  "upstream_policy_sha256": "d7b1c7dc31edf129f616dabb1981fe81dfce247e1effa74a9a8c201dba3df2c4",
+  "upstream_audit_complete_sha256": "6236802be210610b2b69f052827857594c8b60007ef30256948fe094c8f5cd9e"
+}

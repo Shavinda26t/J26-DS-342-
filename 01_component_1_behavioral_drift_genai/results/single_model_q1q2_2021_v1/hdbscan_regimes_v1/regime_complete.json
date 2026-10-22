@@ -1,0 +1,73 @@
+{
+  "created_utc": "2026-10-20T10:54:30.567143+00:00",
+  "run_id": "single_model_q1q2_2021_v1",
+  "ssl_id": "masked_transformer_v1_seed42",
+  "regime_id": "hdbscan_regimes_v1",
+  "analysis_complete": true,
+  "provisional_ready": false,
+  "readiness_checks": {
+    "positive_sampled_dbcv": true,
+    "multiple_supported_training_regimes": true,
+    "informative_stability_all_repeats": false,
+    "training_persistence_above_shuffle": true
+  },
+  "settings": {
+    "seed": 42,
+    "fit_spacing_days": 10,
+    "fit_max_per_drive": 8,
+    "fit_max_total": 6000,
+    "pca_cap": 8,
+    "dbcv_sample_max": 1500,
+    "silhouette_sample_max": 1000,
+    "min_cluster_sizes": [
+      30,
+      60,
+      120
+    ],
+    "min_samples_values": [
+      5,
+      15
+    ],
+    "minimum_assigned_fraction": 0.5,
+    "minimum_unique_drives_per_regime": 5,
+    "stability_seeds": [
+      43,
+      44,
+      45
+    ],
+    "stability_drive_fraction": 0.8,
+    "stability_anchor_max": 5000,
+    "provisional_ari_target": 0.7,
+    "shuffle_repeats": 20,
+    "encoder_complete_sha256": "167569d8c55f75f5d1c048056a692359e5568d9d5b08375f5c21250d57fccec9",
+    "selection_rule": "training-only: >=2 clusters, assigned fraction >=.5, every cluster >=5 fitting drives, finite sampled DBCV; rank by DBCV then coverage"
+  },
+  "selected_candidate": "mcs30_ms5",
+  "selected_min_cluster_size": 30,
+  "selected_min_samples": 5,
+  "sampled_dbcv": 0.6339896278306689,
+  "pca_retained_variance": 0.9960261565993402,
+  "fit_windows": 4885,
+  "fit_drives": 700,
+  "failure_labels_used": false,
+  "sealed_test_opened": false,
+  "pipeline_sha256": "d7eff3ffd5ab11fe6cc63d19c823b458ef8685bb283f420c9dcccab2e8165f98",
+  "encoder_complete_sha256": "167569d8c55f75f5d1c048056a692359e5568d9d5b08375f5c21250d57fccec9",
+  "versions": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "sklearn": "1.9.1",
+    "hdbscan": "0.8.44"
+  },
+  "limitations": [
+    "one encoder seed and HDD model",
+    "thinned training fit subset",
+    "sampled DBCV estimate",
+    "overlapping windows",
+    "conditional clustering stability, not neural-seed stability",
+    "no validated healthy/failing semantics",
+    "no final anomaly calibration or drift policy",
+    "quarantine/refinement and across-model evaluation still outstanding"
+  ]
+}

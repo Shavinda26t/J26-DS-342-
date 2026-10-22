@@ -1,0 +1,50 @@
+{
+  "checkpoint_sha256": "6bc0e42fe995d1dddc00f9ebe7379b7ca3aa1762ab1fd2278a012c3ae2f0e172",
+  "preprocessing_sha256": "bdf52e05f24a1239d184b02b7667b2edb42bd2d556fc3ff5b80aec20301eb9b8",
+  "thresholds_sha256": "ba599e366f8941e0a82b8b67d05e2805f79cb93c7752f3bddc883a61a1d5b881",
+  "sensitivity_complete_sha256": "595ce7a185035f410b7e68bd835a8ea2533365b1da41f06a00a9d5f623a5c106",
+  "q3_zip_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "replay_end_date": "2021-09-15",
+  "replay_drives_per_model": 10,
+  "contract": {
+    "schema_version": "research_smart_daily_v1",
+    "input": {
+      "serial_number": "nonempty string",
+      "model": "one of the five frozen HDD models",
+      "date": "ISO 8601 calendar day YYYY-MM-DD; one record per drive/day",
+      "smart_5_raw": "finite nonnegative observed number",
+      "smart_9_raw": "finite nonnegative observed number",
+      "smart_194_raw": "finite nonnegative observed number",
+      "smart_197_raw": "finite nonnegative observed number",
+      "smart_198_raw": "finite nonnegative observed number"
+    },
+    "readiness": "30 consecutive valid daily observations per drive; gap resets window",
+    "duplicate": "identical same-day record is idempotent; conflicting record rejected",
+    "ordering": "per-drive dates strictly increasing; late/backfilled days rejected",
+    "output": [
+      "serial_number",
+      "model",
+      "end_date",
+      "status",
+      "history_days",
+      "scores",
+      "thresholds",
+      "flags",
+      "sensor_residuals",
+      "smart_evidence",
+      "model_version"
+    ],
+    "risk_semantics": "candidate anomaly flags; not failure probability or automatic healing",
+    "regime_status": "unavailable",
+    "drift_status": "unavailable",
+    "required_for_real_agent_integration": [
+      "confirm agent field names and units",
+      "daily timestamp timezone and end-of-day policy",
+      "device identity and model mapping",
+      "missing-value semantics",
+      "deduplication and storage policy"
+    ]
+  },
+  "failure_labels_used": false,
+  "future_test_opened": false
+}

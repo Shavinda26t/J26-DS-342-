@@ -1,0 +1,35 @@
+{
+  "salt": "five-model-if-pilot-v1-seed42",
+  "split_cutoffs": [
+    0.6,
+    0.8
+  ],
+  "fit_snapshot_date": "2021-08-15",
+  "calibration_dates": [
+    "2021-08-16",
+    "2021-08-31"
+  ],
+  "evaluation_score_dates": [
+    "2021-08-01",
+    "2021-09-30"
+  ],
+  "evaluation_metric_dates": [
+    "2021-09-01",
+    "2021-09-30"
+  ],
+  "warning_horizons": [
+    7,
+    14,
+    30
+  ],
+  "window_days": 30,
+  "n_estimators": 100,
+  "max_samples": 256,
+  "seed": 42,
+  "calibration_quantile": 0.998,
+  "strict_alarm": "score > threshold",
+  "representation": "log1p last five values, log1p 30-day std five values, log1p positive 7-day sector changes",
+  "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "q3_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "upstream_baseline_complete_sha256": "3e7618f4801996c894d17de19824ce93884207134a5eacad38a759c7f5454da9"
+}

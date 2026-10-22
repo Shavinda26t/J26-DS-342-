@@ -1,0 +1,21 @@
+{
+  "candidate_lock_sha256": "b56973f430150300ed07696ba88bacfa53d37eae6d80b129debabe84185fd0d4",
+  "score_lock_sha256": "9cb0fd0ee69d8cfbe7e23f6824d8a2137b581e76dbb8158f83a283541dd79941",
+  "q4_archive_sha256": "e8753f153054823237f50a7abbae0d39f057122b12aec60f2b34278c602e749e",
+  "methods": [
+    "transformer_sector_error",
+    "transformer_temp_error",
+    "transformer_joint_error",
+    "isolation_forest",
+    "sector_positive_fixed",
+    "sector_delta_fixed",
+    "sector_positive_calibrated",
+    "sector_delta_calibrated"
+  ],
+  "horizons": [
+    14,
+    7,
+    30
+  ],
+  "winner_selection_after_q4": false
+}

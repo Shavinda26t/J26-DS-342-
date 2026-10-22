@@ -1,0 +1,24 @@
+{
+  "checkpoint_sha256": "6bc0e42fe995d1dddc00f9ebe7379b7ca3aa1762ab1fd2278a012c3ae2f0e172",
+  "preprocessing_sha256": "bdf52e05f24a1239d184b02b7667b2edb42bd2d556fc3ff5b80aec20301eb9b8",
+  "fit_windows_sha256": "ee60ef1843c0ea5b7204eb3fcc022e561cdb2d30cafd856a37357aeff7666e9e",
+  "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "q3_zip_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "snapshots": [
+    "2021-08-01",
+    "2021-08-08",
+    "2021-08-15"
+  ],
+  "population": "fit drives only; stop subset never used for clustering fit",
+  "representation": "unmasked, fully observed encoder; mean final 7 daily states; frozen weights",
+  "per_model_scaler": "RobustScaler fit on August 15 training subset",
+  "pca_components": 8,
+  "hdbscan_min_cluster_size_fraction": 0.01,
+  "hdbscan_min_cluster_size_floor": 30,
+  "hdbscan_min_samples": 15,
+  "projection": "nearest cluster centroid, accept within training-cluster 95th percentile radius",
+  "silhouette_sample": 3000,
+  "seed": 42,
+  "labels_used": false,
+  "regime_health_semantics": false
+}

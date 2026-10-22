@@ -1,0 +1,39 @@
+{
+  "seed": 42,
+  "features": [
+    "smart_5_raw",
+    "smart_9_raw",
+    "smart_194_raw",
+    "smart_197_raw",
+    "smart_198_raw"
+  ],
+  "models": [
+    "TOSHIBA MG07ACA14TA",
+    "ST12000NM0008",
+    "ST4000DM000",
+    "ST8000NM0055",
+    "HGST HMS5C4040BLE640"
+  ],
+  "window_start": "2021-07-17",
+  "window_end": "2021-08-15",
+  "window_days": 30,
+  "one_window_per_fit_drive": true,
+  "stopping_fraction_of_fit_drives": 0.1,
+  "stopping_salt": "five-model-masked-transformer-stop-v1",
+  "input_transform": "log1p then model-specific train-only median and IQR; constant IQR uses 1",
+  "derived_input": "normalized adjacent-day differences, hidden when either source reading is hidden",
+  "width": 64,
+  "heads": 4,
+  "layers": 2,
+  "feedforward": 128,
+  "dropout": 0.1,
+  "mask_fraction": 0.15,
+  "batch_size": 256,
+  "max_epochs": 25,
+  "patience": 5,
+  "learning_rate": 0.0005,
+  "minimum_delta": 1e-05,
+  "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "archive_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "upstream_pilot_complete_sha256": "a6708363c8801a4ecaae6144154def893489ae53da1f7b466a915bf6494a6db3"
+}

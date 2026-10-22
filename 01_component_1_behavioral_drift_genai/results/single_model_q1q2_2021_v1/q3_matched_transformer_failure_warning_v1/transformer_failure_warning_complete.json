@@ -1,0 +1,22 @@
+{
+  "created_utc": "2026-10-22T09:27:47.285328+00:00",
+  "analysis_complete": true,
+  "protocol_sha256": "377d4ca02ed0a94918c8bf1a57fcb6e75fb915e2104a5ed8d62e43cbc6e9b34c",
+  "score_lock_sha256": "5983644254d0f5ebc7cdeb518ac5ad578f8027576252cb1766715c1d113e2054",
+  "transformer_metrics_sha256": "83595fdfdcf72a753fc39ae5dd35a97dc323a43adbe692aa688671a8306d05c0",
+  "combined_metrics_sha256": "0ef3f3dcbcb3a9520a5bdf613d4197e29e7444f3e808fc0510ee344c04d71307",
+  "matched_rows": 945649,
+  "methods_compared": 8,
+  "winner_selected": false,
+  "failure_labels_used_for_scoring_or_calibration": false,
+  "failure_labels_used_for_evaluation": true,
+  "q4_outcomes_opened": false,
+  "sealed_June_test_opened": false,
+  "limitations": [
+    "Q3 outcomes previously inspected; exploratory development comparison",
+    "small complete-event sample and model imbalance",
+    "30-day observed negative follow-up absent in September",
+    "0.998 calibration quantiles do not equalize September alert workloads",
+    "reconstruction error is not necessarily sensitive to every failure mode"
+  ]
+}

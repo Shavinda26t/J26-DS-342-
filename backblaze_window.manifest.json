@@ -1,0 +1,13 @@
+{
+  "serial_number": "1030A001F97G",
+  "model": "TOSHIBA MG07ACA14TA",
+  "start_date": "2022-10-01",
+  "end_date": "2022-10-30",
+  "days": 30,
+  "csv_sha256": "046cfd61963a10e2331b08baf6588cb222723f73f475c2526b15bf276bbce6e1",
+  "source_paths": [
+    "D:\\Downloads\\data_Q4_2022.zip"
+  ],
+  "failure_labels_exported": false,
+  "description": "Raw SMART daily replay window; no training or threshold changes"
+}

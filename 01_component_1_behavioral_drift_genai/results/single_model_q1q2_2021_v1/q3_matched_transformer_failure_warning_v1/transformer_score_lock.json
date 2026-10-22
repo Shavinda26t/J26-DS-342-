@@ -1,0 +1,7 @@
+{
+  "protocol_sha256": "377d4ca02ed0a94918c8bf1a57fcb6e75fb915e2104a5ed8d62e43cbc6e9b34c",
+  "matched_scores_sha256": "b5b4b370da086831e46fbc90a6b7619940ecda245e068aee2a88caee23725a9e",
+  "notebook16_matched_scores_sha256": "c5a30c23f3d1e45c8144ae97cbc7dbf473bbbfa452aba3b4d2f8b8fffb6dce7e",
+  "rows": 945649,
+  "failure_labels_used_for_scores_or_thresholds": false
+}

@@ -1,0 +1,34 @@
+{
+  "horizons_days": [
+    7,
+    14,
+    30
+  ],
+  "positive_interval": "0 < failure_date - endpoint <= horizon",
+  "negative_rule": "all next h calendar days observed; no failure within horizon",
+  "event_rule": "all h pre-failure calendar endpoints must have valid saved scores",
+  "failure_event": "first recorded failure per acceptance serial in Q3",
+  "population": "already inspected September development acceptance group",
+  "score_sha256": {
+    "acceptance_frozen_R_global_scores.csv": "2909f95000f3042f35247c312763effb213497c39cf38f595539881be48b4545",
+    "acceptance_frozen_R_conditional_scores.csv": "632a9d68960f63edc342fc4aee16abb370319c037b4a6f0ea4c5679f3f1ffb40",
+    "acceptance_frozen_E_global_scores.csv": "b2093d11e403dc7217f71e013ad4a6a495fbdfb367bc70674cbd2324864da137",
+    "acceptance_frozen_E_conditional_scores.csv": "c16958d4650dc109a4c81aec8aecb586e3a7bef3ee89788175b31ad23b353c5f",
+    "acceptance_frozen_D_global_scores.csv": "61db7b587460a6a7e84eca310b3862391ecf8c625efd35ca1eda2dc7944b4196",
+    "acceptance_frozen_D_conditional_scores.csv": "792ffbdf252fbcd2b2f401657d8524091ccbaade6e48680efe3938bcb649c148",
+    "acceptance_frozen_RD_global_scores.csv": "e700ecb30d58aa50f4f7fdf52956ce366ffe24c1ef9a3c903050d8746b106d5d",
+    "acceptance_frozen_RD_conditional_scores.csv": "15eecd6ba90d4308c79553d9c43ee6056db8afe4d89215d229207a332af34109",
+    "acceptance_candidate_R_global_scores.csv": "b0becc3a9791569ca9ee871c7d2383f1bdae43097781df04f2ad96b5ea0ce102",
+    "acceptance_candidate_R_conditional_scores.csv": "f9ae8a55111c570876504ebf8d5dc11b00c009e1543a52cded8d4353f7d66f08",
+    "acceptance_candidate_E_global_scores.csv": "625e655fce5d789eb8ebd34302b83062969fc3c8566cd27ed326c886ab72285b",
+    "acceptance_candidate_E_conditional_scores.csv": "48d61b20219b0b86901b348bc0fb300f10bedd37d5db6d96f3484c40eb2fefad",
+    "acceptance_candidate_D_global_scores.csv": "dffeed44504abbcba2a8a784f1d00987ce338a8882dce85b2cdf787c29b372d1",
+    "acceptance_candidate_D_conditional_scores.csv": "0dc3511eadaf671d5b7e692a76cccdc905706bcc2b00bdf0cdedfcf6a843800d",
+    "acceptance_candidate_RD_global_scores.csv": "c28e233db22f33e3a127dd5548a535ab10d3b846f70a38275591e1ab7ad11198",
+    "acceptance_candidate_RD_conditional_scores.csv": "6f1f0ef720d70b58a70c73dd813a0caed7acf96448eaef4e0f9ac60e0d0be195"
+  },
+  "archive_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "upstream_trial_complete_sha256": "a72fedaf04a2db37421296aadbba8ab47585b73fa976ef7959974e98cdc9d77c",
+  "no_fitting_or_threshold_changes": true,
+  "winner_selection_enabled": false
+}

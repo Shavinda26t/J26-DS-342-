@@ -1,0 +1,13 @@
+{
+  "created_utc": "2026-10-22T13:12:30.918266+00:00",
+  "analysis_complete": true,
+  "candidate_lock_sha256": "b56973f430150300ed07696ba88bacfa53d37eae6d80b129debabe84185fd0d4",
+  "score_lock_sha256": "9cb0fd0ee69d8cfbe7e23f6824d8a2137b581e76dbb8158f83a283541dd79941",
+  "blind_evaluation_sha256": "c48185d67e1a2cf085ce9bf696a6256f3381e9d3108e7e4df55c17154a445622",
+  "comparison_sha256": "7d51f0e2b9a539ab615d1946bfee3e8d54220022e7702b4d66c4bccd6f49c3c8",
+  "handoff_sha256": "58007381775c36842c4d0efe4b0d6ff335b863e0336a203a532202ee5597a125",
+  "report_sha256": "475d4f5f1f6c662aa899082ab38b62457b7dfdf71a6f240c8a31d24b0630749d",
+  "q4_archive_reopened": false,
+  "winner_selection_after_q4": false,
+  "integration_mode": "shadow display only"
+}

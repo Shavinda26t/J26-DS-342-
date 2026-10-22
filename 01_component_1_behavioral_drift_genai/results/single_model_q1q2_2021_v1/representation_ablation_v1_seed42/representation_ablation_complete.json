@@ -1,0 +1,131 @@
+{
+  "created_utc": "2026-10-22T03:45:35.507897+00:00",
+  "run_id": "single_model_q1q2_2021_v1",
+  "ablation_id": "representation_ablation_v1_seed42",
+  "analysis_complete": true,
+  "training_complete": true,
+  "settings": {
+    "seed": 42,
+    "width": 32,
+    "heads": 4,
+    "layers": 2,
+    "feedforward": 64,
+    "dropout": 0.1,
+    "point_mask_probability": 0.15,
+    "span_days": 3,
+    "batch_size": 128,
+    "max_epochs": 50,
+    "patience": 8,
+    "learning_rate": 0.001,
+    "weight_decay": 1e-05,
+    "stopping_max_windows": 2048,
+    "change_definition": "raw adjacent-day difference; signed log1p for count/usage features; temperature difference unchanged",
+    "change_visibility": "available only if both source levels visible; first within-window change unavailable",
+    "fit_spacing_days": 10,
+    "fit_max_per_drive": 8,
+    "fit_max_total": 6000,
+    "pca_cap": 8,
+    "dbcv_sample_max": 1500,
+    "min_cluster_sizes": [
+      30,
+      60,
+      120
+    ],
+    "min_samples_values": [
+      5,
+      15
+    ],
+    "minimum_assigned_fraction": 0.5,
+    "minimum_unique_drives_per_cluster": 5,
+    "stability_seeds": [
+      43,
+      44,
+      45
+    ],
+    "stability_drive_fraction": 0.8,
+    "stability_anchor_max": 5000,
+    "minimum_joint_fraction": 0.5,
+    "ari_target": 0.7,
+    "shuffle_repeats": 20,
+    "temporal_diagnostic_min_switching_drives": 5,
+    "temporal_diagnostic_min_lift": 0.01,
+    "temporal_diagnostic_note": "new explicit exploratory flag, not a final validated acceptance criterion",
+    "old_encoder_complete_sha256": "167569d8c55f75f5d1c048056a692359e5568d9d5b08375f5c21250d57fccec9",
+    "dataset_complete_sha256": "7e655aaaeb2fbc5e08e11d54af7262536e121ea0e83b0d771a61370bc6335b5e",
+    "daily_preprocessing_sha256": "b8c37d9c1fe9eb62f6b152b76c85fd062e72576f3e090a636646b894d80a51fc"
+  },
+  "best_epoch": 44,
+  "best_stopping_mse": 0.0044396082,
+  "representations": [
+    {
+      "representation": "existing_level_encoder",
+      "candidate": "mcs30_ms5",
+      "stable_partition": false,
+      "temporal_evidence": false,
+      "status": "diagnostic_only",
+      "sampled_dbcv": 0.6339896278,
+      "train_switching_drives": 1,
+      "train_persistence_lift": 0.0006111145
+    },
+    {
+      "representation": "level_change_encoder",
+      "candidate": "mcs30_ms15",
+      "stable_partition": true,
+      "temporal_evidence": false,
+      "status": "diagnostic_only",
+      "sampled_dbcv": 0.5304061416,
+      "train_switching_drives": 0,
+      "train_persistence_lift": 0.0
+    },
+    {
+      "representation": "change_summary_baseline",
+      "candidate": "mcs120_ms5",
+      "stable_partition": false,
+      "temporal_evidence": false,
+      "status": "diagnostic_only",
+      "sampled_dbcv": -0.1550562417,
+      "train_switching_drives": 684,
+      "train_persistence_lift": -0.1121715586
+    }
+  ],
+  "collapsed_representations": [],
+  "artifact_sha256": {
+    "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\change_preprocessing.json": "4e4896762bada6c40b30e9bb2abf461409367ae1f69fc32feb54c4dd7be2aa71",
+    "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\change_summary_baseline_diagnostic_pipeline.joblib": "efcf2d01a0ebaa9e9a24c997ab2285ea9d5e891f92653d821e6edbe95697bd40",
+    "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\existing_level_encoder_diagnostic_pipeline.joblib": "a815fab6e3dede1417afd66c9e78584a90cfd63ed2d7d22d652495999a3a2542",
+    "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\internal_stopping_serials.json": "d653e677a18d51d9e581d2ce39b92b9b98619d6d41839de227c6af4d026b001e",
+    "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\level_change_encoder.pt": "8f830d972d202ec2a4857b741da886732af52b540abf734a5e6b736c0e453c50",
+    "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\level_change_encoder_diagnostic_pipeline.joblib": "c1b5bdd4194aa107c3daba99dedff427a0063f4b2d703e02b8e1285e5db9d806",
+    "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\settings.json": "4f192661e79b98cda20c02c2363358744a4776ed00e3f9bb885f37eb310a7c8d",
+    "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\shared_indices.npz": "17d426eb51d51b5a1efae4b43097314b6b633a6d3d39c6358c73cd417b4ad7bd",
+    "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\training_record.json": "be69c63c927b392dff1358122c74ee46c765f3a549f235a3d2aac03545c9f580",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\calibration\\metadata.parquet": "bb229b24a642794ed3b39946e6892c0d6d0f07c3905800ea6bee5b3a89cffd53",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\calibration\\representations.npz": "e50dedec0e7f3be00a89ccfd1a771b8211826c7659906a21510f5b9d8ba67f66",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\development\\metadata.parquet": "f22f88ca20d6e5906fdafbbfc2f8f559d781d8ac5d5b4a3c358ff416754f5fc6",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\development\\representations.npz": "b39408abfbfbff9764821307c403c6a1a0a247b49767eb994a42821041f9365a",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\train\\metadata.parquet": "44fa996810808fa84b556a8b2c6a719009b222e893f045b24f433771fe132092",
+    "data\\features\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\new_encoder\\train\\representations.npz": "bb4ab2c0d7e154ad1493db55337cc60ce017752567c452ccab69a520c0fe8de5"
+  },
+  "versions": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "torch": "2.14.1+cpu",
+    "sklearn": "1.9.1",
+    "hdbscan": "0.8.44"
+  },
+  "failure_labels_used": false,
+  "sealed_test_opened": false,
+  "limitations": [
+    "one model/seed",
+    "exploratory sequential development",
+    "unlabeled training contamination possible",
+    "conditional clustering stability only",
+    "overlapping windows",
+    "sampled DBCV",
+    "PCA cap differs in retained information",
+    "new encoder has extra input parameters; not a strictly matched feature-only causal ablation",
+    "daily changes alone may not create meaningful operating regimes",
+    "no final fault evaluation or drift adaptation"
+  ]
+}

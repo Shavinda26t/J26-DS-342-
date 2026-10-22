@@ -1,0 +1,8 @@
+{
+  "candidate_lock_sha256": "b56973f430150300ed07696ba88bacfa53d37eae6d80b129debabe84185fd0d4",
+  "score_manifest_sha256": "d2b8d6f4893d54efa8417163bc4bbac322c54043af0998f8a266c6450e813dcd",
+  "q4_archive_sha256": "e8753f153054823237f50a7abbae0d39f057122b12aec60f2b34278c602e749e",
+  "score_rows": 1758728,
+  "failure_column_read": false,
+  "q4_failure_outcomes_opened": false
+}

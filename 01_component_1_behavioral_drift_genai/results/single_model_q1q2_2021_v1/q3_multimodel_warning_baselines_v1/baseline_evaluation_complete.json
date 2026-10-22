@@ -1,0 +1,27 @@
+{
+  "created_utc": "2026-10-22T07:36:22.022112+00:00",
+  "analysis_complete": true,
+  "protocol_sha256": "8080a86575f526a01068aafca4ed26dbbcb141e791ab959afb47ff2c236f9720",
+  "score_manifest_sha256": "4eed2ecae7d0a5d2326542883b467fa02098857f1746044e39109e1ee9b47be7",
+  "baseline_metrics_sha256": "001a7e23d63f6a056534daf0db4215464ccbc42116b861f3162e5289cd7cd7ff",
+  "development_drives": 77412,
+  "reserved_future_test_drives": 19351,
+  "recorded_q3_events": 230,
+  "models_provisional": [
+    "TOSHIBA MG07ACA14TA",
+    "ST12000NM0008",
+    "ST4000DM000",
+    "ST8000NM0055",
+    "HGST HMS5C4040BLE640"
+  ],
+  "trained_detector_scored_on_new_cohort": false,
+  "all_device_types_verified": false,
+  "future_test_outcomes_opened": false,
+  "sealed_June_test_opened": false,
+  "next_steps": [
+    "Verify four provisional HDD model types and SMART semantics",
+    "Train/score detector on development data for these five models without failure labels",
+    "Freeze detector scores and compare with these baselines at equal alert budgets",
+    "Reserve Q4 for blind evaluation; do not use it to fill Q3 follow-up"
+  ]
+}

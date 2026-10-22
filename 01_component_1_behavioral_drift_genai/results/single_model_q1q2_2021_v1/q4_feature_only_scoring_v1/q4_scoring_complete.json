@@ -1,0 +1,12 @@
+{
+  "created_utc": "2026-10-22T12:01:17.674096+00:00",
+  "analysis_complete": true,
+  "score_lock_sha256": "9cb0fd0ee69d8cfbe7e23f6824d8a2137b581e76dbb8158f83a283541dd79941",
+  "score_manifest_sha256": "d2b8d6f4893d54efa8417163bc4bbac322c54043af0998f8a266c6450e813dcd",
+  "candidate_lock_sha256": "b56973f430150300ed07696ba88bacfa53d37eae6d80b129debabe84185fd0d4",
+  "q4_archive_sha256": "e8753f153054823237f50a7abbae0d39f057122b12aec60f2b34278c602e749e",
+  "score_rows": 1758728,
+  "q4_failure_outcomes_opened": false,
+  "sealed_June_test_opened": false,
+  "next_gate": "Verify score lock, then read Q4 failure labels once in Notebook 27"
+}

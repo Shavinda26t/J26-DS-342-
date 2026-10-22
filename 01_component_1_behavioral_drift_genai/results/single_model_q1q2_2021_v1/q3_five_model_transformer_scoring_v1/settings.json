@@ -1,0 +1,37 @@
+{
+  "checkpoint_sha256": "6bc0e42fe995d1dddc00f9ebe7379b7ca3aa1762ab1fd2278a012c3ae2f0e172",
+  "preprocessing_sha256": "bdf52e05f24a1239d184b02b7667b2edb42bd2d556fc3ff5b80aec20301eb9b8",
+  "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "q3_zip_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+  "pilot_feature_manifest_sha256": "8eb78e30f2ac17e702d56bf9f0550292fe40956cce83e90161363a2126c0f5c2",
+  "scoring_dates": [
+    "2021-08-01",
+    "2021-09-30"
+  ],
+  "calibration_dates": [
+    "2021-08-16",
+    "2021-08-31"
+  ],
+  "evaluation_role": "evaluation",
+  "batch_size": 256,
+  "hidden_final_day_features": [
+    "smart_5_raw",
+    "smart_194_raw",
+    "smart_197_raw",
+    "smart_198_raw"
+  ],
+  "detectors": [
+    "temp_error",
+    "sector_error",
+    "joint_error"
+  ],
+  "score_meanings": {
+    "temp_error": "squared final-day 194 residual",
+    "sector_error": "mean squared final-day 5,197,198 residual",
+    "joint_error": "mean of the four hidden final-day squared residuals"
+  },
+  "quantile": 0.998,
+  "alarm_rule": "strictly greater than model-specific higher-quantile threshold",
+  "labels_used": false,
+  "transition_score_enabled": false
+}

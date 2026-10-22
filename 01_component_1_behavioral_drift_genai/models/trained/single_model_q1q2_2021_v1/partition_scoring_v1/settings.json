@@ -1,0 +1,24 @@
+{
+  "seed": 42,
+  "calibration_quantile": 0.99,
+  "conditional_minimum_windows": 200,
+  "conditional_minimum_drives": 5,
+  "minimum_assignment_strength": 0.5,
+  "prototype_minimum_drives": 5,
+  "prototype_minimum_windows": 30,
+  "prototype_radius_quantile": 0.95,
+  "reconstruction_weight": 0.5,
+  "distance_weight": 0.5,
+  "transition_weight": 0.0,
+  "ablation_complete_sha256": "b316745aa1db84df8d5ee0952ffb019b10680a33102bd95ced0090637ed68de3",
+  "calibration_rule": "global and conditional quantiles compared separately; sparse/noise/weak context falls back to global",
+  "synthetic_tests": [
+    "temperature_plus_2_last_7_days",
+    "temperature_plus_5_last_7_days",
+    "temperature_spike_plus_10",
+    "temperature_frozen_last_7_days",
+    "temperature_alignment_break",
+    "sector_5_plus_8_last_7_days",
+    "sector_197_198_plus_8_last_7_days"
+  ]
+}

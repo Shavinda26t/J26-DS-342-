@@ -1,0 +1,20 @@
+{
+  "created_utc": "2026-10-22T09:47:08.925444+00:00",
+  "analysis_complete": true,
+  "settings_sha256": "afd59d14272cd6398ff7e7af9bb41841d6a48020eb1d8572b706c458a2044d8a",
+  "composition_sha256": "a3d5519b92e830827430bc9c8828920452985e19b0f4026a5a5e87f375239c54",
+  "association_sha256": "463657be51af3d31220f1c7dce020665f7a277d458def3fe38ab0906091a099a",
+  "stability_sha256": "c5aa11dd6c3e54e9a75543d33c30e971a1a086bf74841a3b474d4ec3db1fd109",
+  "decision_sha256": "28316e73e06705802454c01429f7f767bf8031ec3130713121ffcebb2cfa10f6",
+  "failure_labels_used": false,
+  "evaluation_drives_used": false,
+  "future_test_opened": false,
+  "sealed_June_test_opened": false,
+  "regime_model_approved": false,
+  "limitations": [
+    "three resamples are an initial stability audit, not a confidence interval",
+    "SMART feature associations do not identify causal cluster drivers",
+    "August 15 fit windows only; out-of-sample projection still approximate",
+    "no held-out warning comparison for regime distance or transitions"
+  ]
+}

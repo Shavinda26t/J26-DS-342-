@@ -1,0 +1,29 @@
+{
+  "seed": 42,
+  "width": 32,
+  "heads": 4,
+  "layers": 2,
+  "feedforward": 64,
+  "dropout": 0.1,
+  "point_mask_probability": 0.15,
+  "span_days": 3,
+  "batch_size": 128,
+  "max_epochs": 50,
+  "patience": 8,
+  "learning_rate": 0.001,
+  "weight_decay": 1e-05,
+  "score_policy": "five fixed diagonal mask partitions; each value hidden and scored exactly once",
+  "embedding_policy": "mean of pooled encoder embeddings from the five fixed masked passes",
+  "score_quantile": 0.99,
+  "features": [
+    "smart_5_raw",
+    "smart_9_raw",
+    "smart_194_raw",
+    "smart_197_raw",
+    "smart_198_raw"
+  ],
+  "window_days": 30,
+  "dataset_config_sha256": "892bef21419fb60ce1bc0a5d1c5d03645852e9d992b98b9cb4efb3ca47432bb1",
+  "preprocessing_sha256": "b8c37d9c1fe9eb62f6b152b76c85fd062e72576f3e090a636646b894d80a51fc",
+  "dataset_complete_sha256": "7e655aaaeb2fbc5e08e11d54af7262536e121ea0e83b0d771a61370bc6335b5e"
+}

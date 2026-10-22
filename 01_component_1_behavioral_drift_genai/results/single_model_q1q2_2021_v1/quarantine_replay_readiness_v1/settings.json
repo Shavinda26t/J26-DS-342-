@@ -1,0 +1,13 @@
+{
+  "minimum_panel_fraction": 0.8,
+  "E_fraction_limit": 0.1,
+  "sector_fraction_limit": 0.05,
+  "hold_batches": 10,
+  "candidate_maturation_batches": 10,
+  "minimum_unique_dates": 14,
+  "minimum_candidate_drives": 30,
+  "historical_anchor_cap_per_drive": 8,
+  "historical_anchor_spacing_days": 10,
+  "seed": 42,
+  "upstream_complete_sha256": "77ad19acdd3b4ccbd1e465d1a696418bee2f1a67d0795cfc60cad0398aacd58b"
+}

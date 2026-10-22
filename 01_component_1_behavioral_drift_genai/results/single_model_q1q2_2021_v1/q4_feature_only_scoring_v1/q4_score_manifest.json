@@ -1,0 +1,1300 @@
+{
+  "settings_sha256": "fc2231ac8119fd6c1932784db60695ca9f76b76199d7d1c82f3ca30beb549ad7",
+  "candidate_lock_sha256": "b56973f430150300ed07696ba88bacfa53d37eae6d80b129debabe84185fd0d4",
+  "q4_archive_sha256": "e8753f153054823237f50a7abbae0d39f057122b12aec60f2b34278c602e749e",
+  "partition_sha256": {
+    "2021-10-01.parquet": "5e5ea970050e5e2e4249d0b28f68b584977c41a16d3d2e0a4f910175c351080d",
+    "2021-10-02.parquet": "fdad83a6f578299f66e8922f11e920192ad305fc072d7d607e016bea1d2d58c3",
+    "2021-10-03.parquet": "92daccf12755a82ccdbd36799ac9189ee9a4d37c3168cfa62a3c26976c8dc13d",
+    "2021-10-04.parquet": "52d27955f0449c141ccf151d477bdee7fbbda82af0b082631def5821770dd2ff",
+    "2021-10-05.parquet": "437b40061603ce6c33282d5d5043509cdf76eb6985c7afbb59481cfd4e38fce6",
+    "2021-10-06.parquet": "b88fce33e447e979dbd35f7290d4ca2316976d704debc5bb5e373c56ceec89c8",
+    "2021-10-07.parquet": "22c4c554069619b8ac8cf2e63f23a9099ca78edb3150e6352dcf55b3610640eb",
+    "2021-10-08.parquet": "8069725bbde1f4ccacd14770ce6c4b19dbc8a399feb4d21db6cc0d8a22c073a7",
+    "2021-10-09.parquet": "629841eb9c975caf8a730685e459a3ec5dfbc9f1624c210534a27174641b9a90",
+    "2021-10-10.parquet": "1f9771d9b685ed20f4f6a7211e9ca9e0b93a8f03e4271e5e297b674f680b6943",
+    "2021-10-11.parquet": "80a45f4a8936f8251acd9a2a8e5a93bcc3240865e21c750d4405ab282490922d",
+    "2021-10-12.parquet": "8c553f2beb74d60731a46d4ee2c8699ea8c2c0c17f2cb1bb6a745dd3f6de2bd7",
+    "2021-10-13.parquet": "6a33e062aebed4e703c1964af329d9a95f6e5a105a9a7dac83b50a0ee56e7e4f",
+    "2021-10-14.parquet": "309c432e7aeab80c9ba1f0356dcb6eb091e3cd68eaeac1c7e1ab436281191408",
+    "2021-10-15.parquet": "53663f9bc76c4c06181030b5f0697bd350aad78cfda8d7d78f2766f34a28aae6",
+    "2021-10-16.parquet": "67ad591f90173592ef0e0eb27d5f6282754110282fd81aacc7091489de0cba4a",
+    "2021-10-17.parquet": "1bba87bb8a352159bb2a69f95c8d26c9de93674fff000370eb9892235eab94fe",
+    "2021-10-18.parquet": "1528cc0aa2e05118cc79cbdfab0a0cf4461440379ff6dd5842905b77c1adc633",
+    "2021-10-19.parquet": "a52001e820e7e406a85fc6e12998cb49afe06ef59c6ab8fcde7e4ca956477b51",
+    "2021-10-20.parquet": "f9bea448616a57f0db62a09aa0d671173745152e9635d821d3ac7c02fd3b76a2",
+    "2021-10-21.parquet": "43ef32402a1d099d2a550bed0919a22e5bffb7c47061741914f7c26493f1ff89",
+    "2021-10-22.parquet": "6fe2cc5891c2219fcf647fdc99d6c85281d44e822399da920395357b142fbf25",
+    "2021-10-23.parquet": "1d2c249982088f446260c902b6de61862032f7ff8b7dcc72cb54e4e1d57e84d6",
+    "2021-10-24.parquet": "3621623994e4e5ba46169e96c45eb729e35470e29e0af78c25dc43773bb65c72",
+    "2021-10-25.parquet": "26295afbaca3aeed65f6359b65cf6b651a2eebe246ad82bc2c0975ba1d64f319",
+    "2021-10-26.parquet": "2a91665ffa62bb2389a91b2004e63d7dde93d5f8b2fb37d8d58836b2f916428a",
+    "2021-10-27.parquet": "039fac479745cc837b901b5c305897c11ac4e4ed06117191aab92f56ddf44d3b",
+    "2021-10-28.parquet": "613039c6051a790cf3a8251b984cc1e88ca67da9108d79595fe7212d9ca44def",
+    "2021-10-29.parquet": "708f0c12b7f8972e5144064c5d4d6e5ab9b39948c3923cab3756f85c74f5366e",
+    "2021-10-30.parquet": "8f016bbbd826913724eaa1c89dae71a0b57c562f3195427cc1c0cbc27b4a21fa",
+    "2021-10-31.parquet": "e4c8eae660a482ed825250f597ef344173886c3108cea7cdbe60f8665cd3a3cb",
+    "2021-11-01.parquet": "503b3a3a47126f2d9e2fd3c8f707bdd23d93c291763bed2adebd69c80e1f5f29",
+    "2021-11-02.parquet": "a47b09f20d79c1579840d7d4e1c518678bfc97e2fdfbd4116c378408bcbaf2f3",
+    "2021-11-03.parquet": "a32698bb77e07622aeff158a2498d3a1bf63c5230a05a8426ab3691c1a6b4b7e",
+    "2021-11-04.parquet": "bebdc523ec3b3a8a5d37fa642999f63d35a5563c59e1bec57f18d098a165abf0",
+    "2021-11-05.parquet": "03afa43a4802e86fae40607de0c28bf1f1378dec409548e994f27dae9b8bb1ac",
+    "2021-11-06.parquet": "064c70965945f0ddcb759af1c1d084d4e36643fbd489691e91b74533ba1304e3",
+    "2021-11-07.parquet": "262013cf283953b4934a8d065fb6b82cfb88eb54c8880d67dbad684ebc8ad46d",
+    "2021-11-08.parquet": "527350800c85ba15570ac4e83ab84228c029e57076f160a1638875aa7d383b53",
+    "2021-11-09.parquet": "e57f017fe61eebd08ab0f74956a84d5317077b1a289829fa13bdc9e65a09786a",
+    "2021-11-10.parquet": "e1fba70bec7cc27fe6927fb47d11e82a89a25a3eaa3c0b481c200326c880dda6",
+    "2021-11-11.parquet": "cbfea11f140cd36c044873d532831a2523302c045b817faddb728fb8bd191343",
+    "2021-11-12.parquet": "3a530cb51cf0d953bc3e02208a74d7dbbfa42ae5318c286209e746afb3d80dd0",
+    "2021-11-13.parquet": "2e090b94f78d2f30992b2acf3953f89f50eec9c39aa4f3fafcb00f449f64d086",
+    "2021-11-14.parquet": "eb8dfeaa57ba133bfafc14a784ba99078633b9690aa93489a11f9a3c6e855b31",
+    "2021-11-15.parquet": "07294e9cba52448bfbc5bf09ff546471ea662fd7c9417b53407a6dc639af1f1f",
+    "2021-11-16.parquet": "7c72bb016caec417bdf789b7f4fde3c98d978f9f1ba50bdb253de17bdb32def0",
+    "2021-11-17.parquet": "1c6fcdccef3c95045a89bc162ef630b4aa388abcc4514de29e65c8c18a4fc077",
+    "2021-11-18.parquet": "b17bbe34e2bb5475f6bbb2215f40c77735c96b92c2aa748f2a12334f71366a22",
+    "2021-11-19.parquet": "65df5ad8eec51ea25608adddcbcd0188ca681ab14595ed233dcbe503144a888d",
+    "2021-11-20.parquet": "1e250c17d6aad5e3ca619fb9ff98818684172a0ad84aa2610569d194e4786475",
+    "2021-11-21.parquet": "6e7622ef60813ee27b5d648827bd0edfb3379bc4b1e0080af8a3df2ee0dd07ea",
+    "2021-11-22.parquet": "1838d4d26b60be8a3e449e421304dc328ed2608ded4e22592f07f859df212b8d",
+    "2021-11-23.parquet": "372f6613d62843b2f83bf30f29579bd240848981e23f4988c028fa756c533b68",
+    "2021-11-24.parquet": "1a1c14f40a6d8fb98c231b205e38cfc42c38cb8d3399e9681587d9becb5a341e",
+    "2021-11-25.parquet": "87ee6cb4d12e790e57042994f3ee97a3666078b2541579420706941f4a1a78cc",
+    "2021-11-26.parquet": "c6e4e023a436ca2cb5e7f918eded3d20b0b98a2a301ae4b3ddc32a3875c66984",
+    "2021-11-27.parquet": "ad6c06ba0a125ffe4b4f1d67c6d8388c4d538a6a7375a54fd734a820cd22ce7e",
+    "2021-11-28.parquet": "dc82223700bd28d83a5947b204444ce220bf6b577040f07886335e2b48fea737",
+    "2021-11-29.parquet": "6cdf583a7f9ef3365feeebdc210d30975b5e2ff90fe724d29d816ac76697042c",
+    "2021-11-30.parquet": "48528220e587c4a88bca0c5afbdad31278d161cbf6503386d1df95c97f443ac1",
+    "2021-12-01.parquet": "a16699337aa5f2d4b90c3febb6cf54d58047851876486f2f26425000bf398725",
+    "2021-12-02.parquet": "74822d7da6998a0438f55958cf1e2554bd4b8d47358368e59ecb0b6582fb24e6",
+    "2021-12-03.parquet": "6c7544c8497e56473ca7802f0ebc9d5794c4b8c07dd7a617727b5ed42778e8aa",
+    "2021-12-04.parquet": "a4b91fd7ead65e4df545e154a5c1ba888a1c7166ff706a4b6a5731f19155f97e",
+    "2021-12-05.parquet": "f7b563dffb0dbf37e93f3560ec12b7f4afccefd894409808e874048973b54f95",
+    "2021-12-06.parquet": "e9d6daf13ff1e09994db7a8e8fac19730b3db64e5b815751283f9c3bfe5cbf57",
+    "2021-12-07.parquet": "eb6b26f4f04371076058ceea84df113d22cbb97eaca161a29e5b7157a8d7c761",
+    "2021-12-08.parquet": "5b23605006c821257c0a4a2e02729687002854aa9d53c5f22cb8c677d0a999d9",
+    "2021-12-09.parquet": "c107179c3dee60f4781dfd926181879a3fe2b7a0a8e2b7a678f559f050658dbd",
+    "2021-12-10.parquet": "b7974266a398a8b01eb11282bc22513df3fd68fbe543fe243871a56c73ab049c",
+    "2021-12-11.parquet": "ff01b0d8f5d159fde2d10a8ef87ca690412b190aea77f4e70e08286ec50938ab",
+    "2021-12-12.parquet": "3abe4abf54f594f2f9888d2f3b5a71d893da434cf533ddbb95cbb52c6d172d40",
+    "2021-12-13.parquet": "9b297e4815d4dd5d9139a2583903e169a0d00cf9db9c1f951309370ecaf35708",
+    "2021-12-14.parquet": "9e6db640da87a32b1f5ab73ceb718ec4129b64beb068aae1e10d3b7f15deded2",
+    "2021-12-15.parquet": "b28b048ce0fb93fc1ae799500ac2693332def86ff82dcb76898ae09ddc386ee4",
+    "2021-12-16.parquet": "2428e6b165c9f1f00818b6ba96433c7ed5e1e13af7125fd44e23912eed192d17",
+    "2021-12-17.parquet": "f46184a56f25078adb7320b038d783597290a4d39ec098fb66befd15874e6a72",
+    "2021-12-18.parquet": "67a577aaa3fba31289d9f57760660cff3608e7c4ff32edc2e1a3d74d04100f25",
+    "2021-12-19.parquet": "a426175570f8f06147fd88d22d0d3c201f1b9c75052dc5e5066eb2fff40edcf3",
+    "2021-12-20.parquet": "33f5c843bdd5e9be84d5333bc74c05af492940ff4850121656ff164d4e324f0c",
+    "2021-12-21.parquet": "fb4f4e7a9e3e89ebdd507b1eef50aa0a9c2266111cdabca935e0bc9d807be9fc",
+    "2021-12-22.parquet": "568edf1ac23555bf908a44048359b939e0118bf1da2f66b1151c9e793391ad96",
+    "2021-12-23.parquet": "29aba739aa0c2aec95b6b1a8ae2ddd2cfc1adea2aa0a646570dddf31b653d752",
+    "2021-12-24.parquet": "f594119a6a71f1726566fe628db8c537d62f1600fb4f26bcac114d1a0bdda34e",
+    "2021-12-25.parquet": "d88d530c7b4fc42b8fe84f0d1b0ac4d0078e273855a5b4357635b4c068278ecf",
+    "2021-12-26.parquet": "0e02cd6fb7dd5423b90fcf7d380bd141dda04e6f7286ec68cc22cb8475870984",
+    "2021-12-27.parquet": "cec67e2efbb417764151cef48d8cb40076b2a77f816d4a78a144739fb09cd387",
+    "2021-12-28.parquet": "2c260e8214c0575c53eb733c818b8d109e76f31c69f66b1077e420486f342b50",
+    "2021-12-29.parquet": "113b041bc33054b55bd947c48b1de54ecb5c93b3c63248e405aec76451a90db5",
+    "2021-12-30.parquet": "b6700b24bd3feee1af67ea2eab29ab4ac12820ad76a56866f1e456fd83d2743d",
+    "2021-12-31.parquet": "9c47eae2cae1906398e36b64726e19f8028ede46d6eeac7991704670fc3d5fcb"
+  },
+  "daily_quality": {
+    "2021-10-01": {
+      "observed_rows": 19292,
+      "invalid_rows": 14,
+      "gap_resets": 1,
+      "scored_rows": 19155,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6386,
+        "ST12000NM0008": 3735,
+        "ST4000DM000": 3734,
+        "ST8000NM0055": 2809,
+        "HGST HMS5C4040BLE640": 2491
+      }
+    },
+    "2021-10-02": {
+      "observed_rows": 19286,
+      "invalid_rows": 4,
+      "gap_resets": 0,
+      "scored_rows": 19145,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6386,
+        "ST12000NM0008": 3735,
+        "ST4000DM000": 3734,
+        "ST8000NM0055": 2803,
+        "HGST HMS5C4040BLE640": 2487
+      }
+    },
+    "2021-10-03": {
+      "observed_rows": 19281,
+      "invalid_rows": 0,
+      "gap_resets": 6,
+      "scored_rows": 19150,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6386,
+        "ST12000NM0008": 3734,
+        "ST4000DM000": 3733,
+        "ST8000NM0055": 2810,
+        "HGST HMS5C4040BLE640": 2487
+      }
+    },
+    "2021-10-04": {
+      "observed_rows": 19291,
+      "invalid_rows": 0,
+      "gap_resets": 10,
+      "scored_rows": 19153,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6386,
+        "ST12000NM0008": 3734,
+        "ST4000DM000": 3733,
+        "ST8000NM0055": 2813,
+        "HGST HMS5C4040BLE640": 2487
+      }
+    },
+    "2021-10-05": {
+      "observed_rows": 19291,
+      "invalid_rows": 12,
+      "gap_resets": 0,
+      "scored_rows": 19153,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6383,
+        "ST12000NM0008": 3725,
+        "ST4000DM000": 3733,
+        "ST8000NM0055": 2822,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-10-06": {
+      "observed_rows": 19290,
+      "invalid_rows": 1,
+      "gap_resets": 0,
+      "scored_rows": 19164,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6387,
+        "ST12000NM0008": 3725,
+        "ST4000DM000": 3733,
+        "ST8000NM0055": 2829,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-10-07": {
+      "observed_rows": 19290,
+      "invalid_rows": 3,
+      "gap_resets": 0,
+      "scored_rows": 19164,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6387,
+        "ST12000NM0008": 3725,
+        "ST4000DM000": 3733,
+        "ST8000NM0055": 2829,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-10-08": {
+      "observed_rows": 19290,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19173,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6387,
+        "ST12000NM0008": 3734,
+        "ST4000DM000": 3733,
+        "ST8000NM0055": 2829,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-10-09": {
+      "observed_rows": 19288,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19183,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6387,
+        "ST12000NM0008": 3733,
+        "ST4000DM000": 3733,
+        "ST8000NM0055": 2840,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-10-10": {
+      "observed_rows": 19278,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19181,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6386,
+        "ST12000NM0008": 3733,
+        "ST4000DM000": 3733,
+        "ST8000NM0055": 2839,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-10-11": {
+      "observed_rows": 19275,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19178,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6385,
+        "ST12000NM0008": 3732,
+        "ST4000DM000": 3732,
+        "ST8000NM0055": 2839,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-10-12": {
+      "observed_rows": 19274,
+      "invalid_rows": 0,
+      "gap_resets": 1,
+      "scored_rows": 19177,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6384,
+        "ST12000NM0008": 3732,
+        "ST4000DM000": 3732,
+        "ST8000NM0055": 2839,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-10-13": {
+      "observed_rows": 19270,
+      "invalid_rows": 8,
+      "gap_resets": 0,
+      "scored_rows": 19166,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6384,
+        "ST12000NM0008": 3732,
+        "ST4000DM000": 3732,
+        "ST8000NM0055": 2839,
+        "HGST HMS5C4040BLE640": 2479
+      }
+    },
+    "2021-10-14": {
+      "observed_rows": 19275,
+      "invalid_rows": 17,
+      "gap_resets": 11,
+      "scored_rows": 19146,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3732,
+        "ST4000DM000": 3731,
+        "ST8000NM0055": 2839,
+        "HGST HMS5C4040BLE640": 2469
+      }
+    },
+    "2021-10-15": {
+      "observed_rows": 19279,
+      "invalid_rows": 0,
+      "gap_resets": 5,
+      "scored_rows": 19146,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3733,
+        "ST4000DM000": 3730,
+        "ST8000NM0055": 2839,
+        "HGST HMS5C4040BLE640": 2469
+      }
+    },
+    "2021-10-16": {
+      "observed_rows": 19278,
+      "invalid_rows": 6,
+      "gap_resets": 0,
+      "scored_rows": 19154,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3733,
+        "ST4000DM000": 3729,
+        "ST8000NM0055": 2839,
+        "HGST HMS5C4040BLE640": 2478
+      }
+    },
+    "2021-10-17": {
+      "observed_rows": 19278,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19176,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3733,
+        "ST4000DM000": 3729,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-18": {
+      "observed_rows": 19276,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19174,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3731,
+        "ST4000DM000": 3729,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-19": {
+      "observed_rows": 19276,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19174,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3731,
+        "ST4000DM000": 3729,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-20": {
+      "observed_rows": 19270,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19168,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3731,
+        "ST4000DM000": 3723,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-21": {
+      "observed_rows": 19275,
+      "invalid_rows": 0,
+      "gap_resets": 5,
+      "scored_rows": 19168,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3731,
+        "ST4000DM000": 3723,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-22": {
+      "observed_rows": 19274,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19169,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3733,
+        "ST4000DM000": 3722,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-23": {
+      "observed_rows": 19274,
+      "invalid_rows": 6,
+      "gap_resets": 0,
+      "scored_rows": 19163,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3722,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-24": {
+      "observed_rows": 19274,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19163,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3722,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-25": {
+      "observed_rows": 19274,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19163,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3722,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-26": {
+      "observed_rows": 19273,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19162,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3721,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-10-27": {
+      "observed_rows": 19273,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19167,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3721,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2498
+      }
+    },
+    "2021-10-28": {
+      "observed_rows": 19273,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19167,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3721,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2498
+      }
+    },
+    "2021-10-29": {
+      "observed_rows": 19270,
+      "invalid_rows": 13,
+      "gap_resets": 0,
+      "scored_rows": 19158,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6369,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3720,
+        "ST8000NM0055": 2846,
+        "HGST HMS5C4040BLE640": 2496
+      }
+    },
+    "2021-10-30": {
+      "observed_rows": 19269,
+      "invalid_rows": 0,
+      "gap_resets": 1,
+      "scored_rows": 19156,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6368,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3720,
+        "ST8000NM0055": 2845,
+        "HGST HMS5C4040BLE640": 2496
+      }
+    },
+    "2021-10-31": {
+      "observed_rows": 19268,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19163,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6368,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3719,
+        "ST8000NM0055": 2845,
+        "HGST HMS5C4040BLE640": 2504
+      }
+    },
+    "2021-11-01": {
+      "observed_rows": 19255,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19159,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6367,
+        "ST12000NM0008": 3727,
+        "ST4000DM000": 3718,
+        "ST8000NM0055": 2850,
+        "HGST HMS5C4040BLE640": 2497
+      }
+    },
+    "2021-11-02": {
+      "observed_rows": 19255,
+      "invalid_rows": 4,
+      "gap_resets": 7,
+      "scored_rows": 19158,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6359,
+        "ST12000NM0008": 3737,
+        "ST4000DM000": 3715,
+        "ST8000NM0055": 2850,
+        "HGST HMS5C4040BLE640": 2497
+      }
+    },
+    "2021-11-03": {
+      "observed_rows": 19260,
+      "invalid_rows": 5,
+      "gap_resets": 11,
+      "scored_rows": 19147,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6359,
+        "ST12000NM0008": 3732,
+        "ST4000DM000": 3715,
+        "ST8000NM0055": 2844,
+        "HGST HMS5C4040BLE640": 2497
+      }
+    },
+    "2021-11-04": {
+      "observed_rows": 19265,
+      "invalid_rows": 10,
+      "gap_resets": 6,
+      "scored_rows": 19145,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6358,
+        "ST12000NM0008": 3741,
+        "ST4000DM000": 3715,
+        "ST8000NM0055": 2837,
+        "HGST HMS5C4040BLE640": 2494
+      }
+    },
+    "2021-11-05": {
+      "observed_rows": 19259,
+      "invalid_rows": 11,
+      "gap_resets": 0,
+      "scored_rows": 19129,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6357,
+        "ST12000NM0008": 3735,
+        "ST4000DM000": 3715,
+        "ST8000NM0055": 2833,
+        "HGST HMS5C4040BLE640": 2489
+      }
+    },
+    "2021-11-06": {
+      "observed_rows": 19218,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19091,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6357,
+        "ST12000NM0008": 3718,
+        "ST4000DM000": 3704,
+        "ST8000NM0055": 2836,
+        "HGST HMS5C4040BLE640": 2476
+      }
+    },
+    "2021-11-07": {
+      "observed_rows": 19262,
+      "invalid_rows": 10,
+      "gap_resets": 35,
+      "scored_rows": 19090,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6356,
+        "ST12000NM0008": 3718,
+        "ST4000DM000": 3704,
+        "ST8000NM0055": 2836,
+        "HGST HMS5C4040BLE640": 2476
+      }
+    },
+    "2021-11-08": {
+      "observed_rows": 19262,
+      "invalid_rows": 8,
+      "gap_resets": 0,
+      "scored_rows": 19089,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6356,
+        "ST12000NM0008": 3718,
+        "ST4000DM000": 3704,
+        "ST8000NM0055": 2835,
+        "HGST HMS5C4040BLE640": 2476
+      }
+    },
+    "2021-11-09": {
+      "observed_rows": 19262,
+      "invalid_rows": 0,
+      "gap_resets": 1,
+      "scored_rows": 19088,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6356,
+        "ST12000NM0008": 3718,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2835,
+        "HGST HMS5C4040BLE640": 2476
+      }
+    },
+    "2021-11-10": {
+      "observed_rows": 19247,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19082,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6356,
+        "ST12000NM0008": 3718,
+        "ST4000DM000": 3704,
+        "ST8000NM0055": 2835,
+        "HGST HMS5C4040BLE640": 2469
+      }
+    },
+    "2021-11-11": {
+      "observed_rows": 19258,
+      "invalid_rows": 26,
+      "gap_resets": 6,
+      "scored_rows": 19061,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6345,
+        "ST12000NM0008": 3713,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2831,
+        "HGST HMS5C4040BLE640": 2469
+      }
+    },
+    "2021-11-12": {
+      "observed_rows": 19260,
+      "invalid_rows": 3,
+      "gap_resets": 3,
+      "scored_rows": 19069,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6345,
+        "ST12000NM0008": 3710,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2831,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-13": {
+      "observed_rows": 19259,
+      "invalid_rows": 6,
+      "gap_resets": 0,
+      "scored_rows": 19083,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6350,
+        "ST12000NM0008": 3709,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2831,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-11-14": {
+      "observed_rows": 19258,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19082,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6349,
+        "ST12000NM0008": 3709,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2831,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-11-15": {
+      "observed_rows": 19248,
+      "invalid_rows": 6,
+      "gap_resets": 0,
+      "scored_rows": 19072,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6349,
+        "ST12000NM0008": 3709,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2831,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-16": {
+      "observed_rows": 19257,
+      "invalid_rows": 0,
+      "gap_resets": 10,
+      "scored_rows": 19071,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6349,
+        "ST12000NM0008": 3708,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2831,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-17": {
+      "observed_rows": 19258,
+      "invalid_rows": 0,
+      "gap_resets": 1,
+      "scored_rows": 19071,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6349,
+        "ST12000NM0008": 3708,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2831,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-18": {
+      "observed_rows": 19258,
+      "invalid_rows": 9,
+      "gap_resets": 0,
+      "scored_rows": 19062,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6349,
+        "ST12000NM0008": 3707,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-19": {
+      "observed_rows": 19258,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19067,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6349,
+        "ST12000NM0008": 3707,
+        "ST4000DM000": 3708,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-20": {
+      "observed_rows": 19258,
+      "invalid_rows": 6,
+      "gap_resets": 0,
+      "scored_rows": 19061,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6349,
+        "ST12000NM0008": 3707,
+        "ST4000DM000": 3702,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-21": {
+      "observed_rows": 19258,
+      "invalid_rows": 13,
+      "gap_resets": 0,
+      "scored_rows": 19049,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6342,
+        "ST12000NM0008": 3707,
+        "ST4000DM000": 3697,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-22": {
+      "observed_rows": 19257,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19054,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6342,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3697,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-23": {
+      "observed_rows": 19256,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19053,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6341,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3697,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-24": {
+      "observed_rows": 19256,
+      "invalid_rows": 10,
+      "gap_resets": 0,
+      "scored_rows": 19053,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6341,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3697,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-25": {
+      "observed_rows": 19256,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19053,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6341,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3697,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-26": {
+      "observed_rows": 19249,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19049,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6341,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3693,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-27": {
+      "observed_rows": 19256,
+      "invalid_rows": 3,
+      "gap_resets": 4,
+      "scored_rows": 19049,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6341,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3693,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2480
+      }
+    },
+    "2021-11-28": {
+      "observed_rows": 19256,
+      "invalid_rows": 4,
+      "gap_resets": 0,
+      "scored_rows": 19059,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6351,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3691,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2482
+      }
+    },
+    "2021-11-29": {
+      "observed_rows": 19245,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19049,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6351,
+        "ST12000NM0008": 3702,
+        "ST4000DM000": 3691,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2482
+      }
+    },
+    "2021-11-30": {
+      "observed_rows": 19255,
+      "invalid_rows": 0,
+      "gap_resets": 10,
+      "scored_rows": 19049,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6351,
+        "ST12000NM0008": 3702,
+        "ST4000DM000": 3691,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2482
+      }
+    },
+    "2021-12-01": {
+      "observed_rows": 19254,
+      "invalid_rows": 13,
+      "gap_resets": 0,
+      "scored_rows": 19042,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6350,
+        "ST12000NM0008": 3702,
+        "ST4000DM000": 3691,
+        "ST8000NM0055": 2810,
+        "HGST HMS5C4040BLE640": 2489
+      }
+    },
+    "2021-12-02": {
+      "observed_rows": 19253,
+      "invalid_rows": 3,
+      "gap_resets": 0,
+      "scored_rows": 19051,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6358,
+        "ST12000NM0008": 3702,
+        "ST4000DM000": 3688,
+        "ST8000NM0055": 2810,
+        "HGST HMS5C4040BLE640": 2493
+      }
+    },
+    "2021-12-03": {
+      "observed_rows": 19253,
+      "invalid_rows": 32,
+      "gap_resets": 0,
+      "scored_rows": 19036,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6358,
+        "ST12000NM0008": 3707,
+        "ST4000DM000": 3688,
+        "ST8000NM0055": 2816,
+        "HGST HMS5C4040BLE640": 2467
+      }
+    },
+    "2021-12-04": {
+      "observed_rows": 19253,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19040,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6358,
+        "ST12000NM0008": 3707,
+        "ST4000DM000": 3688,
+        "ST8000NM0055": 2817,
+        "HGST HMS5C4040BLE640": 2470
+      }
+    },
+    "2021-12-05": {
+      "observed_rows": 19254,
+      "invalid_rows": 0,
+      "gap_resets": 1,
+      "scored_rows": 19045,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6358,
+        "ST12000NM0008": 3707,
+        "ST4000DM000": 3688,
+        "ST8000NM0055": 2817,
+        "HGST HMS5C4040BLE640": 2475
+      }
+    },
+    "2021-12-06": {
+      "observed_rows": 19254,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19077,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6358,
+        "ST12000NM0008": 3714,
+        "ST4000DM000": 3695,
+        "ST8000NM0055": 2822,
+        "HGST HMS5C4040BLE640": 2488
+      }
+    },
+    "2021-12-07": {
+      "observed_rows": 19254,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19080,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6358,
+        "ST12000NM0008": 3714,
+        "ST4000DM000": 3698,
+        "ST8000NM0055": 2822,
+        "HGST HMS5C4040BLE640": 2488
+      }
+    },
+    "2021-12-08": {
+      "observed_rows": 19254,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19088,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6365,
+        "ST12000NM0008": 3714,
+        "ST4000DM000": 3698,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2488
+      }
+    },
+    "2021-12-09": {
+      "observed_rows": 19253,
+      "invalid_rows": 2,
+      "gap_resets": 0,
+      "scored_rows": 19085,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6365,
+        "ST12000NM0008": 3714,
+        "ST4000DM000": 3695,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2488
+      }
+    },
+    "2021-12-10": {
+      "observed_rows": 19254,
+      "invalid_rows": 0,
+      "gap_resets": 1,
+      "scored_rows": 19090,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6365,
+        "ST12000NM0008": 3714,
+        "ST4000DM000": 3698,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-12-11": {
+      "observed_rows": 19254,
+      "invalid_rows": 3,
+      "gap_resets": 0,
+      "scored_rows": 19116,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6376,
+        "ST12000NM0008": 3719,
+        "ST4000DM000": 3699,
+        "ST8000NM0055": 2827,
+        "HGST HMS5C4040BLE640": 2495
+      }
+    },
+    "2021-12-12": {
+      "observed_rows": 19253,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19118,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6375,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3699,
+        "ST8000NM0055": 2827,
+        "HGST HMS5C4040BLE640": 2495
+      }
+    },
+    "2021-12-13": {
+      "observed_rows": 19251,
+      "invalid_rows": 1,
+      "gap_resets": 0,
+      "scored_rows": 19121,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3699,
+        "ST8000NM0055": 2832,
+        "HGST HMS5C4040BLE640": 2494
+      }
+    },
+    "2021-12-14": {
+      "observed_rows": 19252,
+      "invalid_rows": 1,
+      "gap_resets": 0,
+      "scored_rows": 19121,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3699,
+        "ST8000NM0055": 2832,
+        "HGST HMS5C4040BLE640": 2494
+      }
+    },
+    "2021-12-15": {
+      "observed_rows": 19253,
+      "invalid_rows": 1,
+      "gap_resets": 1,
+      "scored_rows": 19136,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3699,
+        "ST8000NM0055": 2838,
+        "HGST HMS5C4040BLE640": 2503
+      }
+    },
+    "2021-12-16": {
+      "observed_rows": 19252,
+      "invalid_rows": 2,
+      "gap_resets": 0,
+      "scored_rows": 19134,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3721,
+        "ST4000DM000": 3699,
+        "ST8000NM0055": 2838,
+        "HGST HMS5C4040BLE640": 2502
+      }
+    },
+    "2021-12-17": {
+      "observed_rows": 19250,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19133,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3721,
+        "ST4000DM000": 3698,
+        "ST8000NM0055": 2838,
+        "HGST HMS5C4040BLE640": 2502
+      }
+    },
+    "2021-12-18": {
+      "observed_rows": 19250,
+      "invalid_rows": 9,
+      "gap_resets": 0,
+      "scored_rows": 19133,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3698,
+        "ST8000NM0055": 2837,
+        "HGST HMS5C4040BLE640": 2502
+      }
+    },
+    "2021-12-19": {
+      "observed_rows": 19249,
+      "invalid_rows": 6,
+      "gap_resets": 0,
+      "scored_rows": 19126,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3697,
+        "ST8000NM0055": 2837,
+        "HGST HMS5C4040BLE640": 2496
+      }
+    },
+    "2021-12-20": {
+      "observed_rows": 19239,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19122,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3703,
+        "ST8000NM0055": 2828,
+        "HGST HMS5C4040BLE640": 2495
+      }
+    },
+    "2021-12-21": {
+      "observed_rows": 19236,
+      "invalid_rows": 10,
+      "gap_resets": 0,
+      "scored_rows": 19122,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6380,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3706,
+        "ST8000NM0055": 2828,
+        "HGST HMS5C4040BLE640": 2496
+      }
+    },
+    "2021-12-22": {
+      "observed_rows": 19244,
+      "invalid_rows": 5,
+      "gap_resets": 9,
+      "scored_rows": 19116,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3706,
+        "ST8000NM0055": 2828,
+        "HGST HMS5C4040BLE640": 2496
+      }
+    },
+    "2021-12-23": {
+      "observed_rows": 19243,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19115,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3712,
+        "ST4000DM000": 3705,
+        "ST8000NM0055": 2828,
+        "HGST HMS5C4040BLE640": 2496
+      }
+    },
+    "2021-12-24": {
+      "observed_rows": 19243,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19125,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3705,
+        "ST8000NM0055": 2828,
+        "HGST HMS5C4040BLE640": 2496
+      }
+    },
+    "2021-12-25": {
+      "observed_rows": 19243,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19125,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3705,
+        "ST8000NM0055": 2828,
+        "HGST HMS5C4040BLE640": 2496
+      }
+    },
+    "2021-12-26": {
+      "observed_rows": 19242,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19128,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3709,
+        "ST8000NM0055": 2828,
+        "HGST HMS5C4040BLE640": 2495
+      }
+    },
+    "2021-12-27": {
+      "observed_rows": 19241,
+      "invalid_rows": 4,
+      "gap_resets": 0,
+      "scored_rows": 19126,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6374,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3712,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2495
+      }
+    },
+    "2021-12-28": {
+      "observed_rows": 19236,
+      "invalid_rows": 0,
+      "gap_resets": 0,
+      "scored_rows": 19125,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6376,
+        "ST12000NM0008": 3722,
+        "ST4000DM000": 3714,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-12-29": {
+      "observed_rows": 19241,
+      "invalid_rows": 0,
+      "gap_resets": 5,
+      "scored_rows": 19135,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6376,
+        "ST12000NM0008": 3732,
+        "ST4000DM000": 3714,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2490
+      }
+    },
+    "2021-12-30": {
+      "observed_rows": 19237,
+      "invalid_rows": 7,
+      "gap_resets": 0,
+      "scored_rows": 19124,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6369,
+        "ST12000NM0008": 3732,
+        "ST4000DM000": 3714,
+        "ST8000NM0055": 2823,
+        "HGST HMS5C4040BLE640": 2486
+      }
+    },
+    "2021-12-31": {
+      "observed_rows": 19230,
+      "invalid_rows": 6,
+      "gap_resets": 4,
+      "scored_rows": 19120,
+      "scored_by_model": {
+        "TOSHIBA MG07ACA14TA": 6363,
+        "ST12000NM0008": 3732,
+        "ST4000DM000": 3714,
+        "ST8000NM0055": 2829,
+        "HGST HMS5C4040BLE640": 2482
+      }
+    }
+  },
+  "score_rows": 1758728,
+  "failure_column_read": false,
+  "q4_failure_outcomes_opened": false
+}

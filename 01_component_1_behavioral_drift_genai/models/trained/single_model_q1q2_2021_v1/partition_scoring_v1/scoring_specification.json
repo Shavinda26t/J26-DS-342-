@@ -1,0 +1,81 @@
+{
+  "run_id": "single_model_q1q2_2021_v1",
+  "ablation_id": "representation_ablation_v1_seed42",
+  "score_id": "partition_scoring_v1",
+  "settings": {
+    "seed": 42,
+    "calibration_quantile": 0.99,
+    "conditional_minimum_windows": 200,
+    "conditional_minimum_drives": 5,
+    "minimum_assignment_strength": 0.5,
+    "prototype_minimum_drives": 5,
+    "prototype_minimum_windows": 30,
+    "prototype_radius_quantile": 0.95,
+    "reconstruction_weight": 0.5,
+    "distance_weight": 0.5,
+    "transition_weight": 0.0,
+    "ablation_complete_sha256": "b316745aa1db84df8d5ee0952ffb019b10680a33102bd95ced0090637ed68de3",
+    "calibration_rule": "global and conditional quantiles compared separately; sparse/noise/weak context falls back to global",
+    "synthetic_tests": [
+      "temperature_plus_2_last_7_days",
+      "temperature_plus_5_last_7_days",
+      "temperature_spike_plus_10",
+      "temperature_frozen_last_7_days",
+      "temperature_alignment_break",
+      "sector_5_plus_8_last_7_days",
+      "sector_197_198_plus_8_last_7_days"
+    ]
+  },
+  "detectors": {
+    "R": "mean masked level MSE over 30 days and five features",
+    "E": "final-day temperature masked MSE",
+    "D": "minimum distance to training median prototypes / corresponding training q95 radius",
+    "RD": "0.5 training-normalised log1p(R) + 0.5 training-normalised log1p(D)"
+  },
+  "normalisation": {
+    "R": {
+      "center": 0.0022049543913453817,
+      "scale": 0.0035543714184314013,
+      "scale_rule": "IQR"
+    },
+    "D": {
+      "center": 0.45571267382580827,
+      "scale": 0.24639097500635815,
+      "scale_rule": "IQR"
+    }
+  },
+  "thresholds": {
+    "R": {
+      "global": 1.8720992803573608,
+      "groups": {
+        "1": 0.019728122279047966
+      }
+    },
+    "E": {
+      "global": 0.2732660174369812,
+      "groups": {
+        "1": 0.24211569130420685
+      }
+    },
+    "D": {
+      "global": 3.7279717380986703,
+      "groups": {
+        "1": 1.1083638784045913
+      }
+    },
+    "RD": {
+      "global": 150.99427159658137,
+      "groups": {
+        "1": 2.0693060862619674
+      }
+    }
+  },
+  "transition_weight": 0,
+  "upstream_encoder_checkpoint": "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\level_change_encoder.pt",
+  "upstream_partition_pipeline": "models\\trained\\single_model_q1q2_2021_v1\\representation_ablation_v1_seed42\\level_change_encoder_diagnostic_pipeline.joblib",
+  "checkpoint_sha256": "8f830d972d202ec2a4857b741da886732af52b540abf734a5e6b736c0e453c50",
+  "partition_pipeline_sha256": "c1b5bdd4194aa107c3daba99dedff427a0063f4b2d703e02b8e1285e5db9d806",
+  "prototype_sha256": "af71c40c572abb6554961c09716c285c1fb9d9c17e87a369c24ded50efe93b0e",
+  "settings_sha256": "89fc1c1f22658cd10e2e5a9b88e2cbee6df5b48d3ae0495475ff692c20be53b1",
+  "ablation_complete_sha256": "b316745aa1db84df8d5ee0952ffb019b10680a33102bd95ced0090637ed68de3"
+}

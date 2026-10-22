@@ -1,0 +1,182 @@
+{
+  "protocol": {
+    "id": "q4_blind_candidate_protocol_v1",
+    "population": "exact July 1 reserved future_test serials, all five provisional HDD models",
+    "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+    "q3_archive_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb",
+    "q4_archive_expected_relative_path": "data/raw/data_Q4_2021.zip",
+    "q4_archive_contents_opened_by_this_notebook": false,
+    "warmup": "Q3 September SMART features only for future_test drives; never Q3/Q4 failure flags during scoring",
+    "scoring_endpoint_dates": [
+      "2021-10-01",
+      "2021-12-31"
+    ],
+    "window_days": 30,
+    "require_consecutive_observed_valid_days": true,
+    "primary_method": "transformer_sector_error",
+    "primary_score": "mean squared normalized final-day hidden residual for SMART 5,197,198",
+    "primary_alarm_rule": "score > frozen per-model higher 0.998 calibration quantile",
+    "secondary_methods": [
+      "transformer_temp_error",
+      "transformer_joint_error"
+    ],
+    "comparators": [
+      "isolation_forest",
+      "sector_positive_fixed",
+      "sector_delta_fixed",
+      "sector_positive_calibrated",
+      "sector_delta_calibrated"
+    ],
+    "fixed_smart_rule": "score > 0",
+    "calibrated_smart_rule": "score > frozen per-model higher 0.998 quantile",
+    "methods_on_identical_endpoints": true,
+    "primary_horizon_days": 14,
+    "other_horizons_days": [
+      7,
+      30
+    ],
+    "negative_rule": "all following h calendar days observed in Q4 and no first failure in horizon",
+    "post_failure_rule": "first failure on/before endpoint is excluded from endpoint targets",
+    "strict_event_rule": "all h pre-failure daily score endpoints present for every method",
+    "incomplete_events": "preserve all recorded future-test failures and report incomplete/unscoreable separately",
+    "metrics": [
+      "per-model and pooled descriptive average_precision when both classes present",
+      "positive prevalence",
+      "positive endpoint recall",
+      "strict complete-history event recall",
+      "false alerts per 1000 observed negative endpoints",
+      "all alerts per 1000 scored endpoints",
+      "median first warning lead days",
+      "paired event outcomes"
+    ],
+    "30_day_note": "do not compute AP/false-alert rate without observed negative follow-up",
+    "uncertainty": "drive-level bootstrap intervals only if enough distinct positive drives; otherwise report undefined",
+    "score_lock_before_labels": true,
+    "q4_label_use": "one read after complete score manifest and protocol hash are frozen; no feedback to candidate selection",
+    "winner_selection_after_q4": false,
+    "regime_score_enabled": false,
+    "drift_update_enabled": false,
+    "automatic_healing_enabled": false,
+    "ssd_generalization_claim": false,
+    "limitations": [
+      "Q3 failures were inspected during development",
+      "four provisional HDD model names lack independently verified device type",
+      "the number of Q4 future-test failures is unknown"
+    ]
+  },
+  "artifacts": {
+    "transformer_checkpoint": {
+      "path": "models\\trained\\single_model_q1q2_2021_v1\\q3_five_model_masked_transformer_v1\\best_model.pt",
+      "sha256": "6bc0e42fe995d1dddc00f9ebe7379b7ca3aa1762ab1fd2278a012c3ae2f0e172"
+    },
+    "transformer_preprocessing": {
+      "path": "models\\trained\\single_model_q1q2_2021_v1\\q3_five_model_masked_transformer_v1\\preprocessing.json",
+      "sha256": "bdf52e05f24a1239d184b02b7667b2edb42bd2d556fc3ff5b80aec20301eb9b8"
+    },
+    "transformer_training_settings": {
+      "path": "results\\single_model_q1q2_2021_v1\\q3_five_model_masked_transformer_v1\\settings.json",
+      "sha256": "f38a31cdee0e8119cec6bc9cd5ed519043d69a662bf1a1f9c547010b3fdf522a"
+    },
+    "transformer_scoring_settings": {
+      "path": "results\\single_model_q1q2_2021_v1\\q3_five_model_transformer_scoring_v1\\settings.json",
+      "sha256": "b6e0331f97b1838a1b0be782160553ad32cacba6a649bd91f0e29f6d22712aed"
+    },
+    "transformer_thresholds": {
+      "path": "results\\single_model_q1q2_2021_v1\\q3_five_model_transformer_scoring_v1\\calibrated_thresholds.json",
+      "sha256": "ba599e366f8941e0a82b8b67d05e2805f79cb93c7752f3bddc883a61a1d5b881"
+    },
+    "if_model": {
+      "path": "models\\trained\\single_model_q1q2_2021_v1\\q3_five_model_isolation_forest_v1\\if_models.joblib",
+      "sha256": "1daa5334ba18adbcd259b43b50472369562a549d0c79529b2f262532f51c0d09"
+    },
+    "if_specification": {
+      "path": "models\\trained\\single_model_q1q2_2021_v1\\q3_five_model_isolation_forest_v1\\if_specification.json",
+      "sha256": "7bc7a77b1c7e3ba22f10911215fb387f1f80f634904d1f4b89139ee175f9cb34"
+    },
+    "if_settings": {
+      "path": "results\\single_model_q1q2_2021_v1\\q3_five_model_isolation_forest_v1\\settings.json",
+      "sha256": "3ee24e01ad875e6932e046477f0b2b3d88cef04e897bf84d451c55dde3dda340"
+    },
+    "smart_thresholds": {
+      "path": "results\\single_model_q1q2_2021_v1\\q3_matched_detector_baseline_comparison_v1\\baseline_calibration_thresholds.json",
+      "sha256": "fb545c4e50b8934749a1d1dfb4701ae76b20b137a000bf37474eb2bdfb93990d"
+    },
+    "reservation": {
+      "path": "data\\splits\\q3_multimodel_event_coverage_v1_serials.json",
+      "sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5"
+    },
+    "stream_contract": {
+      "path": "results\\single_model_q1q2_2021_v1\\q3_frozen_streaming_inference_replay_v1\\telemetry_contract.json",
+      "sha256": "7269e47403c5a780d91afdb072138fe5018cd504c801264210c6b11b0c69e525"
+    }
+  },
+  "thresholds": {
+    "transformer": {
+      "TOSHIBA MG07ACA14TA": {
+        "temp_error": 1.0100409984588623,
+        "sector_error": 0.012183227576315403,
+        "joint_error": 0.27318981289863586
+      },
+      "ST12000NM0008": {
+        "temp_error": 1.3839993476867676,
+        "sector_error": 0.07124821096658707,
+        "joint_error": 0.43940889835357666
+      },
+      "ST4000DM000": {
+        "temp_error": 0.8130478858947754,
+        "sector_error": 2.7843704223632812,
+        "joint_error": 2.1274476051330566
+      },
+      "ST8000NM0055": {
+        "temp_error": 1.2879847288131714,
+        "sector_error": 1.6324185132980347,
+        "joint_error": 1.2295870780944824
+      },
+      "HGST HMS5C4040BLE640": {
+        "temp_error": 4.2677106857299805,
+        "sector_error": 0.252239853143692,
+        "joint_error": 1.0904500484466553
+      }
+    },
+    "smart": {
+      "TOSHIBA MG07ACA14TA": {
+        "sector_positive": 2.0,
+        "sector_delta": 0.0
+      },
+      "ST12000NM0008": {
+        "sector_positive": 576.0,
+        "sector_delta": 0.0
+      },
+      "ST4000DM000": {
+        "sector_positive": 1760.0,
+        "sector_delta": 0.0
+      },
+      "ST8000NM0055": {
+        "sector_positive": 2360.0,
+        "sector_delta": 8.0
+      },
+      "HGST HMS5C4040BLE640": {
+        "sector_positive": 96.0,
+        "sector_delta": 0.0
+      }
+    },
+    "isolation_forest": {
+      "TOSHIBA MG07ACA14TA": 0.6190100577274577,
+      "ST12000NM0008": 0.6500983119094251,
+      "ST4000DM000": 0.7519426704888462,
+      "ST8000NM0055": 0.7326522426264707,
+      "HGST HMS5C4040BLE640": 0.6206983962398507
+    }
+  },
+  "future_test_drives_by_model": {
+    "TOSHIBA MG07ACA14TA": 6406,
+    "ST12000NM0008": 3776,
+    "ST4000DM000": 3758,
+    "ST8000NM0055": 2880,
+    "HGST HMS5C4040BLE640": 2531
+  },
+  "frozen_method_count": 8,
+  "failure_labels_used_for_thresholds": false,
+  "q4_archive_opened": false,
+  "q4_outcomes_opened": false
+}

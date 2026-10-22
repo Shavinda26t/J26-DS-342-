@@ -1,0 +1,6 @@
+{
+  "threshold": 2.476930618286133,
+  "calibration_split": "April",
+  "quantile": 0.99,
+  "checkpoint_sha256": "698375961ba8e63be6c938c1d5c8e93799f3daf5ff29ab504c8f96c45f49b315"
+}

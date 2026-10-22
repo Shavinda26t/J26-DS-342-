@@ -1,0 +1,29 @@
+{
+  "calibration_dates": [
+    "2021-08-01",
+    "2021-08-15"
+  ],
+  "evaluation_dates": [
+    "2021-08-16",
+    "2021-09-30"
+  ],
+  "events_evaluated": [
+    "2021-09-01",
+    "2021-09-30"
+  ],
+  "horizons_days": [
+    7,
+    14,
+    30
+  ],
+  "score_definition": {
+    "sector_positive": "any of SMART 5/197/198 positive at endpoint",
+    "sector_delta": "sum of positive one-day changes in SMART 5/197/198"
+  },
+  "alarm_rule": "score > 0; fixed before label evaluation",
+  "window_days": 30,
+  "population": "Notebook 13 July-1 declared development drives only",
+  "reservation_sha256": "8498c0a28d60a5873473e16733eeccf5a6d7e22ae3d7d8cbd2d16db8a01bd2b5",
+  "event_support_sha256": "b69d513b85ce295b3388b485edc3214de04228e32720965faa87cf18f225c28f",
+  "q3_zip_sha256": "01670ff560a2d3a50de9b74075f2d73ac4796735df9239f4eb92678c2b20f2fb"
+}

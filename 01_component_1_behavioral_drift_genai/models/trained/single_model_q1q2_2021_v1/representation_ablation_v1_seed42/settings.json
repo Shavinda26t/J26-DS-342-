@@ -1,0 +1,50 @@
+{
+  "seed": 42,
+  "width": 32,
+  "heads": 4,
+  "layers": 2,
+  "feedforward": 64,
+  "dropout": 0.1,
+  "point_mask_probability": 0.15,
+  "span_days": 3,
+  "batch_size": 128,
+  "max_epochs": 50,
+  "patience": 8,
+  "learning_rate": 0.001,
+  "weight_decay": 1e-05,
+  "stopping_max_windows": 2048,
+  "change_definition": "raw adjacent-day difference; signed log1p for count/usage features; temperature difference unchanged",
+  "change_visibility": "available only if both source levels visible; first within-window change unavailable",
+  "fit_spacing_days": 10,
+  "fit_max_per_drive": 8,
+  "fit_max_total": 6000,
+  "pca_cap": 8,
+  "dbcv_sample_max": 1500,
+  "min_cluster_sizes": [
+    30,
+    60,
+    120
+  ],
+  "min_samples_values": [
+    5,
+    15
+  ],
+  "minimum_assigned_fraction": 0.5,
+  "minimum_unique_drives_per_cluster": 5,
+  "stability_seeds": [
+    43,
+    44,
+    45
+  ],
+  "stability_drive_fraction": 0.8,
+  "stability_anchor_max": 5000,
+  "minimum_joint_fraction": 0.5,
+  "ari_target": 0.7,
+  "shuffle_repeats": 20,
+  "temporal_diagnostic_min_switching_drives": 5,
+  "temporal_diagnostic_min_lift": 0.01,
+  "temporal_diagnostic_note": "new explicit exploratory flag, not a final validated acceptance criterion",
+  "old_encoder_complete_sha256": "167569d8c55f75f5d1c048056a692359e5568d9d5b08375f5c21250d57fccec9",
+  "dataset_complete_sha256": "7e655aaaeb2fbc5e08e11d54af7262536e121ea0e83b0d771a61370bc6335b5e",
+  "daily_preprocessing_sha256": "b8c37d9c1fe9eb62f6b152b76c85fd062e72576f3e090a636646b894d80a51fc"
+}
