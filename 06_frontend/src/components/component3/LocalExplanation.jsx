@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { getComponent3Case } from '../../api/component3Api';
 import { formatEnumLabel, formatNullable, formatPercentage } from '../../utils/formatters';
 
+const CASE_MEANINGS = {
+  TP: 'Model correctly detected a future failure',
+  FP: 'Model gave a false alarm',
+  FN: 'Model missed a failure',
+  TN: 'Model correctly identified a healthy/non-failing case',
+};
+
 const LocalExplanation = () => {
   const [activeTab, setActiveTab] = useState('TP');
   const [caseData, setCaseData] = useState(null);
@@ -58,9 +65,20 @@ const LocalExplanation = () => {
             key={type}
             className={`tab-btn ${activeTab === type ? 'active' : ''}`}
             onClick={() => setActiveTab(type)}
+            title={CASE_MEANINGS[type]}
           >
             {type} Case
           </button>
+        ))}
+      </div>
+
+      {/* Case Label Legend */}
+      <div className="case-legend">
+        {Object.entries(CASE_MEANINGS).map(([type, meaning]) => (
+          <div key={type} className="case-legend-item">
+            <span className="case-legend-code">{type}</span>
+            <span className="case-legend-text">— {meaning}</span>
+          </div>
         ))}
       </div>
 

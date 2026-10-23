@@ -384,6 +384,35 @@ body {
   border-color: var(--accent-blue);
 }
 
+/* Case Label Legend */
+.case-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.case-legend-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-card);
+}
+
+.case-legend-code {
+  font-weight: 700;
+  color: var(--accent-blue);
+  min-width: 24px;
+}
+
+.case-legend-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 /* Research Figures Grid */
 .figures-grid {
   display: grid;

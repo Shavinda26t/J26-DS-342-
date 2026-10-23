@@ -39,6 +39,15 @@ const parseFeature = (feature) => {
 
 const HORIZONS = ['7d', '14d', '30d'];
 
+const simpleLabelStyle = {
+  fontSize: '0.66rem',
+  fontWeight: 700,
+  letterSpacing: '0.05em',
+  textTransform: 'uppercase',
+  color: '#64748b',
+  marginBottom: '2px',
+};
+
 const RiskCard = ({ horizon, risk }) => {
   const flagged = risk.flagged;
   const pct = risk.risk_percent;
@@ -98,6 +107,7 @@ export const UploadedHddAnalysis = ({ pred }) => {
   const sufficiency = pred.sufficient_history || {};
   const historyOk = sufficiency['30d'];
   const [showDetail, setShowDetail] = useState(false);
+  const [showResearch, setShowResearch] = useState(false);
 
   return (
     <div
@@ -180,25 +190,47 @@ export const UploadedHddAnalysis = ({ pred }) => {
               {[
                 { label: 'Result', text: narrative.simple.headline, color: '#e2e8f0' },
                 { label: 'Main reason', text: narrative.simple.reason, color: '#cbd5e1' },
-                { label: 'Research backing', text: narrative.simple.support, color: '#93c5fd' },
-                { label: 'Important', text: narrative.simple.caveat, color: '#94a3b8' },
               ].filter((part) => part.text).map((part) => (
                 <div key={part.label}>
-                  <div
-                    style={{
-                      fontSize: '0.66rem',
-                      fontWeight: 700,
-                      letterSpacing: '0.05em',
-                      textTransform: 'uppercase',
-                      color: '#64748b',
-                      marginBottom: '2px',
-                    }}
-                  >
-                    {part.label}
-                  </div>
+                  <div style={simpleLabelStyle}>{part.label}</div>
                   <p style={{ margin: 0, color: part.color }}>{part.text}</p>
                 </div>
               ))}
+
+              {(narrative.simple.support || narrative.simple.caveat) && (
+                <div>
+                  <button
+                    type="button"
+                    className="btn-retry"
+                    aria-expanded={showResearch}
+                    onClick={() => setShowResearch((v) => !v)}
+                    style={{ fontSize: '0.72rem', padding: '4px 10px' }}
+                  >
+                    {showResearch ? 'Hide details' : 'More details'}
+                  </button>
+
+                  {showResearch && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        marginTop: '10px',
+                      }}
+                    >
+                      {[
+                        { label: 'Research backing', text: narrative.simple.support, color: '#93c5fd' },
+                        { label: 'Important', text: narrative.simple.caveat, color: '#94a3b8' },
+                      ].filter((part) => part.text).map((part) => (
+                        <div key={part.label}>
+                          <div style={simpleLabelStyle}>{part.label}</div>
+                          <p style={{ margin: 0, color: part.color }}>{part.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 

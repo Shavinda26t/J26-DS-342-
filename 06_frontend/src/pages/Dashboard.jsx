@@ -91,6 +91,7 @@ const Dashboard = () => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshedAt, setRefreshedAt] = useState(null);
+  const [showResearch, setShowResearch] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -532,6 +533,55 @@ const Dashboard = () => {
                       {Number(pathway.strongest_lag_days) === 1 ? '' : 's'} · detection rate{' '}
                       {n(pathway.strongest_detection_rate, 2)}
                     </div>
+                  </div>
+                )}
+
+                {primaryMatched && (
+                  <div className="dash-details">
+                    <button
+                      type="button"
+                      className="dash-details__toggle"
+                      aria-expanded={showResearch}
+                      onClick={() => setShowResearch((value) => !value)}
+                    >
+                      {showResearch ? 'Hide details' : 'More details'}
+                      <IconArrowRight
+                        size={15}
+                        style={{
+                          transform: showResearch ? 'rotate(90deg)' : 'none',
+                          transition: 'transform 0.18s ease',
+                        }}
+                      />
+                    </button>
+
+                    {showResearch && (
+                      <div className="dash-research">
+                        <h4 className="dash-research__title">Research backing</h4>
+                        <p>
+                          Our research on the whole drive population supports this: drives with
+                          high {primary.factor_name} failed within 30 days about{' '}
+                          {n(primaryMatched.risk_difference_pp, 0)} percentage points more often
+                          than comparable drives that were healthy on that measure. The confidence
+                          range for that figure is{' '}
+                          {n(primaryMatched.cluster_bootstrap_95ci_pp?.[0], 0)} to{' '}
+                          {n(primaryMatched.cluster_bootstrap_95ci_pp?.[1], 0)} percentage points.
+                          We also see this in the data over time:{' '}
+                          {pathway ? pathway.source_factor_name : 'Reallocated Sectors'} tends to
+                          change about {n(pathway?.strongest_lag_days, 0)} days before{' '}
+                          {primary.factor_name} does, and that pattern held up when we re-ran the
+                          analysis on different samples of drives.
+                        </p>
+                        <div className="dash-callout dash-callout--warn">
+                          <IconAlertCircle size={17} />
+                          <div>
+                            <span className="dash-callout__title">Important</span>
+                            This is a warning sign, not a proven cause. The population figures come
+                            from our research on the whole drive fleet and are not recalculated for
+                            this drive.
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </>
