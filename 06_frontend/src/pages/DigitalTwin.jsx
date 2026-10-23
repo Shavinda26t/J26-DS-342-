@@ -57,18 +57,6 @@ const cardStyle = {
 const fmt = (value, digits = 1) =>
   value === null || value === undefined ? '—' : Number(value).toFixed(digits);
 
-function KpiCard({ label, value, sub, color = COLORS.accent }) {
-  return (
-    <div style={{ ...cardStyle, borderTop: `3px solid ${color}` }}>
-      <div style={{ color: COLORS.subtext, fontSize: 13, textTransform: 'uppercase', letterSpacing: 0.6 }}>
-        {label}
-      </div>
-      <div style={{ color, fontSize: 34, fontWeight: 700, margin: '8px 0 4px' }}>{value}</div>
-      <div style={{ color: COLORS.subtext, fontSize: 13 }}>{sub}</div>
-    </div>
-  );
-}
-
 function SectionCard({ title, subtitle, children, style }) {
   return (
     <div style={{ ...cardStyle, ...style }}>
@@ -418,34 +406,6 @@ export default function DigitalTwin() {
             </span>
           )}
         </div>
-      </div>
-
-      {/* KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 16 }}>
-        <KpiCard
-          label="Detection rate (60d)"
-          value={`${fmt(s.detection_rate_percent, 2)}%`}
-          sub={`${s.detected} / ${s.test_hdds} failed HDDs`}
-          color={COLORS.good}
-        />
-        <KpiCard
-          label="False-alarm rate"
-          value={`${fmt(fa.healthy_false_alarm_rate_percent, 1)}%`}
-          sub={`${fa.healthy_false_alarms} / ${fa.healthy_hdds} healthy controls`}
-          color={COLORS.warn}
-        />
-        <KpiCard
-          label="Median lead time"
-          value={`${fmt(s.median_lead_time_days, 0)} d`}
-          sub={`mean ${fmt(s.mean_lead_time_days, 1)} d · max ${fmt(s.maximum_lead_time_days, 0)} d`}
-          color={COLORS.accent}
-        />
-        <KpiCard
-          label="Median persistence span"
-          value={`${fmt(s.median_persistence_span_days, 1)} d`}
-          sub={`${s.persistence_observations} observations · max ${fmt(s.maximum_persistence_span_days, 1)} d`}
-          color="#a78bfa"
-        />
       </div>
 
       {/* Charts row 1 */}
