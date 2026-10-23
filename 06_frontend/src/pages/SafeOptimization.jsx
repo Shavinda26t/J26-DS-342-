@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import MitigationSimulator from '../components/MitigationSimulator';
 
 import {
   getComponent4SafeDecision,
@@ -467,6 +468,7 @@ const update = (key, value) => {
           </p>
         </section>
       )}
+      {result && <MitigationSimulator form={form} decision={result} />}
     </div>
   );
 }
